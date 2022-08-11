@@ -177,7 +177,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-11 13:34:08" itemprop="dateModified" datetime="2022-08-11T13:34:08+08:00">2022-08-11</time>
+                <time title="修改时间：2022-08-11 13:43:06" itemprop="dateModified" datetime="2022-08-11T13:43:06+08:00">2022-08-11</time>
               </span>
 
           
@@ -219,7 +219,7 @@
 <p>&amp;ensp;首先你需要登入你的Github账号，并创建一个新的Repository，其命名格式需为username.gitHub.io（比如我的，iaksh.github.io）。符合该命名格式的Repository会自动进行Github Pages构建。<br>当然，截至目前，这里可能只有一个孤零零的README.md。</p>
 <h1 id="创建你的Hexo博客"><a href="#创建你的Hexo博客" class="headerlink" title="创建你的Hexo博客"></a>创建你的Hexo博客</h1><p>&amp;ensp;找一个你喜欢的地方兴建文件夹，然后在终端中cd进哪个文件夹并使用命令hexo init，一个hexo博客工程就完成了。<br>此时你可以使用hexo server（或简写为hexo s)试运行博客，使用浏览器访问localhots:4000即可预览。<br>使用hexo new name（hexo n name）即可开始一篇新的博文，此命令将会在工程根目录的source文件夹中生成对应名称的markdown源文件，该markdown源文件即为你的博文源码。<br>其他的命令还有hexo generate（hexo g），hexo deploy（hexo d）。前者能将博客生成为一份完整的html+css+js文件，后者自动将其按照预设配置进行部署</p>
 <h1 id="修改你的博客配置"><a href="#修改你的博客配置" class="headerlink" title="修改你的博客配置"></a>修改你的博客配置</h1><p>&amp;ensp;工程根目录中有一配置文件名为“_config.yml”，这是hexo最顶层的配置文件，在这里你可以指定网站的一些基本内容。此外，你可以将第三方主题包放在工程根目录的themes文件夹中，然后修改主题包内的“_config.yml”。<br>另：由于各个主题配置文件不尽相同，具体请见其中的注释。</p>
-<h1 id="将你的Hexo博客推送至Github并自动部署"><a href="#将你的Hexo博客推送至Github并自动部署" class="headerlink" title="将你的Hexo博客推送至Github并自动部署"></a>将你的Hexo博客推送至Github并自动部署</h1><p>在推送博客至github之前，你需要在工程根目录启用hexo的git部署模块，命令为npm install hexo-deployer-git –save</p>
+<h1 id="将你的Hexo博客推送至Github并自动部署"><a href="#将你的Hexo博客推送至Github并自动部署" class="headerlink" title="将你的Hexo博客推送至Github并自动部署"></a>将你的Hexo博客推送至Github并自动部署</h1><p>&amp;ensp;在推送博客至github之前，你需要在工程根目录启用hexo的git部署模块，命令为npm install hexo-deployer-git –save<br>&amp;ensp;完成上述操作后，还需修改工程根目录下的“_config.yml”中的deploy项目，将其中的type改为git，添加repo子项以指定git仓库，添加branch子项以指定上传分支。<br>&amp;ensp;在这之后，使用指令hexo g &amp;&amp; hexo d即可自动完成博客的生成与部署。</p>
 
       
     </div>
