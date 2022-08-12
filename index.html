@@ -146,6 +146,68 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/12/apt%E6%8A%A5%E9%94%99Certificate-verification-failed%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沧蓝星">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/12/apt%E6%8A%A5%E9%94%99Certificate-verification-failed%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">apt报错Certificate verification failed的解决方案</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-12 11:28:51 / 修改时间：11:35:22" itemprop="dateCreated datePublished" datetime="2022-08-12T11:28:51+08:00">2022-08-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  今日重新配置WSL2（Debian）开发环境，又遇此问题，故记之。</p>
+<h1 id="现象描述"><a href="#现象描述" class="headerlink" title="现象描述"></a>现象描述</h1><p>  Debian安装好后直接换清华源（使用https协议），再使用apt update时出现上述错误。</p>
+<h1 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h1><p>  https协议是需要ca证书的，崭新出厂的Debian没有相应的支持。</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>  方案1. 换回之前默认的源，管理员权限下运行指令“apt update &amp;&amp; apt install ca-certificates”（大概会很慢，因为官方源不慢那你就不会换源然后遇到这个问题了）<br>  方案2. 将source.list中的所有源地址由https协议更改为http，再运行方案1的指令，最后将http改回https（安全起见）</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/11/WSL2%E4%B8%8EWSLg%E7%9A%84%E9%83%A8%E7%BD%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -170,14 +232,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-08-11 11:04:01" itemprop="dateCreated datePublished" datetime="2022-08-11T11:04:01+08:00">2022-08-11</time>
+              <time title="创建时间：2022-08-11 22:04:01" itemprop="dateCreated datePublished" datetime="2022-08-11T22:04:01+08:00">2022-08-11</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-12 11:12:52" itemprop="dateModified" datetime="2022-08-12T11:12:52+08:00">2022-08-12</time>
+                <time title="修改时间：2022-08-12 11:29:48" itemprop="dateModified" datetime="2022-08-12T11:29:48+08:00">2022-08-12</time>
               </span>
 
           
@@ -461,7 +523,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
