@@ -146,6 +146,440 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/12/%E4%BB%8EC%E7%A8%8B%E5%BA%8F%E4%B8%AD%E8%B0%83%E7%94%A8Python%E5%B9%B6%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E5%88%9D%E6%AD%A5%E6%8E%A2%E7%B4%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沧蓝星">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/12/%E4%BB%8EC%E7%A8%8B%E5%BA%8F%E4%B8%AD%E8%B0%83%E7%94%A8Python%E5%B9%B6%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E5%88%9D%E6%AD%A5%E6%8E%A2%E7%B4%A2/" class="post-title-link" itemprop="url">从C程序中调用Python并返回值的初步探索</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-12 14:21:18 / 修改时间：14:53:18" itemprop="dateCreated datePublished" datetime="2022-08-12T14:21:18+08:00">2022-08-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022&#x2F;1&#x2F;30，我对其内容几乎没有修改，亦未检查本文可靠性，请自行斟酌。</p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>  翻遍了谷歌百度发现一堆人Python3和Python2傻傻分不清，拿着Python2的函数写Python3的调用，API还是错的，简直是误人子弟，Python官方的API文档也没多大用。这里列出经过一上午的激战摸索出来的正确方案。<br>  C中Python3脚本的调用可以分为以下步骤：</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>代码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>导入Python库</td>
+<td>#include &lt;Python.h&gt;</td>
+</tr>
+<tr>
+<td>初始化Python解释器</td>
+<td>Py_Initialize();</td>
+</tr>
+<tr>
+<td>设置模块路径（可选）</td>
+<td>PyRunSimpleString(“import sys\nsys.path.append(‘.&#x2F;’)”);</td>
+</tr>
+<tr>
+<td>导入模块</td>
+<td>PyImport_ImportModule(“mod_name”);</td>
+</tr>
+<tr>
+<td>从模块中导入方法</td>
+<td>PyObject_GetAttrString(Module,”func_name”);</td>
+</tr>
+<tr>
+<td>创建将要导入方法的参数</td>
+<td>Py_BuildValue(“(s)”,”str_arg”);</td>
+</tr>
+<tr>
+<td>调用方法并处理参数</td>
+<td>PyEval_CallObject(Method,Arg);</td>
+</tr>
+<tr>
+<td>清理Python解释器</td>
+<td>Py_Finalize();</td>
+</tr>
+</tbody></table>
+<p>  Python是一门动态的脚本语言，在C API中也体现了这一点：C API中Python的一切数据类型和对象都是PyObject的“派生类”（但其实C中并没有class，虽然可以有OOP），可以使用PyObject的指针储存。</p>
+<h1 id="使用列"><a href="#使用列" class="headerlink" title="使用列"></a>使用列</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Python.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">Py_Initialize</span>();</span><br><span class="line">    <span class="built_in">PyRun_SimpleString</span>(<span class="string">&quot;import sys&quot;</span>);</span><br><span class="line">    <span class="built_in">PyRun_SimpleString</span>(<span class="string">&quot;sys.path.append(&#x27;./&#x27;)&quot;</span>);</span><br><span class="line">    <span class="comment">// 在C中导入指定py模块</span></span><br><span class="line">    PyObject* pyModule = <span class="built_in">PyImport_ImportModule</span>(<span class="string">&quot;my_test&quot;</span>);</span><br><span class="line">    <span class="comment">// 导入方法并调用</span></span><br><span class="line">    PyObject* pyMethod = <span class="built_in">PyObject_GetAttrString</span>(pModule,<span class="string">&quot;main&quot;</span>);</span><br><span class="line">    PyObject* pyReturn = <span class="built_in">PyEval_CallObject</span>(pMethod, <span class="built_in">Py_BuildValue</span>(<span class="string">&quot;(s)&quot;</span>,<span class="string">&quot;Hi PYTHON!&quot;</span>));</span><br><span class="line">    <span class="type">char</span>* buffer;</span><br><span class="line">    <span class="comment">// 将Python返回的str对象转为C可以使用的char*</span></span><br><span class="line">    <span class="built_in">PyArg_Parse</span>(send_back, <span class="string">&quot;s&quot;</span>, &amp;buffer);</span><br><span class="line">    <span class="comment">// 输出返回值</span></span><br><span class="line">    <span class="built_in">printf</span>(“%s”,buffer);</span><br><span class="line">    <span class="built_in">Py_Finalize</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="对C-封装Python模块的设想"><a href="#对C-封装Python模块的设想" class="headerlink" title="对C++封装Python模块的设想"></a>对C++封装Python模块的设想</h1><p>  综上，从一个Python模块中调用函数并接受返回值需要整整八（或者七？）步。是否可以用C++，在一个文件对应一个同名模块的前提下进行一个简单的封装以实现开箱即用？</p>
+<h1 id="后日谈"><a href="#后日谈" class="headerlink" title="后日谈"></a>后日谈</h1><p>  原文到上面那里就已经没有了，关于那个封装，我确实有试过，但是现在有<a target="_blank" rel="noopener" href="https://github.com/pybind/pybind11">更好的选择</a>。<br>  另外，Boost库里也有对Python API的封装，但是，感觉不如pybind11。。。画质（x</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/12/cout%E4%B8%8Estringstream%E5%9C%A8%E7%BC%93%E5%86%B2%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8A%E7%9A%84%E6%80%A7%E8%83%BD%E5%B7%AE%E8%B7%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沧蓝星">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/12/cout%E4%B8%8Estringstream%E5%9C%A8%E7%BC%93%E5%86%B2%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8A%E7%9A%84%E6%80%A7%E8%83%BD%E5%B7%AE%E8%B7%9D/" class="post-title-link" itemprop="url">C++中std::cout 与 std::stringstream 在缓冲字符串上的性能差距</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-12 13:46:49 / 修改时间：14:18:27" itemprop="dateCreated datePublished" datetime="2022-08-12T13:46:49+08:00">2022-08-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022&#x2F;1&#x2F;30，现简单修改并重新发布。</p>
+<h1 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h1><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>操作系统</td>
+<td>Fedora Linux 35 (Kernel-5.15.16-200)</td>
+</tr>
+<tr>
+<td>编译器</td>
+<td>gcc 11.2.1 (Red Hat 11.2.1-7) 未开启优化</td>
+</tr>
+<tr>
+<td>计时工具</td>
+<td>time指令</td>
+</tr>
+</tbody></table>
+<p>实验机器部分配置：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU</td>
+<td>Intel Core I5 - 4460</td>
+</tr>
+<tr>
+<td>RAM</td>
+<td>4G DDR3 1600Mhz（单通道）</td>
+</tr>
+</tbody></table>
+<h1 id="实验代码"><a href="#实验代码" class="headerlink" title="实验代码"></a>实验代码</h1><h2 id="std-cout"><a href="#std-cout" class="headerlink" title="std::cout"></a>std::cout</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">114514</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;any str\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="std-cout-std-endl"><a href="#std-cout-std-endl" class="headerlink" title="std::cout + std::endl"></a>std::cout + std::endl</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">114514</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;any str&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="std-stringstream-std-cout"><a href="#std-stringstream-std-cout" class="headerlink" title="std::stringstream + std::cout"></a>std::stringstream + std::cout</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::stringstream ss;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">114514</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        ss &lt;&lt; <span class="string">&quot;any str\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; ss.<span class="built_in">str</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>第一次</th>
+<th>第二次</th>
+<th>第三次</th>
+<th>平均</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>std::cout</td>
+<td>0.225</td>
+<td>0.224</td>
+<td>0.225</td>
+<td>0.2247</td>
+</tr>
+<tr>
+<td>std::cout + std::endl</td>
+<td>0.228</td>
+<td>0.222</td>
+<td>0.221</td>
+<td>0.2237</td>
+</tr>
+<tr>
+<td>std::stringstream  + std::cout</td>
+<td>0.076</td>
+<td>0.071</td>
+<td>0.069</td>
+<td>0.0720</td>
+</tr>
+</tbody></table>
+<p>  柱状图如下<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/vJr03j"><img src="https://s1.ax1x.com/2022/08/12/vJr03j.png" alt="vJr03j.png"></a><br>  <em>（注：std::ostringstream和std::istringstream因都是std::stringstream派生类不再讨论，且实验表明他们的速度基本没有差别。）</em></p>
+<h1 id="实验结论"><a href="#实验结论" class="headerlink" title="实验结论"></a>实验结论</h1><p>  实验结果表明，在当前实验环境下，使用std::stringstream缓冲字符串，再用std::stringstream::str()将缓冲的字符串转至std::cout进行输出，较直接使用std::cout有明显的性能优势。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/12/%E5%8D%81%E5%85%AD%E8%BF%9B%E5%88%B6%E4%B8%8E%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E8%81%94%E7%B3%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沧蓝星">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/12/%E5%8D%81%E5%85%AD%E8%BF%9B%E5%88%B6%E4%B8%8E%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E8%81%94%E7%B3%BB/" class="post-title-link" itemprop="url">十六进制与二进制之间的联系</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-12 13:35:38 / 修改时间：13:49:10" itemprop="dateCreated datePublished" datetime="2022-08-12T13:35:38+08:00">2022-08-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022&#x2F;2&#x2F;1，现简单修改并重新发布。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>  首先，我们需要知道十六进制数是由 0 1 2 3 4 5 6 7 8 9 A B C D E F(大小写无关)任意排列所得的数，它们分别表示十进制中的0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15，没有16是因为到16时已经进一位了。</p>
+<p>  我们已经知道二进制和十进制之间相互转换的方法，则通过上述对照关系，我们可以以十进制为桥梁，对二进制和十六进制进行相互的转化，例如：</p>
+<table>
+<thead>
+<tr>
+<th>十六进制</th>
+<th>十进制</th>
+<th>二进制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C</td>
+<td>12</td>
+<td>1100</td>
+</tr>
+<tr>
+<td>46</td>
+<td>70</td>
+<td>1000110</td>
+</tr>
+<tr>
+<td>66CCFF</td>
+<td>107794431</td>
+<td>11001101100110011111111</td>
+</tr>
+</tbody></table>
+<p>  上述方法原理简单，但多少有些难以计算，对此我们有一种更好的方法:<br>易得16&#x2F;2&#x3D;4，则只需要四位二进制数即可表示一个十六进制数，反之亦然。<br>  由此我们可以得出如下过程：<br>  有一二进制数0010 0001 0110 （空格只为了方便阅读）<br>  则每四位一读，读出三个四位的二进制数：0010，0001，0110<br>  四位二进制可以方便地直接转为十六进制，将上述内容转为十六进制得:2,1,6<br>  则上述二进制数的十六进制表达为2 1 6，即十六进制数216。</p>
+<p>  另:由上述推理过程我们不难看出计算机程序设计中十六进制数大量使用的原因：用十六进制数表示的二进制数更短，适合人类阅读，同时也能快速地转换回二进制。（毕竟计算机里没有奇数位的二进制数不是吗？）</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/12/%E4%BB%8E%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%88%B0%E5%8D%81%E8%BF%9B%E5%88%B6%E7%9A%84%E8%BD%AC%E6%8D%A2%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沧蓝星">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/12/%E4%BB%8E%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%88%B0%E5%8D%81%E8%BF%9B%E5%88%B6%E7%9A%84%E8%BD%AC%E6%8D%A2%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">从二进制到十进制的转换方法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-12 13:26:14 / 修改时间：14:53:23" itemprop="dateCreated datePublished" datetime="2022-08-12T13:26:14+08:00">2022-08-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022&#x2F;2&#x2F;1，现简单修改并重新发布。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>  先来看几个实例</p>
+<table>
+<thead>
+<tr>
+<th>二进制</th>
+<th>十进制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>00000001</td>
+<td>1</td>
+</tr>
+<tr>
+<td>00000010</td>
+<td>2</td>
+</tr>
+<tr>
+<td>00000100</td>
+<td>4</td>
+</tr>
+<tr>
+<td>00001000</td>
+<td>8</td>
+</tr>
+<tr>
+<td>00010000</td>
+<td>16</td>
+</tr>
+<tr>
+<td>00100000</td>
+<td>32</td>
+</tr>
+<tr>
+<td>01000000</td>
+<td>64</td>
+</tr>
+<tr>
+<td>10000000</td>
+<td>128</td>
+</tr>
+</tbody></table>
+<p>  上表列举了一个八位二进制数（1字节）00000001按位左移的结果。<br>  由图易得：设一个二进制数00000001向左位移次数为x，则有将其转换为十进制的方程f(x)&#x3D;2∧(x-1)<br>  经检验，该结论正确，过程略。</p>
+<p>  由上述结论我们不难推测，是否存在任意长度的任意二进制数，可以拆分为多个形如00…001向左位移得到的二进制数，再带入上述方程的结果之合为该二进制数的十进制值？</p>
+<p>  经过验证，发现该假设成立，过程简要如下：</p>
+<p>  例如：有一个二进制数000010100<br>  单独看1的位置，发现有两个1，分别位于第5和第3位。<br>  则将此二进制数拆分为两个二进制数：000010000和000000100。<br>  将此二者带入上述f（x），分别得解为2 ∧ 4 &#x3D; 16， 2 ∧ 2 &#x3D; 4<br>  两解相加为20</p>
+<p>  经过检验，成立。</p>
+<p>  综上所述，我们得到一种由二进制数转换为十进制数的快速方法：<br>  只看1的位置，对于每一个1，将自右数起到该1的位数的值（不包括该1所在位）作为2的幂得到多个中间值，再将所有中间值相加得到该二进制数的十进制值。</p>
+<h1 id="后日谈"><a href="#后日谈" class="headerlink" title="后日谈"></a>后日谈</h1><p>  其实现在看来，二进制转十进制实际上就是一个等比数列求和，具体自己看吧。<br>  对了，高考之前我甚至真的遇到这样的题目了。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/11/WSL2%E4%B8%8EWSLg%E7%9A%84%E9%83%A8%E7%BD%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -530,12 +964,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
