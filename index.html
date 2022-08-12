@@ -146,68 +146,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/12/apt%E6%8A%A5%E9%94%99Certificate-verification-failed%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="IAKSH">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="沧蓝星">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/12/apt%E6%8A%A5%E9%94%99Certificate-verification-failed%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">apt报错Certificate verification failed的解决方案</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-08-12 11:28:51 / 修改时间：11:35:22" itemprop="dateCreated datePublished" datetime="2022-08-12T11:28:51+08:00">2022-08-12</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  今日重新配置WSL2（Debian）开发环境，又遇此问题，故记之。</p>
-<h1 id="现象描述"><a href="#现象描述" class="headerlink" title="现象描述"></a>现象描述</h1><p>  Debian安装好后直接换清华源（使用https协议），再使用apt update时出现上述错误。</p>
-<h1 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h1><p>  https协议是需要ca证书的，崭新出厂的Debian没有相应的支持。</p>
-<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>  方案1. 换回之前默认的源，管理员权限下运行指令“apt update &amp;&amp; apt install ca-certificates”（大概会很慢，因为官方源不慢那你就不会换源然后遇到这个问题了）<br>  方案2. 将source.list中的所有源地址由https协议更改为http，再运行方案1的指令，最后将http改回https（安全起见）</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/11/WSL2%E4%B8%8EWSLg%E7%9A%84%E9%83%A8%E7%BD%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -289,6 +227,74 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/11/apt%E6%8A%A5%E9%94%99Certificate-verification-failed%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沧蓝星">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/11/apt%E6%8A%A5%E9%94%99Certificate-verification-failed%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">apt报错Certificate verification failed的解决方案</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-11 11:28:51" itemprop="dateCreated datePublished" datetime="2022-08-11T11:28:51+08:00">2022-08-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-12 11:42:08" itemprop="dateModified" datetime="2022-08-12T11:42:08+08:00">2022-08-12</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  今日重新配置WSL2（Debian）开发环境，又遇此问题，故记之。</p>
+<h1 id="现象描述"><a href="#现象描述" class="headerlink" title="现象描述"></a>现象描述</h1><p>  Debian安装好后直接换清华源（使用https协议），再使用apt update时出现上述错误。</p>
+<h1 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h1><p>  https协议是需要ca证书的，崭新出厂的Debian没有相应的支持。</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>  方案1. 换回之前默认的源，管理员权限下运行指令“apt update &amp;&amp; apt install ca-certificates”（大概会很慢，因为官方源不慢那你就不会换源然后遇到这个问题了）<br>  方案2. 将source.list中的所有源地址由https协议更改为http，再运行方案1的指令，最后将http改回https（安全起见）</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/10/%E4%BD%BF%E7%94%A8Hexo%E6%A1%86%E6%9E%B6%E5%92%8CGithub-Pages%E6%90%AD%E5%BB%BA%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -320,7 +326,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-12 11:07:03" itemprop="dateModified" datetime="2022-08-12T11:07:03+08:00">2022-08-12</time>
+                <time title="修改时间：2022-08-12 11:46:12" itemprop="dateModified" datetime="2022-08-12T11:46:12+08:00">2022-08-12</time>
               </span>
 
           
@@ -371,6 +377,7 @@
 <h2 id="我连接不上Github"><a href="#我连接不上Github" class="headerlink" title="我连接不上Github"></a>我连接不上Github</h2><p>  这是一个非常令人头痛的问题，种种不稳定因素干扰下，Github在国内可谓是风雨飘摇。但就目前而言，你可以使用github镜像站（比如<a target="_blank" rel="noopener" href="https://doc.fastgit.org/zh-cn/">fastgit</a>）来加速访问。<br>  当然，我不能保证它们是绝对安全的，你需要自己承担风险。</p>
 <h2 id="Github-Pages没有更新我刚刚Push的内容"><a href="#Github-Pages没有更新我刚刚Push的内容" class="headerlink" title="Github Pages没有更新我刚刚Push的内容"></a>Github Pages没有更新我刚刚Push的内容</h2><p>  你先别急。<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/v8oV0J"><img src="https://s1.ax1x.com/2022/08/11/v8oV0J.jpg" alt="v8oV0J.jpg"></a></p>
 <p>  Github Pages的部署是需要时间的，具体视Github服务器状况而定，实在着急的话可以去Github仓库的Environment里看一眼Deployment history，还是不行就多等等吧。</p>
+<p>  另外，Github Pages的服务器运行在UTC时区，而我们国内通常是UTC+8（北京时间），Github Pages只会编译在当前时间（UTC）之前的内容，所以如果你的博文长时间没有被自动部署请尝试将时间更改到一天前。</p>
 
       
     </div>
