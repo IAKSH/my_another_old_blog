@@ -146,6 +146,220 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/13/%E5%9C%A8Linux%E4%B8%AD%E4%BD%BF%E7%94%A8tar%E7%AE%A1%E7%90%86%E5%BD%92%E6%A1%A3%E6%96%87%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沧蓝星">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/13/%E5%9C%A8Linux%E4%B8%AD%E4%BD%BF%E7%94%A8tar%E7%AE%A1%E7%90%86%E5%BD%92%E6%A1%A3%E6%96%87%E4%BB%B6/" class="post-title-link" itemprop="url">在Linux中使用tar管理归档文件</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-13 11:37:01 / 修改时间：13:00:27" itemprop="dateCreated datePublished" datetime="2022-08-13T11:37:01+08:00">2022-08-13</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  近来我在云服务器上搭建潜渊症的游戏服务器，时常需要从本地打包文件上传以及从云端打包然后传回文件。<br>  我发现.zip虽然在Windows以及Linux上都通用，但却无法保留文件属性，相较之下，在Linux上，使用tar将文件打包为.tar.gz进行归档是个更好的选择。</p>
+<h1 id="什么是tar命令"><a href="#什么是tar命令" class="headerlink" title="什么是tar命令"></a>什么是tar命令</h1><p>  tar命令（英文全拼：tape archive ），用于备份文件。<br>  tar 是用来建立，还原备份文件的工具程序，它可以加入，解开备份文件内的文件。</p>
+<h1 id="最常用的三组tar命令"><a href="#最常用的三组tar命令" class="headerlink" title="最常用的三组tar命令"></a>最常用的三组tar命令</h1><h2 id="压缩文件"><a href="#压缩文件" class="headerlink" title="压缩文件"></a>压缩文件</h2>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -czvf test.tar.gz a.c   //压缩 a.c文件为test.tar.gz</span><br></pre></td></tr></table></figure>
+<p>  参数解释：</p>
+<table>
+<thead>
+<tr>
+<th>短参</th>
+<th>长参</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-c</td>
+<td>–create</td>
+<td>建立新的备份文件</td>
+</tr>
+<tr>
+<td>-z</td>
+<td>–gzip或–ungzip</td>
+<td>通过gzip指令处理备份文件</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>–verbose</td>
+<td>显示指令执行过程</td>
+</tr>
+<tr>
+<td>-f xxx</td>
+<td>–file&#x3D;xxx</td>
+<td>指定备份文件</td>
+</tr>
+</tbody></table>
+<h2 id="列出压缩文件的内容"><a href="#列出压缩文件的内容" class="headerlink" title="列出压缩文件的内容"></a>列出压缩文件的内容</h2>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -tzvf test.tar.gz </span><br></pre></td></tr></table></figure>
+<p>  参数解释：</p>
+<table>
+<thead>
+<tr>
+<th>短参</th>
+<th>长参</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-t</td>
+<td>–list</td>
+<td>列出备份文件的内容</td>
+</tr>
+<tr>
+<td>-z</td>
+<td>–gzip或–ungzip</td>
+<td>通过gzip指令处理备份文件</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>–verbose</td>
+<td>显示指令执行过程</td>
+</tr>
+<tr>
+<td>-f xxx</td>
+<td>–file&#x3D;xxx</td>
+<td>指定备份文件</td>
+</tr>
+</tbody></table>
+<h2 id="解压文件"><a href="#解压文件" class="headerlink" title="解压文件"></a>解压文件</h2>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xzvf test.tar.gz </span><br></pre></td></tr></table></figure>
+<p>  参数解释：</p>
+<table>
+<thead>
+<tr>
+<th>短参</th>
+<th>长参</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-x</td>
+<td>–extract或–get</td>
+<td>从备份文件中还原文件</td>
+</tr>
+<tr>
+<td>-z</td>
+<td>–gzip或–ungzip</td>
+<td>通过gzip指令处理备份文件</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>–verbose</td>
+<td>显示指令执行过程</td>
+</tr>
+<tr>
+<td>-f xxx</td>
+<td>–file&#x3D;xxx</td>
+<td>指定备份文件</td>
+</tr>
+</tbody></table>
+<h1 id="其他一些可能有用的参数（部分）"><a href="#其他一些可能有用的参数（部分）" class="headerlink" title="其他一些可能有用的参数（部分）"></a>其他一些可能有用的参数（部分）</h1><table>
+<thead>
+<tr>
+<th>短参</th>
+<th>长参</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-A</td>
+<td>–catenate</td>
+<td>新增文件到已存在的备份文件</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>–diff或–compare</td>
+<td>对比备份文件内和文件系统上的文件的差异</td>
+</tr>
+<tr>
+<td>-k</td>
+<td>–keep-old-files</td>
+<td>解开备份文件时，不覆盖已有的文件</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>–modification-time</td>
+<td>还原文件时，不变更文件的更改时间</td>
+</tr>
+<tr>
+<td>-N&lt;日期格式&gt;</td>
+<td>–newer&#x3D;&lt;日期时间&gt;</td>
+<td>只将较指定日期更新的文件保存到备份文件里</td>
+</tr>
+<tr>
+<td>-O</td>
+<td>–stdout</td>
+<td>把从备份文件里还原的文件输出到标准输出设备</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>–same-permissions</td>
+<td>用原来的文件权限还原文件</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>–append</td>
+<td>新增文件到已存在的备份文件的结尾部分</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>–update</td>
+<td>仅置换较备份文件内的文件更新的文件</td>
+</tr>
+<tr>
+<td>N&#x2F;A</td>
+<td>–ignore-failed-read</td>
+<td>忽略数据读取错误，不中断程序的执行</td>
+</tr>
+</tbody></table>
+<h1 id="我的一些感想"><a href="#我的一些感想" class="headerlink" title="我的一些感想"></a>我的一些感想</h1><p>不只是tar，Linux上的很多工具都给我一种感觉。在Windows上需要某个第三方软件来完成的事，对Linux上的工具而言只是它们最基础的功能。Linux上的这些工具能很方便的嵌入自动化脚本中，整个系统就像是一个巨大的程序库，共给shell调用。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-comm-tar.html">菜鸟教程-Linux tar 命令</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/12/Dev-C-%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -169,10 +383,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-08-12 15:45:16 / 修改时间：23:02:56" itemprop="dateCreated datePublished" datetime="2022-08-12T15:45:16+08:00">2022-08-12</time>
+              <time title="创建时间：2022-08-12 15:45:16" itemprop="dateCreated datePublished" datetime="2022-08-12T15:45:16+08:00">2022-08-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-13 13:03:56" itemprop="dateModified" datetime="2022-08-13T13:03:56+08:00">2022-08-13</time>
+              </span>
 
           
 
@@ -188,14 +408,14 @@
           <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  其实，我有软件洁癖。但是学校好像要求要用Dev-C++，所以我在虚拟机里进行了配置，并写下了这篇博文。<br>  我对Dev-C++这样老掉牙且有先天缺陷的IDE一向是嗤之以鼻的，但看了一些文章以后，这样的看法似乎有一些改观了。<br>  Dev-C++也许不是一个趁手的工具，但它不失为一个合适的教具。</p>
 <h1 id="什么是Dev-C"><a href="#什么是Dev-C" class="headerlink" title="什么是Dev-C++"></a>什么是Dev-C++</h1><h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>  Dev-C++是以Delphi编写（存疑）的，运行在Windows上的，以MinGW-W64（或TDM-GCC）为后端的<strong>基于GPL协议开源</strong>的C&#x2F;C++集成开发环境（IDE）<br>  Dev-C++功能简陋…不，应该是某种意义上的简洁，对新人不太友好但却实际上适合新手入门以及充当C&#x2F;C++的教学工具。</p>
 <h2 id="Dev-C-的各个分支"><a href="#Dev-C-的各个分支" class="headerlink" title="Dev-C++的各个分支"></a>Dev-C++的各个分支</h2><p>  Dev-C++，作为一个开源项目，它也有着在大多数开源项目上常见的悲惨，却又幸运的命运。<br>  2000年左右，Bloodshed Software团队以构建一个轻量，免费，开源的C&#x2F;C++ IDE为宗旨，创建了Dev-C++项目。不过由于整个团队几乎是在用爱发电，到2005年时，Bloodshed以“失去开发动力”为由，宣布无限期暂停Dev-C++的更新，Dev-C++的版本号停滞在了4.9.9。<br>  但是当时的Dev-C++实在是太讨人喜欢了，在原团队停止开发后，无数的社区开发者们自发地扛起了Dev-C++的更新工作，其中最有名的当属Orwell团队。<br>  Orwell团队在2011年成功将Dev-C++的版本号推至5.x，在2016年发布了他们的最后一个版本——5.11。<br>  从2016年到2020年，只有一些个人维护的Dev-C++分支仍在更新，Dev-C++社区总体上停滞不前。<br>  但2020年7月，Embarcadero公司投入资金并以Orwell Dev-C++ 5.11为蓝本继续开发，这也就是我们即将接触的Embarcadero Dev-C++的来源。</p>
-<h2 id="我为什么认为Dev-C-是一个好的C语言教具"><a href="#我为什么认为Dev-C-是一个好的C语言教具" class="headerlink" title="我为什么认为Dev-C++是一个好的C语言教具"></a>我为什么认为Dev-C++是一个好的C语言教具</h2><p>  众所周知，完事开头难，如果你让一个从未学习过编程的人以来就使用Visual Studio这样的工具，它多半还没有开始敲字就被一堆又一堆的按钮给吓住了。<br>  使用Dev-C++这样老旧的IDE有一个好处，就是它并不会像Visua Studio那样将编译链接的过程隐藏起来，也没有IntelliCode来掩盖你记不住关键字和函数的事实。Dev-C++将编译链接的理论模型简单套上一层自动化脚本，然后直接摆在使用者的面前，给人一种好像就是在用终端指令操纵gcc去编译程序的感觉，熟悉Dev-C++的操作流程以后，能很方便地切换到Makefile以及CMake这样的构建工具上，我想这也是老一辈程序员们热爱它的原因，某种意义上它难以理解，某种意义上它也简单干净，它不为资本所追求的快速迭代而服务，它忠于技术本身，它属于程序员。</p>
+<h2 id="我为什么认为Dev-C-是一个好的C语言教具"><a href="#我为什么认为Dev-C-是一个好的C语言教具" class="headerlink" title="我为什么认为Dev-C++是一个好的C语言教具"></a>我为什么认为Dev-C++是一个好的C语言教具</h2><p>  众所周知，完事开头难，如果你让一个从未学习过编程的人一来就使用Visual Studio这样的工具，它多半还没有开始敲字就被一堆又一堆的按钮给吓住了。<br>  使用Dev-C++这样老旧的IDE有一个好处，就是它并不会像Visua Studio那样将编译链接的过程隐藏起来，也没有IntelliCode来掩盖你记不住关键字和函数的事实。Dev-C++将编译链接的理论模型简单套上一层自动化脚本，然后直接摆在使用者的面前，给人一种好像就是在用终端指令操纵gcc去编译程序的感觉，熟悉Dev-C++的操作流程以后，能较为方便地切换到Makefile以及CMake这样更加专业的构建工具上，我想这也是老一辈程序员们热爱它的原因，某种意义上它难以理解，某种意义上它也简单干净，它不为资本所追求的快速迭代而服务，它忠于技术本身，它属于程序员。</p>
 <h1 id="Dev-C-的下载与安装"><a href="#Dev-C-的下载与安装" class="headerlink" title="Dev-C++的下载与安装"></a>Dev-C++的下载与安装</h1><h2 id="下载Dev-C-安装包"><a href="#下载Dev-C-安装包" class="headerlink" title="下载Dev-C++安装包"></a>下载Dev-C++安装包</h2><p>  作为名副其实的老开源项目，Orwell Dev-C++的仓库托管在<a target="_blank" rel="noopener" href="https://sourceforge.net/projects/orwelldevcpp/">Sourceforge</a>，而重生于2020年的Embarcadero Dev-C++则开源于<a target="_blank" rel="noopener" href="https://github.com/Embarcadero/Dev-Cpp">Github</a><br>  你可以在上述Github仓库页面找到Embarcadero Dev-C++的最新Release。截至本文完稿时的最新版本为6.3，附带的编译器为TDM-GCC，这也是下面我用到的版本。</p>
 <h2 id="安装Dev-C"><a href="#安装Dev-C" class="headerlink" title="安装Dev-C++"></a>安装Dev-C++</h2><p>  <del>你不会拿到安装包了还不会装吧？</del><br>  <del>不会吧不会吧？</del><br>  Embarcadero Dev-C++的Github Release里应该同时包含了exe安装包和可绿色安装的压缩包，我的建议是使用后者，解压即用，双击devcpp.exe起飞。<br>  第一次启动Dev-C++时会要你选择语言和一些主题设置，我的建议是使用Visual Studio Dark配色以及Windows10图标，不包你喜欢但是保证不辣眼睛。</p>
 <h1 id="Dev-C-的基本操作"><a href="#Dev-C-的基本操作" class="headerlink" title="Dev-C++的基本操作"></a>Dev-C++的基本操作</h1><h2 id="新建和打开一个工程"><a href="#新建和打开一个工程" class="headerlink" title="新建和打开一个工程"></a>新建和打开一个工程</h2><p>  和大多数IDE一样，在开始编码之前你得先创建一个项目，进入软件后点击左上角文件-&gt;新建-&gt;项目，然后选择你要创建的项目类型。<br>  这里我以控制台程序（Console Application）为例。<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/vYYOKO"><img src="https://s1.ax1x.com/2022/08/12/vYYOKO.png" alt="vYYOKO.png"></a><br>  点击确认后会需要你选择一个位置作为该项目的根目录，随后会在你选择的路径下创建一个项目文件，如下图。<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/vYt3sU"><img src="https://s1.ax1x.com/2022/08/12/vYt3sU.png" alt="vYt3sU.png"></a><br>  这实际上是一个文本文件，它记录了该项目的各种配置以及源文件路径，你可以使用任意文本编辑器来查看它的内容，比如我的：<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/vYtUiR"><img src="https://s1.ax1x.com/2022/08/12/vYtUiR.png" alt="vYtUiR.png"></a><br>  当你关闭Dev-C++后，只需要用Dev-C++打开该.dev文件即可再次打开该工程。<br>  最简单的操作流程就是把.dev文件拖到devcpp.exe上，就像这样…<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/vYtTeg"><img src="https://s1.ax1x.com/2022/08/12/vYtTeg.png" alt="vYtTeg.png"></a></p>
 <h2 id="向工程中添加源文件和头文件"><a href="#向工程中添加源文件和头文件" class="headerlink" title="向工程中添加源文件和头文件"></a>向工程中添加源文件和头文件</h2><p>  你可以直接右键某个项目然后新建一个文本文件在里面<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/vYN0ts"><img src="https://s1.ax1x.com/2022/08/12/vYN0ts.png" alt="vYN0ts.png"></a><br>  新建文件的路径，名称还有后缀都由你自己决定，Dev-C++和后面的编译器都只靠文件后缀来判断是源文件还是头文件或者是其他的什么玩意儿。但关于路径我想说的是，Dev-C++甚至允许你把添加的文件丢在任何一个目录，但我建议不要把他们丢在项目的根目录外面。</p>
 <p>  你还可以右键工程以后直接点击“New File”，和上面的差不多，但是你得先按Ctrl+S保存才能选择保存路径。<br>  你也许也注意到了，工程的右键菜单里有创建文件夹，我想说的是这个“文件夹”并不是实际文件结构中的文件夹，只是在Dev-C++中对源文件和头文件进行分组归类。</p>
 <h1 id="编译你的工程"><a href="#编译你的工程" class="headerlink" title="编译你的工程"></a>编译你的工程</h1><p>  在项目下放列出的所有文件都会被加入到Dev-C++的构建系统中，此时点击运行选项卡中的编译选项即可。<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/vYdpm8"><img src="https://s1.ax1x.com/2022/08/12/vYdpm8.png" alt="vYdpm8.png"></a></p>
-<h1 id="运行你的工程"><a href="#运行你的工程" class="headerlink" title="运行你的工程"></a>运行你的工程</h1><p>  再去看看上面所说的那个选显卡，你会发现里面有“运行”和“编译运行”这两个选项。<br>  和Visual Studio不一样，Dev-C++的“运行”就真的只是运行，不包含编译。<br>  也就是说，在运行之前，你得先把你的程序编译出来。（这一点同样适用于很多老旧的IDE，比如隔壁Code::Blocks）<br>  至于“编译运行”这个选项，其实就是字面意思，把两步合并在了一起，也就是一键开跑了，倒也还算方便。</p>
+<h1 id="运行你的工程"><a href="#运行你的工程" class="headerlink" title="运行你的工程"></a>运行你的工程</h1><p>  再去看看上面所说的那个选项卡，你会发现里面有“运行”和“编译运行”这两个选项。<br>  和Visual Studio不一样，Dev-C++的“运行”就真的只是运行，不包含编译。<br>  也就是说，在运行之前，你得先把你的程序编译出来。（这一点同样适用于很多老旧的IDE，比如隔壁Code::Blocks）<br>  至于“编译运行”这个选项，其实就是字面意思，把两步合并在了一起，也就是一键开跑了，倒也还算方便。</p>
 <h1 id="在Dev-C-中Debug"><a href="#在Dev-C-中Debug" class="headerlink" title="在Dev-C++中Debug"></a>在Dev-C++中Debug</h1><p>  Dev-C++的Debug功能实际上是调用gdb实现的，使用流程也无非就是常见的打断点-&gt;Debug运行，然后步进啥的，看一眼你们大概就都会了。<br>  对了，Dev-C++的断点是不会独立成一行的，而是和行号重叠，在编辑器里点一下行号就能打断点了。<br>  另外，开始Debug的按钮是“运行”选项卡里的“调试”，如下图所示。<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/vYBnnP"><img src="https://s1.ax1x.com/2022/08/12/vYBnnP.png" alt="vYBnnP.png"></a></p>
 <h1 id="使用快捷键替代鼠标操纵"><a href="#使用快捷键替代鼠标操纵" class="headerlink" title="使用快捷键替代鼠标操纵"></a>使用快捷键替代鼠标操纵</h1><p>  说句大实话，这是提升你的生产效率的必要途径。在各个选项卡中你可以在找到各个功能对应的快捷键（写在右侧，比如调试的快捷键是F5），熟练后尽量使用那些快捷键，而不是慢吞吞地摸出鼠标然后到处点点点。</p>
 <h1 id="Dev-C-其他的一些功能"><a href="#Dev-C-其他的一些功能" class="headerlink" title="Dev-C++其他的一些功能"></a>Dev-C++其他的一些功能</h1><h2 id="代码格式化工具"><a href="#代码格式化工具" class="headerlink" title="代码格式化工具"></a>代码格式化工具</h2><p>  Dev-C++集成了AStyle，可以快速按照某种代码风格来格式化你的代码。<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/vYDG5D"><img src="https://s1.ax1x.com/2022/08/12/vYDG5D.png" alt="vYDG5D.png"></a><br>  具体的格式化策略你可以点击“格式化选项”来修改。<br>  顺便一提：<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/vYDxZ6"><img src="https://s1.ax1x.com/2022/08/12/vYDxZ6.png" alt="vYDxZ6.png"></a><br>  好吧，只是抖个机灵。<br>  实际上我也并没有完全遵守Allman风格。</p>
@@ -768,7 +988,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-12 22:32:17" itemprop="dateModified" datetime="2022-08-12T22:32:17+08:00">2022-08-12</time>
+                <time title="修改时间：2022-08-13 11:29:02" itemprop="dateModified" datetime="2022-08-13T11:29:02+08:00">2022-08-13</time>
               </span>
 
           
@@ -784,7 +1004,7 @@
       
           <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  今日重新配置WSL2（Debian）开发环境，又遇此问题，故记之。</p>
 <h1 id="现象描述"><a href="#现象描述" class="headerlink" title="现象描述"></a>现象描述</h1><p>  Debian安装好后直接换清华源（使用https协议），再使用apt update时出现上述错误。</p>
-<h1 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h1><p>  https协议是需要ca证书的，崭新出厂的Debian没有相应的支持。</p>
+<h1 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h1><p>  https协议是需要CA证书的，崭新出厂的Debian没有相应的支持。</p>
 <h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>  方案1. 换回之前默认的源，管理员权限下运行指令“apt update &amp;&amp; apt install ca-certificates”（大概会很慢，因为官方源不慢那你就不会换源然后遇到这个问题了）<br>  方案2. 将source.list中的所有源地址由https协议更改为http，再运行方案1的指令，最后将http改回https（安全起见）</p>
 
       
@@ -1046,7 +1266,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
