@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"iaksh.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="序  这是一篇翻新文档，最初写于2022&#x2F;2&#x2F;1，现简单修改并重新发布。 正文  先来看几个实例    二进制 十进制    00000001 1   00000010 2   00000100 4   00001000 8   00010000 16   00100000 32   01000000 64   10000000 128     上表列举了一个八位二进制数（1字">
+  <meta name="description" content="前言  这篇文章并没有写完，有待更新。 缘起  几日前购置了一台游戏本，却无心拿它去玩什么游戏了。  但又碍于发热过高，于是想到开启混合输出是否能在日常使用中平衡GPU负载，降低功耗。 测试机器  考虑到某些可能存在的隐患，我不想直接写出笔记本型号，这里列出其大致参数。    项目 参数 备注    CPU Intel Core i7 12700H N&#x2F;A   GPU0 Iris XE">
 <meta property="og:type" content="article">
-<meta property="og:title" content="从二进制到十进制的转换方法">
-<meta property="og:url" content="https://iaksh.github.io/2022/08/12/%E4%BB%8E%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%88%B0%E5%8D%81%E8%BF%9B%E5%88%B6%E7%9A%84%E8%BD%AC%E6%8D%A2%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:title" content="对笔记本混合输出的探究">
+<meta property="og:url" content="https://iaksh.github.io/2022/08/15/%E5%AF%B9%E7%AC%94%E8%AE%B0%E6%9C%AC%E6%B7%B7%E5%90%88%E8%BE%93%E5%87%BA%E7%9A%84%E6%8E%A2%E7%A9%B6/index.html">
 <meta property="og:site_name" content="Hello world!">
-<meta property="og:description" content="序  这是一篇翻新文档，最初写于2022&#x2F;2&#x2F;1，现简单修改并重新发布。 正文  先来看几个实例    二进制 十进制    00000001 1   00000010 2   00000100 4   00001000 8   00010000 16   00100000 32   01000000 64   10000000 128     上表列举了一个八位二进制数（1字">
+<meta property="og:description" content="前言  这篇文章并没有写完，有待更新。 缘起  几日前购置了一台游戏本，却无心拿它去玩什么游戏了。  但又碍于发热过高，于是想到开启混合输出是否能在日常使用中平衡GPU负载，降低功耗。 测试机器  考虑到某些可能存在的隐患，我不想直接写出笔记本型号，这里列出其大致参数。    项目 参数 备注    CPU Intel Core i7 12700H N&#x2F;A   GPU0 Iris XE">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-08-12T05:26:14.000Z">
-<meta property="article:modified_time" content="2022-08-12T06:53:23.585Z">
+<meta property="article:published_time" content="2022-08-14T17:00:36.000Z">
+<meta property="article:modified_time" content="2022-08-14T17:24:11.218Z">
 <meta property="article:author" content="IAKSH">
-<meta property="article:tag" content="Math">
+<meta property="article:tag" content="搞机">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://iaksh.github.io/2022/08/12/%E4%BB%8E%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%88%B0%E5%8D%81%E8%BF%9B%E5%88%B6%E7%9A%84%E8%BD%AC%E6%8D%A2%E6%96%B9%E6%B3%95/">
+<link rel="canonical" href="https://iaksh.github.io/2022/08/15/%E5%AF%B9%E7%AC%94%E8%AE%B0%E6%9C%AC%E6%B7%B7%E5%90%88%E8%BE%93%E5%87%BA%E7%9A%84%E6%8E%A2%E7%A9%B6/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>从二进制到十进制的转换方法 | Hello world!</title>
+  <title>对笔记本混合输出的探究 | Hello world!</title>
   
 
 
@@ -151,7 +151,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/12/%E4%BB%8E%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%88%B0%E5%8D%81%E8%BF%9B%E5%88%B6%E7%9A%84%E8%BD%AC%E6%8D%A2%E6%96%B9%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/15/%E5%AF%B9%E7%AC%94%E8%AE%B0%E6%9C%AC%E6%B7%B7%E5%90%88%E8%BE%93%E5%87%BA%E7%9A%84%E6%8E%A2%E7%A9%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          从二进制到十进制的转换方法
+          对笔记本混合输出的探究
         </h1>
 
         <div class="post-meta">
@@ -175,7 +175,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-08-12 13:26:14 / 修改时间：14:53:23" itemprop="dateCreated datePublished" datetime="2022-08-12T13:26:14+08:00">2022-08-12</time>
+              <time title="创建时间：2022-08-15 01:00:36 / 修改时间：01:24:11" itemprop="dateCreated datePublished" datetime="2022-08-15T01:00:36+08:00">2022-08-15</time>
             </span>
 
           
@@ -189,55 +189,99 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022&#x2F;2&#x2F;1，现简单修改并重新发布。</p>
-<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>  先来看几个实例</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>  这篇文章并没有写完，有待更新。</p>
+<h1 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h1><p>  几日前购置了一台游戏本，却无心拿它去玩什么游戏了。<br>  但又碍于发热过高，于是想到开启混合输出是否能在日常使用中平衡GPU负载，降低功耗。</p>
+<h1 id="测试机器"><a href="#测试机器" class="headerlink" title="测试机器"></a>测试机器</h1><p>  考虑到某些可能存在的隐患，我不想直接写出笔记本型号，这里列出其大致参数。</p>
 <table>
 <thead>
 <tr>
-<th>二进制</th>
-<th>十进制</th>
+<th>项目</th>
+<th>参数</th>
+<th>备注</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>00000001</td>
-<td>1</td>
+<td>CPU</td>
+<td>Intel Core i7 12700H</td>
+<td>N&#x2F;A</td>
 </tr>
 <tr>
-<td>00000010</td>
-<td>2</td>
+<td>GPU0</td>
+<td>Iris XE</td>
+<td>96eu</td>
 </tr>
 <tr>
-<td>00000100</td>
-<td>4</td>
+<td>GPU1</td>
+<td>Nvidia GeForce RTX 3060 Laptop</td>
+<td>140W</td>
 </tr>
 <tr>
-<td>00001000</td>
-<td>8</td>
-</tr>
-<tr>
-<td>00010000</td>
-<td>16</td>
-</tr>
-<tr>
-<td>00100000</td>
-<td>32</td>
-</tr>
-<tr>
-<td>01000000</td>
-<td>64</td>
-</tr>
-<tr>
-<td>10000000</td>
-<td>128</td>
+<td>电源适配器</td>
+<td>230W</td>
+<td>N&#x2F;A</td>
 </tr>
 </tbody></table>
-<p>  上表列举了一个八位二进制数（1字节）00000001按位左移的结果。<br>  由图易得：设一个二进制数00000001向左位移次数为x，则有将其转换为十进制的方程f(x)&#x3D;2∧(x-1)<br>  经检验，该结论正确，过程略。</p>
-<p>  由上述结论我们不难推测，是否存在任意长度的任意二进制数，可以拆分为多个形如00…001向左位移得到的二进制数，再带入上述方程的结果之合为该二进制数的十进制值？</p>
-<p>  经过验证，发现该假设成立，过程简要如下：</p>
-<p>  例如：有一个二进制数000010100<br>  单独看1的位置，发现有两个1，分别位于第5和第3位。<br>  则将此二进制数拆分为两个二进制数：000010000和000000100。<br>  将此二者带入上述f（x），分别得解为2 ∧ 4 &#x3D; 16， 2 ∧ 2 &#x3D; 4<br>  两解相加为20</p>
-<p>  经过检验，成立。</p>
-<p>  综上所述，我们得到一种由二进制数转换为十进制数的快速方法：<br>  只看1的位置，对于每一个1，将自右数起到该1的位数的值（不包括该1所在位）作为2的幂得到多个中间值，再将所有中间值相加得到该二进制数的十进制值。</p>
-<h1 id="后日谈"><a href="#后日谈" class="headerlink" title="后日谈"></a>后日谈</h1><p>  其实现在看来，二进制转十进制实际上就是一个等比数列求和，具体自己看吧。<br>  对了，高考之前我甚至真的遇到这样的题目了。</p>
+<h1 id="测试项目"><a href="#测试项目" class="headerlink" title="测试项目"></a>测试项目</h1><p>  使用Windows 11 “电影和电视”程序播放 SONY DEMO 4K 演示片 ( 2160 X 3840 60fps )<br>  其他的，我暂时懒得弄了，下次继续。</p>
+<h1 id="功耗检测软件"><a href="#功耗检测软件" class="headerlink" title="功耗检测软件"></a>功耗检测软件</h1><p>  使用HWMonitor(x64)监控CPU GT Power。<br>  使用Nvidia Experience监控RTX 3060 Laptop功耗。</p>
+<h1 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h1><p>  混合输出：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>最大功耗</th>
+<th>平均功耗</th>
+<th>平均使用率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU Powers</td>
+<td>20.36W</td>
+<td>10.5W</td>
+<td>N&#x2F;A</td>
+</tr>
+<tr>
+<td>CPU GT Powers</td>
+<td>3.35W</td>
+<td>1.5W</td>
+<td>N&#x2F;A</td>
+</tr>
+<tr>
+<td>Iris XE (96EU)</td>
+<td>N&#x2F;A</td>
+<td>N&#x2F;A</td>
+<td>50%</td>
+</tr>
+<tr>
+<td>Nvidia GeForce RTX 3060 Laptop</td>
+<td>N&#x2F;A</td>
+<td>N&#x2F;A</td>
+<td>0%</td>
+</tr>
+</tbody></table>
+<p>  独显直连</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>最大功耗</th>
+<th>平均功耗</th>
+<th>平均使用率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU Powers</td>
+<td>20.18W</td>
+<td>7.3W</td>
+<td>N&#x2F;A</td>
+</tr>
+<tr>
+<td>Nvidia GeForce RTX 3060 Laptop</td>
+<td>24W</td>
+<td>21W</td>
+<td>38%</td>
+</tr>
+</tbody></table>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>  在当前实验环境下，混合输出确实能减少观看4k 60fps hdr影片时的功耗，由此类推，在日常使用中，混合输出较独显直连更加省电，<em>理论上</em>能减少发热。<br>  但当前测试环境中独显为使用三星8nm工艺的RTX 3060 Laptop，考虑到三星工艺糟糕的能效表现，<strong>此次实验结果在Nvidia 20&#x2F;10系显卡上的不一定适用</strong>。</p>
 
     </div>
 
@@ -247,7 +291,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Math/" rel="tag"># Math</a>
+              <a href="/tags/%E6%90%9E%E6%9C%BA/" rel="tag"># 搞机</a>
           </div>
 
         
@@ -256,12 +300,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/08/11/WSL2%E4%B8%8EWSLg%E7%9A%84%E9%83%A8%E7%BD%B2/" rel="prev" title="WSL2与WSLg的部署">
-      <i class="fa fa-chevron-left"></i> WSL2与WSLg的部署
+    <a href="/2022/08/14/%E5%85%B3%E4%BA%8Estring-h%E7%9A%84%E7%AC%94%E8%AE%B0/" rel="prev" title="关于string.h的笔记">
+      <i class="fa fa-chevron-left"></i> 关于string.h的笔记
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/08/12/%E5%8D%81%E5%85%AD%E8%BF%9B%E5%88%B6%E4%B8%8E%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E8%81%94%E7%B3%BB/" rel="next" title="十六进制与二进制之间的联系">
-      十六进制与二进制之间的联系 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/08/15/%E5%9C%A8vscode%E4%B8%8A%E6%90%AD%E5%BB%BAWSL2%E4%B8%8B%E7%9A%84C%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" rel="next" title="在vscode上搭建WSL2下的C语言开发环境">
+      在vscode上搭建WSL2下的C语言开发环境 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -321,7 +365,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F"><span class="nav-number">1.</span> <span class="nav-text">序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E6%97%A5%E8%B0%88"><span class="nav-number">3.</span> <span class="nav-text">后日谈</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%98%E8%B5%B7"><span class="nav-number">2.</span> <span class="nav-text">缘起</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%9C%BA%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text">测试机器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E9%A1%B9%E7%9B%AE"><span class="nav-number">4.</span> <span class="nav-text">测试项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%9F%E8%80%97%E6%A3%80%E6%B5%8B%E8%BD%AF%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">功耗检测软件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C"><span class="nav-number">6.</span> <span class="nav-text">测试结果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">7.</span> <span class="nav-text">结论</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

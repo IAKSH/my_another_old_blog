@@ -21,9 +21,9 @@
   </script>
 
   <meta property="og:type" content="website">
-<meta property="og:title" content="沧蓝星">
+<meta property="og:title" content="Hello world!">
 <meta property="og:url" content="https://iaksh.github.io/index.html">
-<meta property="og:site_name" content="沧蓝星">
+<meta property="og:site_name" content="Hello world!">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="IAKSH">
 <meta property="article:tag" content="IAKSH">
@@ -42,7 +42,7 @@
   };
 </script>
 
-  <title>沧蓝星</title>
+  <title>Hello world!</title>
   
 
 
@@ -93,7 +93,7 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">沧蓝星</h1>
+      <h1 class="site-title">Hello world!</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -146,6 +146,416 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/18/%E8%AE%B0%E4%B8%80%E6%AC%A1C%E4%B8%AD%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%9A%E9%87%8D%E5%AE%9A%E4%B9%89-multiple-definition-%E6%8A%A5%E9%94%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello world!">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/18/%E8%AE%B0%E4%B8%80%E6%AC%A1C%E4%B8%AD%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%9A%E9%87%8D%E5%AE%9A%E4%B9%89-multiple-definition-%E6%8A%A5%E9%94%99/" class="post-title-link" itemprop="url">记一次C中全局变量的多重定义(multiple definition)报错</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-18 23:32:54 / 修改时间：23:33:51" itemprop="dateCreated datePublished" datetime="2022-08-18T23:32:54+08:00">2022-08-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="记一次C中全局变量的多重定义-multiple-definition-报错"><a href="#记一次C中全局变量的多重定义-multiple-definition-报错" class="headerlink" title="记一次C中全局变量的多重定义(multiple definition)报错"></a>记一次C中全局变量的多重定义(multiple definition)报错</h1><h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>我在一个头文件里定义了一个全局bool（stdbool.h里的那个)，然后在两个源文件中include了这个头文件，在编译时gcc报错multiple definition of  ‘（省略）’</p>
+<h2 id="修复一个bug，获得更多bug"><a href="#修复一个bug，获得更多bug" class="headerlink" title="修复一个bug，获得更多bug"></a>修复一个bug，获得更多bug</h2><p>由于太久没有温习，我最初尝试给bool值的声明语句添加static。</p>
+<p>这确实解决了问题，但是在头文件中用static定义的变量在每次include时会产生不同的对象。每个include此头文件的文件作用域中都会有一个互不干扰的同名变量。</p>
+<p>我的这次操作修复了一个bug，产生了更多bug，并导致我进行了长达1分钟的排查。</p>
+<h2 id="正确解法"><a href="#正确解法" class="headerlink" title="正确解法"></a>正确解法</h2><p>不要在头文件里定义全局变量，这是导致多重定义的直接原因。</p>
+<p>如果你不得不这么做，请在头文件中使用extern声明变量，随后在某个源文件内声明。</p>
+<h2 id="不解"><a href="#不解" class="headerlink" title="不解"></a>不解</h2><p>道理我都明白，但是，为什么已经加了#pragma once，还是多重定义了。<br>且进一步测试表明，#ifndef + #define + #endif也无法解决此问题。</p>
+<h2 id="对上述不解的探究"><a href="#对上述不解的探究" class="headerlink" title="对上述不解的探究"></a>对上述不解的探究</h2><p>我使用gcc -E获取了include上述头文件的源码经过预处理后的文本。</p>
+<p>然后…然后啥也没看出来。</p>
+<p><em>（未完待续）</em><br><em>（也许吧）</em></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/15/C%E4%B8%AD%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA%E6%97%B6%E5%BF%BD%E7%95%A5%E6%B5%AE%E7%82%B9%E6%95%B0%E5%A4%9A%E4%BD%99%E7%9A%840/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello world!">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/15/C%E4%B8%AD%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA%E6%97%B6%E5%BF%BD%E7%95%A5%E6%B5%AE%E7%82%B9%E6%95%B0%E5%A4%9A%E4%BD%99%E7%9A%840/" class="post-title-link" itemprop="url">C中格式化输出时忽略浮点数多余的0</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-15 23:32:02 / 修改时间：23:41:25" itemprop="dateCreated datePublished" datetime="2022-08-15T23:32:02+08:00">2022-08-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>今日刷题，居然被这破玩意儿难住了，搞了半个多小时弄了个神必算法。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> input[<span class="number">3</span>][<span class="number">128</span>];</span><br><span class="line">    <span class="type">float</span> row[<span class="number">3</span>];</span><br><span class="line">    <span class="type">float</span> buffer = <span class="number">0.0f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">3</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">char</span> buffer[<span class="number">128</span>];</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>,buffer);</span><br><span class="line">        <span class="built_in">strcpy</span>(input[i], buffer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>;i &lt;= <span class="number">3</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>;j &lt; <span class="number">2</span>;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(atof(input[j]) &lt; atof(input[j+<span class="number">1</span>]))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="type">char</span> buffer[<span class="number">128</span>];</span><br><span class="line">                <span class="built_in">strcpy</span>(buffer, input[j+<span class="number">1</span>]);</span><br><span class="line">                <span class="built_in">strcpy</span>(input[j+<span class="number">1</span>], input[j]);</span><br><span class="line">                <span class="built_in">strcpy</span>(input[j], buffer);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">3</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s &quot;</span>,input[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    putc(<span class="string">&#x27;\n&#x27;</span>,<span class="built_in">stdout</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>说出来你可能不信，我当时甚至想拿union来搞位操作判断是几位小数。</p>
+<p>后来发现只要用%g就可以忽略浮点数多余的0不输出了。</p>
+<p>使用如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%g\n&quot;</span>,<span class="number">114.51400f</span>);  <span class="comment">//output: 114.514</span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> buffer[<span class="number">128</span>];</span><br><span class="line"><span class="built_in">sprintf</span>(buffer,<span class="string">&quot;%g&quot;</span>,<span class="number">114.51400f</span>);</span><br><span class="line"><span class="built_in">puts</span>(buffer);               <span class="comment">//output: 114.514</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/15/%E5%9C%A8vscode%E4%B8%8A%E6%90%AD%E5%BB%BAWSL2%E4%B8%8B%E7%9A%84C%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello world!">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/15/%E5%9C%A8vscode%E4%B8%8A%E6%90%AD%E5%BB%BAWSL2%E4%B8%8B%E7%9A%84C%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="post-title-link" itemprop="url">在vscode上搭建WSL2下的C语言开发环境</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-15 21:02:39" itemprop="dateCreated datePublished" datetime="2022-08-15T21:02:39+08:00">2022-08-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-18 23:31:00" itemprop="dateModified" datetime="2022-08-18T23:31:00+08:00">2022-08-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>由于Visua Studio仅有C++编译器，且其对C标准库改动过大，我的C程序开发主要在WSL2上进行。<br>这篇文档将会引导你在Windows10&#x2F;11上使用vscode连接本地WSL2进行Linux环境下的C程序开发。<br>如果你尚未部署WSL2，请翻阅<a href="https://iaksh.github.io/2022/08/11/WSL2%E4%B8%8EWSLg%E7%9A%84%E9%83%A8%E7%BD%B2/">这篇文章</a></p>
+<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>我没有使用微软官方的C&#x2F;C++插件，因为它从某种角度来说太糟糕了。<br>这也意味着这套开发环境能够在vscodium上正常部署。</p>
+<h1 id="我选用的技术栈"><a href="#我选用的技术栈" class="headerlink" title="我选用的技术栈"></a>我选用的技术栈</h1><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文本编辑器</td>
+<td>Visual Studio Code</td>
+</tr>
+<tr>
+<td>编译器</td>
+<td>gcc</td>
+</tr>
+<tr>
+<td>调试器</td>
+<td>gdb</td>
+</tr>
+<tr>
+<td>构建工具</td>
+<td>CMake + Makefile（可替换为Ninja）</td>
+</tr>
+<tr>
+<td>代码补全</td>
+<td>clangd</td>
+</tr>
+<tr>
+<td>代码格式化</td>
+<td>clang-format</td>
+</tr>
+</tbody></table>
+<p><em>（其实你也可以选用全套LLVM&#x2F;Clang工具链，但依然无法摆脱gcc）</em></p>
+<h1 id="配置过程"><a href="#配置过程" class="headerlink" title="配置过程"></a>配置过程</h1><h2 id="在Windows上为vscode安装插件"><a href="#在Windows上为vscode安装插件" class="headerlink" title="在Windows上为vscode安装插件"></a>在Windows上为vscode安装插件</h2><p><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl">Remote - WSL</a></p>
+<h2 id="在WSL2上安装C工具链"><a href="#在WSL2上安装C工具链" class="headerlink" title="在WSL2上安装C工具链"></a>在WSL2上安装C工具链</h2><ol>
+<li><p>安装gcc工具链以及CMake，git<br><em>（部分发行版的部分安装策略中是包含了这一工具链的，若有，无视这条。）</em><br>Debian系：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install gcc gdb make cmake git</span><br></pre></td></tr></table></figure>
+<p>Redhat系：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install gcc gdb make cmake git</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装cland和clang-format<br>注：这一步实际上<strong>会安装LLVM&#x2F;Clang工具链</strong><br>Debian系：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install clangd clang-format</span><br></pre></td></tr></table></figure>
+<p>Redhat系：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install clang-tools-extra</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="使用vscode在WSL2中安装插件"><a href="#使用vscode在WSL2中安装插件" class="headerlink" title="使用vscode在WSL2中安装插件"></a>使用vscode在WSL2中安装插件</h2><p>在Windows上使用vscode的Remote - WSL插件连接到WSL2后，安装以下插件至WSL2：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd">clangd</a></li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=coolchyni.beyond-debug">GDB Debugger - Beyond</a></li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=twxs.cmake">CMake</a></li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools">CMake Tools</a></li>
+</ol>
+<h1 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h1><ol>
+<li><p>快速创建一个CMake项目：<br>连接到WSL2后按ctrl+shift+p，在弹出的输入框中输入CMake: Quick Start然后回车。<br>期间需要选择项目类型（库or可执行），项目名称，以及编译工具链。</p>
+</li>
+<li><p>调用clang-tidy：<br>clang-format的功能被集成到了clangd插件中，在编辑器中右键选择格式化文档即可。</p>
+</li>
+<li><p>Debug：<br>打断点之类的操作流程没有变化，但是在开始Debug之前，你需要手动指定可执行文件路径。<br>除非CMakeLists.txt里指定了别的构建位置，可执行文件一般会生成在项目的build&#x2F;目录中。<br>第一次运行Debug时，请点击vscode左侧的“运行和调试”选项卡，点击“创建 launch.json文件”，调试器选择“GDB(Beyond)”。<br>将”program”键的值该为你的可执行文件路径，即可正常Debug。<br>另：你可以使用${workspaceRoot}（vscode提供的宏）来匹配路径，以保证项目文件的可移植性。</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/15/%E5%AF%B9%E7%AC%94%E8%AE%B0%E6%9C%AC%E6%B7%B7%E5%90%88%E8%BE%93%E5%87%BA%E7%9A%84%E6%8E%A2%E7%A9%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello world!">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/15/%E5%AF%B9%E7%AC%94%E8%AE%B0%E6%9C%AC%E6%B7%B7%E5%90%88%E8%BE%93%E5%87%BA%E7%9A%84%E6%8E%A2%E7%A9%B6/" class="post-title-link" itemprop="url">对笔记本混合输出的探究</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-15 01:00:36 / 修改时间：01:24:11" itemprop="dateCreated datePublished" datetime="2022-08-15T01:00:36+08:00">2022-08-15</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>  这篇文章并没有写完，有待更新。</p>
+<h1 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h1><p>  几日前购置了一台游戏本，却无心拿它去玩什么游戏了。<br>  但又碍于发热过高，于是想到开启混合输出是否能在日常使用中平衡GPU负载，降低功耗。</p>
+<h1 id="测试机器"><a href="#测试机器" class="headerlink" title="测试机器"></a>测试机器</h1><p>  考虑到某些可能存在的隐患，我不想直接写出笔记本型号，这里列出其大致参数。</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>参数</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU</td>
+<td>Intel Core i7 12700H</td>
+<td>N&#x2F;A</td>
+</tr>
+<tr>
+<td>GPU0</td>
+<td>Iris XE</td>
+<td>96eu</td>
+</tr>
+<tr>
+<td>GPU1</td>
+<td>Nvidia GeForce RTX 3060 Laptop</td>
+<td>140W</td>
+</tr>
+<tr>
+<td>电源适配器</td>
+<td>230W</td>
+<td>N&#x2F;A</td>
+</tr>
+</tbody></table>
+<h1 id="测试项目"><a href="#测试项目" class="headerlink" title="测试项目"></a>测试项目</h1><p>  使用Windows 11 “电影和电视”程序播放 SONY DEMO 4K 演示片 ( 2160 X 3840 60fps )<br>  其他的，我暂时懒得弄了，下次继续。</p>
+<h1 id="功耗检测软件"><a href="#功耗检测软件" class="headerlink" title="功耗检测软件"></a>功耗检测软件</h1><p>  使用HWMonitor(x64)监控CPU GT Power。<br>  使用Nvidia Experience监控RTX 3060 Laptop功耗。</p>
+<h1 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h1><p>  混合输出：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>最大功耗</th>
+<th>平均功耗</th>
+<th>平均使用率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU Powers</td>
+<td>20.36W</td>
+<td>10.5W</td>
+<td>N&#x2F;A</td>
+</tr>
+<tr>
+<td>CPU GT Powers</td>
+<td>3.35W</td>
+<td>1.5W</td>
+<td>N&#x2F;A</td>
+</tr>
+<tr>
+<td>Iris XE (96EU)</td>
+<td>N&#x2F;A</td>
+<td>N&#x2F;A</td>
+<td>50%</td>
+</tr>
+<tr>
+<td>Nvidia GeForce RTX 3060 Laptop</td>
+<td>N&#x2F;A</td>
+<td>N&#x2F;A</td>
+<td>0%</td>
+</tr>
+</tbody></table>
+<p>  独显直连</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>最大功耗</th>
+<th>平均功耗</th>
+<th>平均使用率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU Powers</td>
+<td>20.18W</td>
+<td>7.3W</td>
+<td>N&#x2F;A</td>
+</tr>
+<tr>
+<td>Nvidia GeForce RTX 3060 Laptop</td>
+<td>24W</td>
+<td>21W</td>
+<td>38%</td>
+</tr>
+</tbody></table>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>  在当前实验环境下，混合输出确实能减少观看4k 60fps hdr影片时的功耗，由此类推，在日常使用中，混合输出较独显直连更加省电，<em>理论上</em>能减少发热。<br>  但当前测试环境中独显为使用三星8nm工艺的RTX 3060 Laptop，考虑到三星工艺糟糕的能效表现，<strong>此次实验结果在Nvidia 20&#x2F;10系显卡上的不一定适用</strong>。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/14/%E5%85%B3%E4%BA%8Estring-h%E7%9A%84%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -155,7 +565,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="沧蓝星">
+      <meta itemprop="name" content="Hello world!">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -169,10 +579,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-08-14 22:13:43 / 修改时间：22:17:53" itemprop="dateCreated datePublished" datetime="2022-08-14T22:13:43+08:00">2022-08-14</time>
+              <time title="创建时间：2022-08-14 22:13:43" itemprop="dateCreated datePublished" datetime="2022-08-14T22:13:43+08:00">2022-08-14</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-15 01:23:26" itemprop="dateModified" datetime="2022-08-15T01:23:26+08:00">2022-08-15</time>
+              </span>
 
           
 
@@ -243,7 +659,7 @@
 <p>  似乎是配合errno.h获取最近的报错描述字符串的。<br>  使用列如下。<br>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line">  <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line">  <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">  <span class="type">int</span> <span class="title function_">main</span> <span class="params">()</span></span><br><span class="line">  &#123;</span><br><span class="line">      FILE *fp;</span><br><span class="line">      fp = fopen(<span class="string">&quot;file.txt&quot;</span>,<span class="string">&quot;r&quot;</span>);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>( fp == <span class="literal">NULL</span> ) </span><br><span class="line">      &#123;</span><br><span class="line">          <span class="built_in">printf</span>(<span class="string">&quot;Error: %s\n&quot;</span>, strerror(errno));</span><br><span class="line">      &#125;</span><br><span class="line">   </span><br><span class="line">      <span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//输出：Error: No such file or directory</span></span><br></pre></td></tr></table></figure></p>
 <hr>
 <h3 id="strlen"><a href="#strlen" class="headerlink" title="strlen"></a>strlen</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">size_t</span> <span class="title function_">strlen</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str)</span></span><br></pre></td></tr></table></figure>
-<p>  返回 str 所指向的字符串的商都（直到但不包括\0）。</p>
+<p>  返回 str 所指向的字符串的长度（直到但不包括\0）。</p>
 <hr>
 <h3 id="strpbrk"><a href="#strpbrk" class="headerlink" title="strpbrk"></a>strpbrk</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strpbrk</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str1, <span class="type">const</span> <span class="type">char</span> *str2)</span></span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -252,7 +668,7 @@
 <hr>
 <h3 id="strrchr"><a href="#strrchr" class="headerlink" title="strrchr"></a>strrchr</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strrchr</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str, <span class="type">int</span> c)</span></span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>在参数 str 所指向的字符串中搜索<em>最后一次</em>出现字符 c（一个无符号字符）的位置。</p>
+<p>在参数 str 所指向的字符串中搜索<strong>最后一次</strong>出现字符 c（一个无符号字符）的位置。</p>
 </blockquote>
 <hr>
 <h3 id="strspn"><a href="#strspn" class="headerlink" title="strspn"></a>strspn</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">size_t</span> <span class="title function_">strspn</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str1, <span class="type">const</span> <span class="type">char</span> *str2)</span></span><br></pre></td></tr></table></figure>
@@ -305,7 +721,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="沧蓝星">
+      <meta itemprop="name" content="Hello world!">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -519,7 +935,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="沧蓝星">
+      <meta itemprop="name" content="Hello world!">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -601,7 +1017,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="沧蓝星">
+      <meta itemprop="name" content="Hello world!">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -712,7 +1128,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="沧蓝星">
+      <meta itemprop="name" content="Hello world!">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -847,7 +1263,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="沧蓝星">
+      <meta itemprop="name" content="Hello world!">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -906,364 +1322,6 @@
 </tbody></table>
 <p>  上述方法原理简单，但多少有些难以计算，对此我们有一种更好的方法:<br>易得16&#x2F;2&#x3D;4，则只需要四位二进制数即可表示一个十六进制数，反之亦然。<br>  由此我们可以得出如下过程：<br>  有一二进制数0010 0001 0110 （空格只为了方便阅读）<br>  则每四位一读，读出三个四位的二进制数：0010，0001，0110<br>  四位二进制可以方便地直接转为十六进制，将上述内容转为十六进制得:2,1,6<br>  则上述二进制数的十六进制表达为2 1 6，即十六进制数216。</p>
 <p>  另:由上述推理过程我们不难看出计算机程序设计中十六进制数大量使用的原因：用十六进制数表示的二进制数更短，适合人类阅读，同时也能快速地转换回二进制。（毕竟计算机里没有奇数位的二进制数不是吗？）</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/12/%E4%BB%8E%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%88%B0%E5%8D%81%E8%BF%9B%E5%88%B6%E7%9A%84%E8%BD%AC%E6%8D%A2%E6%96%B9%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="IAKSH">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="沧蓝星">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/12/%E4%BB%8E%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%88%B0%E5%8D%81%E8%BF%9B%E5%88%B6%E7%9A%84%E8%BD%AC%E6%8D%A2%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">从二进制到十进制的转换方法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-08-12 13:26:14 / 修改时间：14:53:23" itemprop="dateCreated datePublished" datetime="2022-08-12T13:26:14+08:00">2022-08-12</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022&#x2F;2&#x2F;1，现简单修改并重新发布。</p>
-<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>  先来看几个实例</p>
-<table>
-<thead>
-<tr>
-<th>二进制</th>
-<th>十进制</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>00000001</td>
-<td>1</td>
-</tr>
-<tr>
-<td>00000010</td>
-<td>2</td>
-</tr>
-<tr>
-<td>00000100</td>
-<td>4</td>
-</tr>
-<tr>
-<td>00001000</td>
-<td>8</td>
-</tr>
-<tr>
-<td>00010000</td>
-<td>16</td>
-</tr>
-<tr>
-<td>00100000</td>
-<td>32</td>
-</tr>
-<tr>
-<td>01000000</td>
-<td>64</td>
-</tr>
-<tr>
-<td>10000000</td>
-<td>128</td>
-</tr>
-</tbody></table>
-<p>  上表列举了一个八位二进制数（1字节）00000001按位左移的结果。<br>  由图易得：设一个二进制数00000001向左位移次数为x，则有将其转换为十进制的方程f(x)&#x3D;2∧(x-1)<br>  经检验，该结论正确，过程略。</p>
-<p>  由上述结论我们不难推测，是否存在任意长度的任意二进制数，可以拆分为多个形如00…001向左位移得到的二进制数，再带入上述方程的结果之合为该二进制数的十进制值？</p>
-<p>  经过验证，发现该假设成立，过程简要如下：</p>
-<p>  例如：有一个二进制数000010100<br>  单独看1的位置，发现有两个1，分别位于第5和第3位。<br>  则将此二进制数拆分为两个二进制数：000010000和000000100。<br>  将此二者带入上述f（x），分别得解为2 ∧ 4 &#x3D; 16， 2 ∧ 2 &#x3D; 4<br>  两解相加为20</p>
-<p>  经过检验，成立。</p>
-<p>  综上所述，我们得到一种由二进制数转换为十进制数的快速方法：<br>  只看1的位置，对于每一个1，将自右数起到该1的位数的值（不包括该1所在位）作为2的幂得到多个中间值，再将所有中间值相加得到该二进制数的十进制值。</p>
-<h1 id="后日谈"><a href="#后日谈" class="headerlink" title="后日谈"></a>后日谈</h1><p>  其实现在看来，二进制转十进制实际上就是一个等比数列求和，具体自己看吧。<br>  对了，高考之前我甚至真的遇到这样的题目了。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/11/WSL2%E4%B8%8EWSLg%E7%9A%84%E9%83%A8%E7%BD%B2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="IAKSH">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="沧蓝星">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/11/WSL2%E4%B8%8EWSLg%E7%9A%84%E9%83%A8%E7%BD%B2/" class="post-title-link" itemprop="url">WSL2与WSLg的部署</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-11 22:04:01" itemprop="dateCreated datePublished" datetime="2022-08-11T22:04:01+08:00">2022-08-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-12 14:53:47" itemprop="dateModified" datetime="2022-08-12T14:53:47+08:00">2022-08-12</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  今日拿到了新的笔记本，很是开心，但是又得从头配置一遍自己的开发环境了，很是难受。<br>  不过既然事已至此，就随着配置的步伐，顺便水一文吧！</p>
-<h2 id="什么是WSL2和WSLg"><a href="#什么是WSL2和WSLg" class="headerlink" title="什么是WSL2和WSLg"></a>什么是WSL2和WSLg</h2><p>  其实我更建议你去翻<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/">微软的文档</a>。<br>  简单来说，WSL（Windwos下的Linux子系统）提供了一套内核级的翻译机制，能在Windows上翻译执行Linux的ELF格式程序。<br>  而WSL2则是微软妥协的结果，放弃了初代的翻译机制，转而投靠了日渐成熟的Hyper-V虚拟机（一个微软开发的内核级虚拟化平台）。<br>  WSL2实际上就是一个运行在Windows Hyper-V虚拟化平台上的Linux虚拟机，但是相比于直接在虚拟化软件中创建虚拟机，WSL2占用资源相对较少，且提供了对Windows资源管理器的部分集成。<br>  WSLg则是在WSL2的基础上增加了一套图像渲染系统，这套系统的Linux底层是Xorg（X11），通过Windows上dwm混成得到窗口。<br>  简而言之，WSLg能够让你在WSL2中运行绝大多数Linux GUI程序。</p>
-<h2 id="本文适用条件"><a href="#本文适用条件" class="headerlink" title="本文适用条件"></a>本文适用条件</h2><p>  WSLg：我的环境是Windows11，Windows10印象中也是支持的。<br>  WSL2：Windows10与Windows11皆可。</p>
-<h1 id="部署WSL2"><a href="#部署WSL2" class="headerlink" title="部署WSL2"></a>部署WSL2</h1><h2 id="开启相应的Windows功能"><a href="#开启相应的Windows功能" class="headerlink" title="开启相应的Windows功能"></a>开启相应的Windows功能</h2><p>  按Win键-&gt;点设置-&gt;点应用-&gt;往下翻-&gt;点更多Windows功能<br>  勾选 Windows虚拟机监控平台 | 适用于Windows的Linux子系统 | 虚拟机平台<br>  <del>（实际上，虚拟机监控平台大概是不必要的，但是为了兼容其他虚拟机，比如VMware，VirtualBox，还是开着吧）</del></p>
-<h2 id="安装WSL2内核文件"><a href="#安装WSL2内核文件" class="headerlink" title="安装WSL2内核文件"></a>安装WSL2内核文件</h2><p>  尽管<a target="_blank" rel="noopener" href="https://github.com/microsoft/WSL2-Linux-Kernel">WSL2-Linux-Kernal项目</a>的Release早已实装5.15版本内核，但并没有提供相应版本的二进制文件。微软的WSL2文档也依然在提供5.10版本内核的链接。<br>  对于这方面，我的建议通常是使用尽可能新的内核，除非你是在配置一个生产环境。<br>  但这次情况特殊，除非你真的有能力编译一个Linux Kernel，那就老老实实用<a target="_blank" rel="noopener" href="https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi">5.10</a>吧。</p>
-<h2 id="设置WSL默认版本至WSL2"><a href="#设置WSL默认版本至WSL2" class="headerlink" title="设置WSL默认版本至WSL2"></a>设置WSL默认版本至WSL2</h2><p>  以管理员权限运行Windows Terminal（或者Windows10的管理员权限运行的PowerShell），运行如下指令<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-default-version 2</span><br></pre></td></tr></table></figure></p>
-<h2 id="安装一个WSL2发行版"><a href="#安装一个WSL2发行版" class="headerlink" title="安装一个WSL2发行版"></a>安装一个WSL2发行版</h2><p>  最方便的做法是在微软商店中搜索然后一键安装，但这样你的WSL2会被安装在C盘里（User文件夹深处，具体太复杂，自己查吧），如果你不在乎那点空间占用，可以这样做。<br>  还有一种方法是下载发行版的appx安装包，然后手动安装，具体见下文。</p>
-<h3 id="一键安装"><a href="#一键安装" class="headerlink" title="一键安装"></a>一键安装</h3><p>  打开微软商店，搜索你喜欢的发行版，一键安装，点击运行，输入用户名和密码，一切就大功告成了。<br>  下次想要进入WSL2可以直接打开Windows Terminal，使用此种安装方式，你所安装的WSL2发行版的选项卡会自动加入到Windows Terminal的备选终端中。</p>
-<h3 id="手动安装"><a href="#手动安装" class="headerlink" title="手动安装"></a>手动安装</h3><p>  微软商店内的应用实际上都被打包为.appx安装包，你可以将其粗略地理解为Android的.apk。<br>  和apk类似的，appx实际上也是一个归档文件，你可以使用任意压缩软件打开它。<br>  如上所属，如果你能拿到某个WSL发行版的appx安装包，你可以将里面的内容解压到一个你认为合适的目录，这样，WSL2就能被安装到任意位置了。<br>  你可以在微软的文档里找到部分发行版appx安装包的下载直连，这里我搬运了一些。</p>
-<p>  <a target="_blank" rel="noopener" href="https://aka.ms/wslubuntu2204">Ubuntu 22.04 LTS</a><br>  <a target="_blank" rel="noopener" href="https://aka.ms/wslubuntu2004arm">Ubuntu 20.04 ARM</a><br>  <a target="_blank" rel="noopener" href="https://aka.ms/wsl-debian-gnulinux">Debian</a><br>  <a target="_blank" rel="noopener" href="https://aka.ms/wsl-kali-linux-new">Kali</a><br>  <a target="_blank" rel="noopener" href="https://aka.ms/wsl-opensuse-tumbleweed">OpenSUSE Tumbleweed</a><br>  <a target="_blank" rel="noopener" href="https://github.com/WhitewaterFoundry/WSLFedoraRemix/releases/">Fedora Remix for WSL</a></p>
-<p>  解压appx后点击相应的xxx.exe即可，我相信你应该找得到（<br>  不过，有的发行版会将多个架构的版本打包在同一个appx里，也就是套了个娃，找找就有了。</p>
-<h2 id="编辑WSL2配置文件"><a href="#编辑WSL2配置文件" class="headerlink" title="编辑WSL2配置文件"></a>编辑WSL2配置文件</h2><p>  WSL2的配置文件不会自动创建，你需要在自己的User文件夹中新建一个叫“.wslconfig”的文件，注意只有后缀没有名字。<br>  用你最喜欢的文本编辑器打开它，在第一行写上“[wsl2]”，即可开始配置你的WSL2。<br>  这里我提供了一份带有注释的配置文件，仅供参考。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[wsl2]</span><br><span class="line">memory=4GB                  #WSL2最大可使用多少内存，单位可为GB或MB</span><br><span class="line">swap=1GB                    #WSL2最大可用的交换空间，其实就是虚拟内存，单位同上</span><br><span class="line">processor=4                 #分配给WSl2多少个CPU核心（其实是线程）（似乎对Intel 12th大小核不起作用）</span><br><span class="line">localhostForwarding=true    #是否将WSL2的localhost覆盖到物理机的localhost</span><br></pre></td></tr></table></figure>
-<p>  注意：当WSL2完全关闭并且等待一段时间后才能加载修改过的.wslconfig（详见下述文档中的“第 8 秒的规则”），不过你可以在PowerShell中使用指令“wsl –shutdown”来加快这个过程。<br>  其实你甚至能在.wslconfig中指定WSL2使用的内核镜像 ，根据这一特性你甚至能打包任何Linux发行版到WSl2，但我懒得写了。<br>  更多内容见<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/wsl-config">微软的WSL高级配置文档</a></p>
-<h2 id="在WSL2中访问物理机的文件"><a href="#在WSL2中访问物理机的文件" class="headerlink" title="在WSL2中访问物理机的文件"></a>在WSL2中访问物理机的文件</h2><p>  <em>注：不同的发行版可能有不同的挂在策略，此处仅列出Debian与Ubuntu通用的方案。</em><br>  在WSL2启动时，物理机的各个磁盘会被自动挂载至&#x2F;mnt目录，根据盘符（但是是小写）即可进入物理机对应的磁盘。<br>  例如，我在WSL2（debian）中进入物理机的桌面文件夹，指令为：$cd &#x2F;mnt&#x2F;c&#x2F;Users&#x2F;iaksh&#x2F;Desktop<br>  实际上本地磁盘在WSL2中的挂载是通过网络实现的，这也是WSL2与物理机目录IO缓慢的原因。</p>
-<h1 id="部署WSLg"><a href="#部署WSLg" class="headerlink" title="部署WSLg"></a>部署WSLg</h1><h2 id="有关本文时效性的警告"><a href="#有关本文时效性的警告" class="headerlink" title="有关本文时效性的警告"></a>有关本文时效性的警告</h2><p>  虽然Windows11和WSLg的推出都有一段时间了，但WSLg目前的安装方式总是让我感到奇怪。<br>  这样的安装方式说不定哪天就被微软吃掉了，所以当你看见这篇文章的时候，请明确本文所属有关WSLg的内容可能已经失效。</p>
-<h2 id="在WSL2的基础上手动安装WSLg"><a href="#在WSL2的基础上手动安装WSLg" class="headerlink" title="在WSL2的基础上手动安装WSLg"></a>在WSL2的基础上手动安装WSLg</h2><p>  以管理员权限打开Windows Terminal（Windows10下以管理员权限打开PowerShell），在确保WSL2已经关闭的情况下输入指令“wsl –update”。<br>  经过漫长的更新后，你的WSL2内核应该已经支持WSLg了。<br>  此时你可以在WSL2里运行任意GUI程序（比如从你的包管理器下载一个热乎的GIMP然后运行），需要注意的是加载时间可能会略长（视配置而定），而且当某些程序占用全屏时，运行在WSL2上的X11将会崩溃，紧接着Linux GUI程序也会崩溃。（目前发现QQ截图会触发此BUG）。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/11/apt%E6%8A%A5%E9%94%99Certificate-verification-failed%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="IAKSH">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="沧蓝星">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/11/apt%E6%8A%A5%E9%94%99Certificate-verification-failed%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">apt报错Certificate verification failed的解决方案</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-11 11:28:51" itemprop="dateCreated datePublished" datetime="2022-08-11T11:28:51+08:00">2022-08-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-13 11:29:02" itemprop="dateModified" datetime="2022-08-13T11:29:02+08:00">2022-08-13</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  今日重新配置WSL2（Debian）开发环境，又遇此问题，故记之。</p>
-<h1 id="现象描述"><a href="#现象描述" class="headerlink" title="现象描述"></a>现象描述</h1><p>  Debian安装好后直接换清华源（使用https协议），再使用apt update时出现上述错误。</p>
-<h1 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h1><p>  https协议是需要CA证书的，崭新出厂的Debian没有相应的支持。</p>
-<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>  方案1. 换回之前默认的源，管理员权限下运行指令“apt update &amp;&amp; apt install ca-certificates”（大概会很慢，因为官方源不慢那你就不会换源然后遇到这个问题了）<br>  方案2. 将source.list中的所有源地址由https协议更改为http，再运行方案1的指令，最后将http改回https（安全起见）</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/10/%E4%BD%BF%E7%94%A8Hexo%E6%A1%86%E6%9E%B6%E5%92%8CGithub-Pages%E6%90%AD%E5%BB%BA%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="IAKSH">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="沧蓝星">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/10/%E4%BD%BF%E7%94%A8Hexo%E6%A1%86%E6%9E%B6%E5%92%8CGithub-Pages%E6%90%AD%E5%BB%BA%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/" class="post-title-link" itemprop="url">使用Hexo框架和Github Pages搭建静态博客</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-10 23:03:43" itemprop="dateCreated datePublished" datetime="2022-08-10T23:03:43+08:00">2022-08-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-12 22:32:40" itemprop="dateModified" datetime="2022-08-12T22:32:40+08:00">2022-08-12</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://imgtu.com/i/v8E9ne"><img src="https://s1.ax1x.com/2022/08/10/v8E9ne.png" alt="v8E9ne.png"></a></p>
-<blockquote>
-<p>Hexo was originally created and maintained by Tommy Chen in 2012. Since then, it has helped thousands of people to build their dream website&#x2F;blog.</p>
-</blockquote>
-<h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  作为一名“Geek”，哪能没有自己的博客？这就好像一名司机必须要有车，而车需要花买，服务器也需要。但好在博客不一定要有自己的服务器。车，也不一定非要是自己的。</p>
-<p>  2020年的夏天，Hexo框架偶然进入我的视野，这是一个基于Node.js构建的静态博客框架，该框架以Markdown作为博文源码，根据自定义的博客主题自动生成html页面。配合Github pages自动部署，甚至可以做到零成本搭建博客。</p>
-<p>  时隔两年，恍惚中，我竟再次回到了这里，只愿记录下自己搭建博客的一点心得，为大家献上一篇微不足道的教程。</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://hexo.io/">Hexo官网</a><br><a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages介绍</a></p>
-</blockquote>
-<h1 id="一切开始之前的准备"><a href="#一切开始之前的准备" class="headerlink" title="一切开始之前的准备"></a>一切开始之前的准备</h1><p>  正如前文所述，Hexo基于Node.js构建，考虑到Node.js开发环境在Windows系统上的种种不便利因素，我选择了WSL2（Debian），如果你坚持要在Windows上完成搭建，这篇博文依然适用，不过你可能需要格外找方法在Windows上搭建下述环境（因为我懒）。</p>
-<blockquote>
-<p>如果你不知道什么是WSL，请翻阅以下文档<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/about">什么是适用于 Linux 的 Windows 子系统？</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/compare-versions">比较 WSL 1 和 WSL 2</a></p>
-</blockquote>
-<h2 id="安装Node-js，npm，以及hexo模块"><a href="#安装Node-js，npm，以及hexo模块" class="headerlink" title="安装Node.js，npm，以及hexo模块"></a>安装Node.js，npm，以及hexo模块</h2><p>  首先我们需要安装Node.js运行时及其包管理器npm。<br>[<img src="https://bkimg.cdn.bcebos.com/pic/6609c93d70cf3bc79f3ded3c434bada1cd11738bfc82?x-bce-process=image/watermark,image_d2F0ZXIvYmFpa2UxODA=,g_7,xp_5,yp_5/format,f_auto" alt="Node.js.png">]</p>
-<blockquote>
-<p>Node.js发布于2009年5月，由Ryan Dahl开发，是一个基于Chrome V8引擎的JavaScript运行环境，使用了一个事件驱动、非阻塞式I&#x2F;O模型，让JavaScript 运行在服务端的开发平台，它让JavaScript成为与PHP、Python、Perl、Ruby等服务端语言平起平坐的脚本语言<br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/node.js">百度百科</a></p>
-</blockquote>
-<p>  在Debian上可以使用命令apt install nodejs来安装nodejs（需要管理员权限），其余发行版请使用相应的包管理器并寻找对应的包名，下同。<br>  Hexo框架并不是Node.js的一部分，它被封装为Node.js的一个第三方模块，需要使用Node.js的包管理器（npm）进行安装。在Debian上可以使用命令apt install npm进行安装。<br>  接着我们需要使用npm安装Hexo框架，使用指令npm install -g hexo-cli即可（需要管理员权限），其中，-g代表全局安装。</p>
-<blockquote>
-<p>如果你不知道什么是包管理器，请点击下面的链接<br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8">百度百科</a></p>
-</blockquote>
-<p>  运行上述命令，hexo框架将会被自动安装至系统，此时可以使用指令hexo version查看其版本。<br>  下面是我这里的输出。<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/v8ey3q"><img src="https://s1.ax1x.com/2022/08/10/v8ey3q.png" alt="v8ey3q.png"></a></p>
-<p>  你可以使用指令hexo help查看更多指令。</p>
-<h2 id="搭建Github-Pages"><a href="#搭建Github-Pages" class="headerlink" title="搭建Github Pages"></a>搭建Github Pages</h2><p>  由于没有专用的云服务器用于运行博客，我们需要寻找一家可靠的托管方，比如Github。<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/v8mu2q"><img src="https://s1.ax1x.com/2022/08/10/v8mu2q.png" alt="v8mu2q.png"></a></p>
-<p>  首先你需要登入你的Github账号，并创建一个新的Repository，其命名格式需为username.gitHub.io（比如我的，iaksh.github.io）。符合该命名格式的Repository会自动进行Github Pages构建。<br>当然，截至目前，这里可能只有一个孤零零的README.md。</p>
-<h1 id="创建你的Hexo博客"><a href="#创建你的Hexo博客" class="headerlink" title="创建你的Hexo博客"></a>创建你的Hexo博客</h1><p>  找一个你喜欢的地方兴建文件夹，然后在终端中cd进哪个文件夹并使用命令hexo init，一个hexo博客工程就完成了。<br>此时你可以使用hexo server（或简写为hexo s)试运行博客，使用浏览器访问localhots:4000即可预览。<br>使用hexo new name（hexo n name）即可开始一篇新的博文，此命令将会在工程根目录的source文件夹中生成对应名称的markdown源文件，该markdown源文件即为你的博文源码。<br>其他的命令还有hexo generate（hexo g），hexo deploy（hexo d）。前者能将博客生成为一份完整的html+css+js文件，后者自动将其按照预设配置进行部署</p>
-<h1 id="修改你的博客配置"><a href="#修改你的博客配置" class="headerlink" title="修改你的博客配置"></a>修改你的博客配置</h1><p>  工程根目录中有一配置文件名为“_config.yml”，这是hexo最顶层的配置文件，在这里你可以指定网站的一些基本内容。此外，你可以将第三方主题包放在工程根目录的themes文件夹中，然后修改主题包内的“_config.yml”。<br>另：由于各个主题配置文件不尽相同，具体请见其中的注释。</p>
-<h1 id="将你的Hexo博客推送至Github并自动部署"><a href="#将你的Hexo博客推送至Github并自动部署" class="headerlink" title="将你的Hexo博客推送至Github并自动部署"></a>将你的Hexo博客推送至Github并自动部署</h1><p>  在推送博客至github之前，你需要在工程根目录启用hexo的git部署模块，命令为npm install hexo-deployer-git –save<br>  完成上述操作后，还需修改工程根目录下的“_config.yml”中的deploy项目，将其中的type改为git，添加repo子项以指定git仓库，添加branch子项以指定上传分支。<br>  在这之后，使用指令hexo g &amp;&amp; hexo d即可自动完成博客的生成与部署。</p>
-<h1 id="可能遇到的问题以及解决方案"><a href="#可能遇到的问题以及解决方案" class="headerlink" title="可能遇到的问题以及解决方案"></a>可能遇到的问题以及解决方案</h1><h2 id="我无法用Github密码完成Push"><a href="#我无法用Github密码完成Push" class="headerlink" title="我无法用Github密码完成Push"></a>我无法用Github密码完成Push</h2><p>  在进行推送时，git会需要你输入自己的Gihub账户名以及密码，但你可能已经发现，密码已经不再适用了。<br>  事实上，自2021年8月13日起，github不再支持使用密码在git上push代码，取而代之的是token。</p>
-<blockquote>
-<p>As previously announced, starting on August 13, 2021, at 09:00 PST, we will no longer accept account passwords when authenticating Git operations on GitHub.com. Instead, token-based authentication (for example, personal access, OAuth, SSH Key, or GitHub App installation token) will be required for all authenticated Git operations. Please refer to this blog post for instructions on what you need to do to continue using git operations securely.<br> Removal</p>
-</blockquote>
-<p>你需要在自己的github设置中找到“Developer Settings”中的“Personal access tokens”，点击右侧按钮新建token，勾选repo权限，然后填入git的密码框中即可。<br>需要格外注意的是，token被创建之后仅会被显示一次，你需要自己记好它。</p>
-<h2 id="我连接不上Github"><a href="#我连接不上Github" class="headerlink" title="我连接不上Github"></a>我连接不上Github</h2><p>  这是一个非常令人头痛的问题，种种不稳定因素干扰下，Github在国内可谓是风雨飘摇。但就目前而言，你可以使用github镜像站（比如<a target="_blank" rel="noopener" href="https://doc.fastgit.org/zh-cn/">fastgit</a>）来加速访问。<br>  当然，我不能保证它们是绝对安全的，你需要自己承担风险。</p>
-<h2 id="Github-Pages没有更新我刚刚Push的内容"><a href="#Github-Pages没有更新我刚刚Push的内容" class="headerlink" title="Github Pages没有更新我刚刚Push的内容"></a>Github Pages没有更新我刚刚Push的内容</h2><p>  你先别急。<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/v8oV0J"><img src="https://s1.ax1x.com/2022/08/11/v8oV0J.jpg" alt="v8oV0J.jpg"></a></p>
-<p>  Github Pages的部署是需要时间的，具体视Github服务器状况而定，实在着急的话可以去Github仓库的Environment里看一眼Deployment history，还是不行就多等等吧。</p>
-<p>  另外，Github Pages的服务器运行在UTC时区，而我们国内通常是UTC+8（北京时间），Github Pages只会编译在当前时间（UTC）之前的内容，所以如果你的博文长时间没有被自动部署请尝试将时间更改到一天前。</p>
 
       
     </div>
@@ -1348,12 +1406,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
