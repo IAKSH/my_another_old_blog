@@ -146,6 +146,141 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/12/cout%E4%B8%8Estringstream%E5%9C%A8%E7%BC%93%E5%86%B2%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8A%E7%9A%84%E6%80%A7%E8%83%BD%E5%B7%AE%E8%B7%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello world!">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/12/cout%E4%B8%8Estringstream%E5%9C%A8%E7%BC%93%E5%86%B2%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8A%E7%9A%84%E6%80%A7%E8%83%BD%E5%B7%AE%E8%B7%9D/" class="post-title-link" itemprop="url">C++中std::cout 与 std::stringstream 在缓冲字符串上的性能差距</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-12 13:46:49 / 修改时间：14:18:27" itemprop="dateCreated datePublished" datetime="2022-08-12T13:46:49+08:00">2022-08-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022&#x2F;1&#x2F;30，现简单修改并重新发布。</p>
+<h1 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h1><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>操作系统</td>
+<td>Fedora Linux 35 (Kernel-5.15.16-200)</td>
+</tr>
+<tr>
+<td>编译器</td>
+<td>gcc 11.2.1 (Red Hat 11.2.1-7) 未开启优化</td>
+</tr>
+<tr>
+<td>计时工具</td>
+<td>time指令</td>
+</tr>
+</tbody></table>
+<p>实验机器部分配置：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU</td>
+<td>Intel Core I5 - 4460</td>
+</tr>
+<tr>
+<td>RAM</td>
+<td>4G DDR3 1600Mhz（单通道）</td>
+</tr>
+</tbody></table>
+<h1 id="实验代码"><a href="#实验代码" class="headerlink" title="实验代码"></a>实验代码</h1><h2 id="std-cout"><a href="#std-cout" class="headerlink" title="std::cout"></a>std::cout</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">114514</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;any str\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="std-cout-std-endl"><a href="#std-cout-std-endl" class="headerlink" title="std::cout + std::endl"></a>std::cout + std::endl</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">114514</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;any str&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="std-stringstream-std-cout"><a href="#std-stringstream-std-cout" class="headerlink" title="std::stringstream + std::cout"></a>std::stringstream + std::cout</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::stringstream ss;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">114514</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        ss &lt;&lt; <span class="string">&quot;any str\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; ss.<span class="built_in">str</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>第一次</th>
+<th>第二次</th>
+<th>第三次</th>
+<th>平均</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>std::cout</td>
+<td>0.225</td>
+<td>0.224</td>
+<td>0.225</td>
+<td>0.2247</td>
+</tr>
+<tr>
+<td>std::cout + std::endl</td>
+<td>0.228</td>
+<td>0.222</td>
+<td>0.221</td>
+<td>0.2237</td>
+</tr>
+<tr>
+<td>std::stringstream  + std::cout</td>
+<td>0.076</td>
+<td>0.071</td>
+<td>0.069</td>
+<td>0.0720</td>
+</tr>
+</tbody></table>
+<p>  柱状图如下<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/vJr03j"><img src="https://s1.ax1x.com/2022/08/12/vJr03j.png" alt="vJr03j.png"></a><br>  <em>（注：std::ostringstream和std::istringstream因都是std::stringstream派生类不再讨论，且实验表明他们的速度基本没有差别。）</em></p>
+<h1 id="实验结论"><a href="#实验结论" class="headerlink" title="实验结论"></a>实验结论</h1><p>  实验结果表明，在当前实验环境下，使用std::stringstream缓冲字符串，再用std::stringstream::str()将缓冲的字符串转至std::cout进行输出，较直接使用std::cout有明显的性能优势。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/12/%E5%8D%81%E5%85%AD%E8%BF%9B%E5%88%B6%E4%B8%8E%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E8%81%94%E7%B3%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -736,7 +871,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
