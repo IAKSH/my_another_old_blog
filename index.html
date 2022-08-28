@@ -146,6 +146,253 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/29/C%E8%AF%AD%E8%A8%80%E4%B8%ADpthread%E6%88%96Windows-API%E5%9C%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%BA%94%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello world!">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/29/C%E8%AF%AD%E8%A8%80%E4%B8%ADpthread%E6%88%96Windows-API%E5%9C%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%BA%94%E7%94%A8/" class="post-title-link" itemprop="url">C语言中pthread或Windows API在多线程编程中的基本应用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-29 02:29:37 / 修改时间：02:37:20" itemprop="dateCreated datePublished" datetime="2022-08-29T02:29:37+08:00">2022-08-29</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>警告</p>
+<ol>
+<li><p>由于我懒得写完，而且懂的也不是很多，本文不会深入各个多线程库，不会涉及具体的高并发，原子操作等复杂内容，本文仅描述了C语言中多线程技术的基本使用方法<del>，适合新人。</del></p>
+</li>
+<li><p>由于threads.h与pthread.h定位冲突且资料较少，我没有对thread.h深究，仅仅列出部分宏&#x2F;函数表</p>
+</li>
+<li><p>实际上posix环境下的多线程库（还有C++的threads）都大差不差，思路都是互通的，只有Windows是个异类，所以本文重心在于pthread和Windows API的CreateThread。</p>
+</li>
+<li><p>阅读本文需要一定的基础。</p>
+</li>
+</ol>
+<h1 id="多线程概述"><a href="#多线程概述" class="headerlink" title="多线程概述"></a>多线程概述</h1><p>现代操作系统通常以进程（process）作为CPU资源调度的最小单位，其实际上是线程的容器，而线程则是程序指令以及其资源的容器，从这样的角度，我们可以这样说：线程即是“程序”。</p>
+<ul>
+<li>我们为什么要使用多线程？</li>
+</ul>
+<p>原因是多种多样的，扯远一点，由于摩尔定律的失效（CPU单核性能在短期内无法取得决定性的进步），红蓝两家都在往CPU上堆核心，广大程序员无法享用单核红利。而着眼于手边，你可能会为了实现一个好看的读条界面而转向超线程，或者可能是为了在读取文件的同时输出日志，或者仅仅是想给自己的CPU来一次压力测试…</p>
+<ul>
+<li>如何获得多核红利？</li>
+</ul>
+<p>高效利用你的CPU核心的方式多种多样，其中最朴实无华（但实际上也能复杂得让人头痛）的便是多线程技术。ISO C 11提供了一个标准库头文件threads.h以提供多线程功能（但截至目前，Visual Studio未提供相应实现），在posix环境中也可以使用pthread.h，对于Windows环境，也能使用Windows API来管理线程。</p>
+<h1 id="掌握多线程需要学习什么？"><a href="#掌握多线程需要学习什么？" class="headerlink" title="掌握多线程需要学习什么？"></a>掌握多线程需要学习什么？</h1><ol>
+<li><p>学会创建一个线程</p>
+</li>
+<li><p>学会管理线程</p>
+</li>
+<li><p>学会使用互斥锁缓解线程安全问题</p>
+</li>
+<li><p>…</p>
+</li>
+</ol>
+<p>实际上，多线程是一个大坑，非常坑，远远不止上述内容。</p>
+<p>如果要深究，还得涉及到操作系统层面的调度，甚至是硬件层面的乱序发射。</p>
+<h1 id="使用pthread-h实现多线程"><a href="#使用pthread-h实现多线程" class="headerlink" title="使用pthread.h实现多线程"></a>使用pthread.h实现多线程</h1><p>使用pthread需要链接pthread.so（或windows上的libwinpthread），mingw-w64 gcc若使用posix线程模型则默认链接该库，而linux上的gcc则需要手动配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">手动编译示例</span></span><br><span class="line">gcc main.c -o app -lpthread</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># CMake示例</span></span><br><span class="line"><span class="keyword">add_executable</span>(learning_pthread)</span><br><span class="line"><span class="keyword">target_sources</span>(learning_pthread PUBLIC main.c)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(learning_pthread PUBLIC pthread)</span><br></pre></td></tr></table></figure>
+
+<p>pthread.h的内容几乎都以pthread_开头，请看如下示例代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdbool.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">say</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* str)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) <span class="built_in">puts</span>(str);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">pthread_t</span> t1;</span><br><span class="line">    <span class="type">pthread_t</span> t2;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 原型为 pthread_create(pthread_t *restrict newthread, const pthread_attr_t *restrict attr, void *(*start_routine)(void *), void *restrict arg)</span></span><br><span class="line">    <span class="comment">// 此处第四个参数进行了隐式转换</span></span><br><span class="line">    pthread_create(&amp;t1, <span class="literal">NULL</span>, say, <span class="string">&quot;hello world!&quot;</span>);</span><br><span class="line">    pthread_create(&amp;t2, <span class="literal">NULL</span>, say, <span class="string">&quot;pthread is awesome!&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 非阻塞</span></span><br><span class="line">    pthread_detach(t1);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 阻塞当前线程，可以指定返回值到何处，但此处不需要，故设为NULL</span></span><br><span class="line">    pthread_join(t2,<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) <span class="built_in">puts</span>(<span class="string">&quot;if you see this , the main thread is still alive!&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 另外，你可以使用如下函数强行终止一个线程</span></span><br><span class="line"><span class="comment">//void  pthread_exit（void  *retval）;</span></span><br><span class="line"><span class="comment">// 你还可以使用下述函数获得当前线程标识</span></span><br><span class="line"><span class="comment">//pthread_t pthread_self(void);</span></span><br></pre></td></tr></table></figure>
+
+<p>编译并运行上述代码，你应该能发现“hello world”和“pthread is awesome”交替输出，但是一者输出一段时间后换为另一者进行输出，这是因为每个线程都分配到了一定的CPU时间片，当自己的时间片用尽时才会让出CPU，让其他线程执行，线程其实并没有同步执行，只是高速切换。</p>
+<p>最后的“if you see this , the main thread is still alive!”是不会被输出的，因为主线程执行到“pthread_join(t2,NULL);”时就被堵塞了。</p>
+<p>pthread中也提供了互斥锁以<strong>缓解</strong>线程安全问题，和其他的多线程库一样，其操作总结下来无非就是</p>
+<ol>
+<li><p>创建mutex</p>
+</li>
+<li><p>对关键IO操作上锁</p>
+</li>
+<li><p>完成关键IO操作后解锁</p>
+</li>
+</ol>
+<p>放到代码中就像是这样：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">pthread_mutex_t</span> mut;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">counter</span><span class="params">(<span class="type">void</span>* args)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> i = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (i &lt;= <span class="number">10000</span> / <span class="number">4</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 对非本线程资源的读写，可能存在冲突，故上锁</span></span><br><span class="line">		pthread_mutex_lock(&amp;mut);</span><br><span class="line">		g_number++;</span><br><span class="line">		pthread_mutex_unlock(&amp;mut);</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种直接上锁的方式尽管简单易用，但却实际上使程序的IO部分退化回了单线程，造成了一定的性能损失。而想要解决这个问题，我们就得来谈谈“原子操作”了。</p>
+<p>原子操作是一种复杂且经过数次迭代的机制，简单来说，它是一个不可中断的，一系列的操作，它不会被线程调度机制打断，也不会有任何的上下文切换。使用原子操作，能完美解决传统mutex锁策略所带来的性能损失，同时保证线程安全。</p>
+<p>你可能好奇如此神奇的机制到底是如何实现的，其实，时至今日，原子操作早已不单是标准库中的一套概念，而是整合进了CPU的一套指令集。原子操作的底层是由CPU硬件实现的。</p>
+<p>在ISO C 11中标准库提供了stdatomic.h，我们可以用它来实现原子操作。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 以下代码截取自zh.cppreference.com</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;threads.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdatomic.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="type">atomic_int</span> acnt;</span><br><span class="line"><span class="type">int</span> cnt;</span><br><span class="line"> </span><br><span class="line"><span class="type">int</span> <span class="title function_">f</span><span class="params">(<span class="type">void</span>* thr_data)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> n = <span class="number">0</span>; n &lt; <span class="number">1000</span>; ++n) &#123;</span><br><span class="line">        ++cnt;</span><br><span class="line">        ++acnt;</span><br><span class="line">        <span class="comment">// 对于此例，宽松内存顺序是足够的，例如</span></span><br><span class="line">        <span class="comment">// atomic_fetch_add_explicit(&amp;acnt, 1, memory_order_relaxed);</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">thrd_t</span> thr[<span class="number">10</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> n = <span class="number">0</span>; n &lt; <span class="number">10</span>; ++n)</span><br><span class="line">        thrd_create(&amp;thr[n], f, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> n = <span class="number">0</span>; n &lt; <span class="number">10</span>; ++n)</span><br><span class="line">        thrd_join(thr[n], <span class="literal">NULL</span>);</span><br><span class="line"> </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;The atomic counter is %u\n&quot;</span>, acnt);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;The non-atomic counter is %u\n&quot;</span>, cnt);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="使用Windows-API实现多线程"><a href="#使用Windows-API实现多线程" class="headerlink" title="使用Windows API实现多线程"></a>使用Windows API实现多线程</h1><p>其实在我看来，使用Windows API是迫不得已的下下策，但无可否认的是，如此的”迫不得已“，实在是太普遍了。</p>
+<p>Windows API有个特色，就是参数列表又臭又长，如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建线程</span></span><br><span class="line">HANDLE <span class="title function_">CreateThread</span><span class="params">(</span></span><br><span class="line"><span class="params">                    LPSECURITY_ATTRIBUTES lpThreadAttributes,</span></span><br><span class="line"><span class="params">                    DWORD dwStackSize,</span></span><br><span class="line"><span class="params">                    LPTHREAD_START_ROUTINE lpStartAddress,</span></span><br><span class="line"><span class="params">                    LPVOID lpParameter,</span></span><br><span class="line"><span class="params">                    DWORD dwCreationFlags,</span></span><br><span class="line"><span class="params">                    LPDWORD lpThreadID</span></span><br><span class="line"><span class="params">                   )</span>;</span><br><span class="line"><span class="comment">// 其实这还不是最长的（小声</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>lpThreadAttrivutes</td>
+<td>用于定义新线程的安全属性，一般为NULL</td>
+</tr>
+<tr>
+<td>dwStackSize</td>
+<td>线程堆栈的大小，单位字节，默认为0</td>
+</tr>
+<tr>
+<td>lpStartAddress</td>
+<td>线程函数地址，即此线程需要执行的函数</td>
+</tr>
+<tr>
+<td>lpParameter</td>
+<td>传给线程函数的参数</td>
+</tr>
+<tr>
+<td>dwCreationFlags</td>
+<td>创建线程的运行状态，CREATE_SUSPEND表示挂起，0表示立即执行</td>
+</tr>
+<tr>
+<td>lpThreadID</td>
+<td>回新创建的线程的ID</td>
+</tr>
+</tbody></table>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 等待线程结束，其实也可以是等待其他东西</span></span><br><span class="line">DWORD <span class="title function_">WaitForSingleObject</span><span class="params">(</span></span><br><span class="line"><span class="params">                          HANDLE hHandle,</span></span><br><span class="line"><span class="params">                          DWORD dwMilliseconds</span></span><br><span class="line"><span class="params">                         )</span>;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>hHandle</td>
+<td>对象或时间的句柄</td>
+</tr>
+<tr>
+<td>dwMilliseconds</td>
+<td>最长等待时间，单位毫秒，若超过此最长时间则强制返回，亦可设为INFINITE，然后等待戈多（不</td>
+</tr>
+</tbody></table>
+<p>Windows API也提供了与mutex锁类似的机制来缓解线程安全问题，叫”临界区“</p>
+<p>其使用步骤大体为：</p>
+<ol>
+<li><p>创建临界区： CRITICAL_SECTION cs</p>
+</li>
+<li><p>初始化临界区：InitializeCriticalSection(&amp;cs)</p>
+</li>
+<li><p>在关键IO前进入临界区：EnterCriticalSection(&amp;cs);</p>
+</li>
+<li><p>关键IO结束后退出临界区：LeaveCriticalSection(&amp;cs);</p>
+</li>
+</ol>
+<p>下面是一端演示</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">CRITICAL_SECTION cs;</span><br><span class="line"></span><br><span class="line">DWORD WINAPI <span class="title function_">func</span><span class="params">(LPVOID parament)</span></span><br><span class="line">&#123;</span><br><span class="line">    EnterCriticalSection(&amp;cs);</span><br><span class="line">    <span class="comment">// certain IO</span></span><br><span class="line">    i++;</span><br><span class="line">    LeaveCriticalSection(&amp;cs);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    HANDLE thread[<span class="number">2</span>];</span><br><span class="line">    DWORD ret1;</span><br><span class="line">    DWORD ret2;</span><br><span class="line"></span><br><span class="line">    InitializeCriticalSection(&amp;cs);</span><br><span class="line">    <span class="comment">// 两个线程都设置为立即执行，从效果上说和pthread_detach类似</span></span><br><span class="line">    thread[<span class="number">0</span>] = CreateThread(<span class="literal">NULL</span>, <span class="number">0</span>, func, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">    thread[<span class="number">1</span>] = CreateThread(<span class="literal">NULL</span>, <span class="number">0</span>, func, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">    </span><br><span class="line">    WaitForMultipleObjects(<span class="number">2</span>, thread, TRUE, INFINITE);</span><br><span class="line">    CloseHandle(harrThread[<span class="number">0</span>]);</span><br><span class="line">    CloseHandle(harrThread[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="使用threads-h实现多线程"><a href="#使用threads-h实现多线程" class="headerlink" title="使用threads.h实现多线程"></a>使用threads.h实现多线程</h1><p>thread.h在ISO C 11标准后加入，请确保你的编译器支持且启用了ISO C 11标准。另外，Visual Studio尚未支持ISO C 11的threads.h，因为他们从来不关心C语言标准。</p>
+<p>threads.h的函数均以thrd_开头，常用内容如下</p>
+<table>
+<thead>
+<tr>
+<th>标识符&#x2F;原型</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>thrd_t</td>
+<td>宏</td>
+<td>用于存放线程的相关数据，可以当成线程对象来使用</td>
+</tr>
+<tr>
+<td>int thrd_create(thrd_t *thr, thrd_start_t func, void *arg);</td>
+<td>函数</td>
+<td>创建线程并指定其执行的函数</td>
+</tr>
+<tr>
+<td>int thrd_detach(thrd_t thr);</td>
+<td>函数</td>
+<td>将子线程与主线程分离，使其与主线程并行</td>
+</tr>
+<tr>
+<td>int thrd_equal(thrd_t thr0, thrd_t thr1);</td>
+<td>函数</td>
+<td>判断两个线程标识符是否标识同一线程</td>
+</tr>
+<tr>
+<td>void thrd_exit(int res)</td>
+<td>函数</td>
+<td>强制结束某线程</td>
+</tr>
+<tr>
+<td>int thrd_join(thrd_t thr, int *res)</td>
+<td>函数</td>
+<td>注意：我查到的资料中的描述和我实际测试的结果不同，我现有的资料都说此函数会阻塞当前线程，但实际测试结果并未阻塞，存疑。</td>
+</tr>
+<tr>
+<td>void thrd_sleep(const xtime *xt)</td>
+<td>函数</td>
+<td>使当前线程休眠指定时间</td>
+</tr>
+<tr>
+<td>void thrd_yield(void)</td>
+<td>函数</td>
+<td>挂起当前线程，让出CPU资源</td>
+</tr>
+</tbody></table>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>(不分先后，随机排序)</p>
+<p><a target="_blank" rel="noopener" href="https://www.ibadboy.net/archives/2323.html">C11新增多线程支持库-threads.h参考手册 – 坏蛋的博客 (ibadboy.net)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42055033/article/details/106560321">windows API（9）线程安全 临界区_飘零的落花的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u012877472/article/details/49721653">使用CreateThread函数创建线程_Valineliu的博客-CSDN博客_createthread函数</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/97418361">C语言多线程编程(一) - 知乎 (zhihu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/c/language/atomic">原子类型 - cppreference.com</a></p>
+<p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/1880992">原子操作_百度百科 (baidu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zhuiyunzhugang/article/details/108147466">什么是原子操作_辽宁大学的博客-CSDN博客_原子操作</a></p>
+<p>[多核，并行计算和摩尔定律浅谈_DrPerformance的博客-CSDN博客</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/23/EasyX%E5%9F%BA%E7%A1%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1828,117 +2075,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/12/%E4%BB%8EC%E7%A8%8B%E5%BA%8F%E4%B8%AD%E8%B0%83%E7%94%A8Python%E5%B9%B6%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E5%88%9D%E6%AD%A5%E6%8E%A2%E7%B4%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="IAKSH">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hello world!">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/12/%E4%BB%8EC%E7%A8%8B%E5%BA%8F%E4%B8%AD%E8%B0%83%E7%94%A8Python%E5%B9%B6%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E5%88%9D%E6%AD%A5%E6%8E%A2%E7%B4%A2/" class="post-title-link" itemprop="url">从C程序中调用Python并返回值的初步探索</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-12 14:21:18" itemprop="dateCreated datePublished" datetime="2022-08-12T14:21:18+08:00">2022-08-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-13 11:29:33" itemprop="dateModified" datetime="2022-08-13T11:29:33+08:00">2022-08-13</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022&#x2F;1&#x2F;30，我对其内容几乎没有修改，亦未检查本文可靠性，请自行斟酌。</p>
-<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>  翻遍了谷歌百度发现一堆人Python3和Python2傻傻分不清，拿着Python2的函数写Python3的调用，API还是错的，简直是误人子弟，Python官方的API文档也没多大用。这里列出经过一上午的激战摸索出来的正确方案。<br>  C中Python3脚本的调用可以分为以下步骤：</p>
-<table>
-<thead>
-<tr>
-<th>步骤</th>
-<th>代码</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>导入Python库</td>
-<td>#include &lt;Python.h&gt;</td>
-</tr>
-<tr>
-<td>初始化Python解释器</td>
-<td>Py_Initialize();</td>
-</tr>
-<tr>
-<td>设置模块路径（可选）</td>
-<td>PyRunSimpleString(“import sys\nsys.path.append(‘.&#x2F;‘)”);</td>
-</tr>
-<tr>
-<td>导入模块</td>
-<td>PyImport_ImportModule(“mod_name”);</td>
-</tr>
-<tr>
-<td>从模块中导入方法</td>
-<td>PyObject_GetAttrString(Module,”func_name”);</td>
-</tr>
-<tr>
-<td>创建将要导入方法的参数</td>
-<td>Py_BuildValue(“(s)”,”str_arg”);</td>
-</tr>
-<tr>
-<td>调用方法并处理参数</td>
-<td>PyEval_CallObject(Method,Arg);</td>
-</tr>
-<tr>
-<td>清理Python解释器</td>
-<td>Py_Finalize();</td>
-</tr>
-</tbody></table>
-<p>  Python是一门动态的脚本语言，在C API中也体现了这一点：C API中Python的一切数据类型和对象都是PyObject的“派生类”（但其实C中并没有class，虽然可以有OOP），可以使用PyObject的指针储存。</p>
-<h1 id="使用列"><a href="#使用列" class="headerlink" title="使用列"></a>使用列</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Python.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">Py_Initialize</span>();</span><br><span class="line">    <span class="built_in">PyRun_SimpleString</span>(<span class="string">&quot;import sys&quot;</span>);</span><br><span class="line">    <span class="built_in">PyRun_SimpleString</span>(<span class="string">&quot;sys.path.append(&#x27;./&#x27;)&quot;</span>);</span><br><span class="line">    <span class="comment">// 在C中导入指定py模块</span></span><br><span class="line">    PyObject* pyModule = <span class="built_in">PyImport_ImportModule</span>(<span class="string">&quot;my_test&quot;</span>);</span><br><span class="line">    <span class="comment">// 导入方法并调用</span></span><br><span class="line">    PyObject* pyMethod = <span class="built_in">PyObject_GetAttrString</span>(pModule,<span class="string">&quot;main&quot;</span>);</span><br><span class="line">    PyObject* pyReturn = <span class="built_in">PyEval_CallObject</span>(pMethod, <span class="built_in">Py_BuildValue</span>(<span class="string">&quot;(s)&quot;</span>,<span class="string">&quot;Hi PYTHON!&quot;</span>));</span><br><span class="line">    <span class="type">char</span>* buffer;</span><br><span class="line">    <span class="comment">// 将Python返回的str对象转为C可以使用的char*</span></span><br><span class="line">    <span class="built_in">PyArg_Parse</span>(send_back, <span class="string">&quot;s&quot;</span>, &amp;buffer);</span><br><span class="line">    <span class="comment">// 输出返回值</span></span><br><span class="line">    <span class="built_in">printf</span>(“%s”,buffer);</span><br><span class="line">    <span class="built_in">Py_Finalize</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="对C-封装Python模块的设想"><a href="#对C-封装Python模块的设想" class="headerlink" title="对C++封装Python模块的设想"></a>对C++封装Python模块的设想</h1><p>  综上，从一个Python模块中调用函数并接受返回值需要整整八（或者七？）步。是否可以用C++，在一个文件对应一个同名模块的前提下进行一个简单的封装以实现开箱即用？</p>
-<h1 id="后日谈"><a href="#后日谈" class="headerlink" title="后日谈"></a>后日谈</h1><p>  原文到上面那里就已经没有了，关于那个封装，我确实有试过，但是现在有<a target="_blank" rel="noopener" href="https://github.com/pybind/pybind11">更好的选择</a>。<br>  另外，Boost库里也有对Python API的封装，但是，感觉不如pybind11。。。画质（x</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2008,7 +2144,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
