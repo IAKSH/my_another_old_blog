@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"iaksh.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="EasyX EasyX Graphics Library 是针对 Visual C++ 的免费绘图库，支持 VC6.0 ~ VC2022，简单易用，学习成本极低，应用领域广泛。目前已有许多大学将 EasyX 应用在教学当中。   EasyX其实是一个C++库，不是C库，这就像VC只有C++编译器，没有C编译器一样。  EasyX最初发布于2009年，其底层是gdi，设计上和Windows API高">
+  <meta name="description" content="EasyX EasyX Graphics Library 是针对 Visual C++ 的免费绘图库，支持 VC6.0 ~ VC2022，简单易用，学习成本极低，应用领域广泛。目前已有许多大学将 EasyX 应用在教学当中。   EasyX其实是一个C++库，不是C库，这就像VC只有C++编译器，没有C编译器一样。  EasyX最初发布于2009年，其底层是gdi，设计上和Windows API高">
 <meta property="og:type" content="article">
 <meta property="og:title" content="EasyX基础">
 <meta property="og:url" content="https://iaksh.github.io/2022/08/23/EasyX%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="Hello world!">
-<meta property="og:description" content="EasyX EasyX Graphics Library 是针对 Visual C++ 的免费绘图库，支持 VC6.0 ~ VC2022，简单易用，学习成本极低，应用领域广泛。目前已有许多大学将 EasyX 应用在教学当中。   EasyX其实是一个C++库，不是C库，这就像VC只有C++编译器，没有C编译器一样。  EasyX最初发布于2009年，其底层是gdi，设计上和Windows API高">
+<meta property="og:description" content="EasyX EasyX Graphics Library 是针对 Visual C++ 的免费绘图库，支持 VC6.0 ~ VC2022，简单易用，学习成本极低，应用领域广泛。目前已有许多大学将 EasyX 应用在教学当中。   EasyX其实是一个C++库，不是C库，这就像VC只有C++编译器，没有C编译器一样。  EasyX最初发布于2009年，其底层是gdi，设计上和Windows API高">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s1.ax1x.com/2022/08/23/v6xQHI.png">
 <meta property="article:published_time" content="2022-08-23T07:05:18.000Z">
@@ -192,7 +192,7 @@
 
       
         <h1 id="EasyX"><a href="#EasyX" class="headerlink" title="EasyX"></a>EasyX</h1><blockquote>
-<p>EasyX Graphics Library 是针对 Visual C++ 的免费绘图库，支持 VC6.0 ~ VC2022，简单易用，学习成本极低，应用领域广泛。目前已有许多大学将 EasyX 应用在教学当中。</p>
+<p>EasyX Graphics Library 是针对 Visual C++ 的免费绘图库，支持 VC6.0 ~ VC2022，简单易用，学习成本极低，应用领域广泛。目前已有许多大学将 EasyX 应用在教学当中。</p>
 </blockquote>
 <ol>
 <li><p>EasyX其实是一个C++库，不是C库，这就像VC只有C++编译器，没有C编译器一样。</p>
@@ -207,138 +207,45 @@
 <h1 id="搭建EasyX的开发环境"><a href="#搭建EasyX的开发环境" class="headerlink" title="搭建EasyX的开发环境"></a>搭建EasyX的开发环境</h1><ol>
 <li><p>由于与Windows API高度耦合，EasyX官方仅支持VC工具链，具体版本下至Visual C++ 6.0，上至Visual Studio 2022。（截至目前而言）</p>
 </li>
-<li><p>官方提供了一个<a target="_blank" rel="noopener" href="https://easyx.cn/download/EasyX_20220610.exe">安装程序</a>来完成各个版本VC&#x2F;VS上的一键式部署与卸载。（同时也提供了一个离线文档）</p>
+<li><p>官方提供了一个<a target="_blank" rel="noopener" href="https://easyx.cn/download/EasyX_20220610.exe">安装程序</a>来完成各个版本VC/VS上的一键式部署与卸载。（同时也提供了一个离线文档）</p>
 </li>
 </ol>
 <h1 id="使用EasyX编写GUI程序的简单示例"><a href="#使用EasyX编写GUI程序的简单示例" class="headerlink" title="使用EasyX编写GUI程序的简单示例"></a>使用EasyX编写GUI程序的简单示例</h1><ol>
 <li>引入EasyX库的头文件，旧版本的EasyX使用graphics.h（这也是你在网上能找到的大多数教程所用的头文件），但现在应该使用easyx.h。目前的graphics.h仅保留了若干已被easyx.h废弃的旧版功能。</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;easyx.h&gt;</span></span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
+<ol>
 <li>初始化绘图窗口，创建一个指定大小（此处示例为640x480像素）的窗口。</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">initgraph</span>(<span class="number">640</span>, <span class="number">480</span>);</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
+<ol>
 <li>绘图，此处示例为绘制一个圆心为（200,200），半径为100的圆。</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">circle</span>(<span class="number">200</span>, <span class="number">200</span>, <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
+<ol>
 <li>关闭绘图窗口</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">closegraph</span>();</span><br></pre></td></tr></table></figure>
-
-<ol start="5">
+<ol>
 <li>完整代码</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;graphics.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;conio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">initgraph</span>(<span class="number">640</span>, <span class="number">480</span>);</span><br><span class="line">    <span class="built_in">circle</span>(<span class="number">200</span>, <span class="number">200</span>, <span class="number">100</span>);</span><br><span class="line">    _getch();</span><br><span class="line">    <span class="built_in">closegraph</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="6">
+<ol>
 <li>运行效果</li>
 </ol>
 <p><a target="_blank" rel="noopener" href="https://imgse.com/i/v6xQHI"><img src="https://s1.ax1x.com/2022/08/23/v6xQHI.png" alt="v6xQHI.png"></a></p>
 <hr>
 <h1 id="EasyX中的基本概念"><a href="#EasyX中的基本概念" class="headerlink" title="EasyX中的基本概念"></a>EasyX中的基本概念</h1><h2 id="EaysX中颜色的三种表示方式："><a href="#EaysX中颜色的三种表示方式：" class="headerlink" title="EaysX中颜色的三种表示方式："></a>EaysX中颜色的三种表示方式：</h2><ol>
 <li><p>宏定义：EasyX内建了一些宏常量来表示颜色</p>
-<table>
-<thead>
-<tr>
-<th>宏</th>
-<th>值</th>
-<th>颜色</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>BLACK</td>
-<td>0</td>
-<td>黑</td>
-</tr>
-<tr>
-<td>BLUE</td>
-<td>0xAA0000</td>
-<td>蓝</td>
-</tr>
-<tr>
-<td>GREEN</td>
-<td>0x00AA00</td>
-<td>绿</td>
-</tr>
-<tr>
-<td>CYAN</td>
-<td>0xAAAA00</td>
-<td>青</td>
-</tr>
-<tr>
-<td>RED</td>
-<td>0x0000AA</td>
-<td>红</td>
-</tr>
-<tr>
-<td>MAGENTA</td>
-<td>0xAA00AA</td>
-<td>紫</td>
-</tr>
-<tr>
-<td>BROWN</td>
-<td>0x0055AA</td>
-<td>棕</td>
-</tr>
-<tr>
-<td>LIGHTGRAY</td>
-<td>0xAAAAAA</td>
-<td>浅灰</td>
-</tr>
-<tr>
-<td>DARKGRAY</td>
-<td>0x555555</td>
-<td>深灰</td>
-</tr>
-<tr>
-<td>LIGHTBLUE</td>
-<td>0xFF5555</td>
-<td>亮蓝</td>
-</tr>
-<tr>
-<td>LIGHTGREEN</td>
-<td>0x55FF55</td>
-<td>亮绿</td>
-</tr>
-<tr>
-<td>LIGHTCYAN</td>
-<td>0xFFFF55</td>
-<td>亮青</td>
-</tr>
-<tr>
-<td>LIGHTRED</td>
-<td>0x5555FF</td>
-<td>亮红</td>
-</tr>
-<tr>
-<td>LIGHTMAGENTA</td>
-<td>0xFF55FF</td>
-<td>亮紫</td>
-</tr>
-<tr>
-<td>YELLOW</td>
-<td>0x55FFFF</td>
-<td>黄</td>
-</tr>
-<tr>
-<td>WHITE</td>
-<td>0xFFFFFF</td>
-<td>白</td>
-</tr>
-</tbody></table>
+<p>| 宏            | 值        | 颜色  |<br>| —————— | ———— | —- |<br>| BLACK        | 0        | 黑   |<br>| BLUE         | 0xAA0000 | 蓝   |<br>| GREEN        | 0x00AA00 | 绿   |<br>| CYAN         | 0xAAAA00 | 青   |<br>| RED          | 0x0000AA | 红   |<br>| MAGENTA      | 0xAA00AA | 紫   |<br>| BROWN        | 0x0055AA | 棕   |<br>| LIGHTGRAY    | 0xAAAAAA | 浅灰  |<br>| DARKGRAY     | 0x555555 | 深灰  |<br>| LIGHTBLUE    | 0xFF5555 | 亮蓝  |<br>| LIGHTGREEN   | 0x55FF55 | 亮绿  |<br>| LIGHTCYAN    | 0xFFFF55 | 亮青  |<br>| LIGHTRED     | 0x5555FF | 亮红  |<br>| LIGHTMAGENTA | 0xFF55FF | 亮紫  |<br>| YELLOW       | 0x55FFFF | 黄   |<br>| WHITE        | 0xFFFFFF | 白   |</p>
 </li>
 <li><p>16进制：</p>
-<p>格式为0xbbggrr（bb&#x3D;蓝，gg&#x3D;绿，rr&#x3D;红）</p>
+<p>格式为0xbbggrr（bb=蓝，gg=绿，rr=红）</p>
 </li>
 <li><p>RGB宏：用于将红、绿、蓝颜色分量合成RGB颜色。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">COLORREF <span class="title">RGB</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    BYTE byRed,        <span class="comment">// 颜色的红色部分，取值范围：0~255，下同</span></span></span></span><br><span class="line"><span class="params"><span class="function">    BYTE byGreen,    <span class="comment">// 颜色的绿色部分</span></span></span></span><br><span class="line"><span class="params"><span class="function">    BYTE byBlue        <span class="comment">// 颜色的蓝色部分</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>HSLtoRGB，HSVtoRGB：用于将HSL&#x2F;HSV颜色空间模型转至RGB。</p>
+<li><p>HSLtoRGB，HSVtoRGB：用于将HSL/HSV颜色空间模型转至RGB。</p>
 </li>
 </ol>
 <h2 id="坐标"><a href="#坐标" class="headerlink" title="坐标"></a>坐标</h2><ol>
@@ -356,11 +263,9 @@
 <hr>
 <h1 id="EasyX部分功能示例"><a href="#EasyX部分功能示例" class="headerlink" title="EasyX部分功能示例"></a>EasyX部分功能示例</h1><p>只列出了我认为最有用的部分</p>
 <h2 id="清屏：cleardevice"><a href="#清屏：cleardevice" class="headerlink" title="清屏：cleardevice"></a>清屏：cleardevice</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">cleardevice</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-
 <h2 id="设置当前设备绘图背景色：setbkcolor"><a href="#设置当前设备绘图背景色：setbkcolor" class="headerlink" title="设置当前设备绘图背景色：setbkcolor"></a>设置当前设备绘图背景色：setbkcolor</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">setbkcolor</span><span class="params">(COLORREF color)</span></span>;</span><br></pre></td></tr></table></figure>
-
 <h2 id="设置当前设备图案填充和文字输出时的背景模式"><a href="#设置当前设备图案填充和文字输出时的背景模式" class="headerlink" title="设置当前设备图案填充和文字输出时的背景模式"></a>设置当前设备图案填充和文字输出时的背景模式</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">setbkmode</span><span class="params">(<span class="type">int</span> mode)</span></span>;</span><br></pre></td></tr></table></figure>
-
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -368,7 +273,8 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>OPAQUE</td>
 <td>背景用当前背景色填充（默认）</td>
 </tr>
@@ -376,13 +282,13 @@
 <td>TRANSPARENT</td>
 <td>背景透明</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="设置当前设备填充样式：setfillstyle"><a href="#设置当前设备填充样式：setfillstyle" class="headerlink" title="设置当前设备填充样式：setfillstyle"></a>设置当前设备填充样式：setfillstyle</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">setfillstyle</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    FILLSTYLE* pstyle</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">setfillstyle</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">int</span> style,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">long</span> hatch = <span class="literal">NULL</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    IMAGE* ppattern = <span class="literal">NULL</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">setfillstyle</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    BYTE* ppattern8x8</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
-
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -390,7 +296,8 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>pstyle</td>
 <td>指向填充样式 FILLSTYLE 的指针</td>
 </tr>
@@ -402,12 +309,13 @@
 <td>hatch</td>
 <td>指定填充图案</td>
 </tr>
-</tbody></table>
-<p>具体内容请参照[官方文档](<a target="_blank" rel="noopener" href="https://docs.easyx.cn/zh-cn/setfillstyle">EasyX 文档 - setfillstyle</a>)</p>
+</tbody>
+</table>
+</div>
+<p>具体内容请参照<a href="[EasyX 文档 - setfillstyle](https://docs.easyx.cn/zh-cn/setfillstyle">官方文档</a>)</p>
 <h2 id="设置当前设备画线样式：setlinestyle"><a href="#设置当前设备画线样式：setlinestyle" class="headerlink" title="设置当前设备画线样式：setlinestyle"></a>设置当前设备画线样式：setlinestyle</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">setlinestyle</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> LINESTYLE* pstyle</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">setlinestyle</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">int</span> style,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">int</span> thickness = <span class="number">1</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> DWORD *puserstyle = <span class="literal">NULL</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    DWORD userstylecount = <span class="number">0</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
-
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -415,7 +323,8 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>pstyle</td>
 <td>指向画线样式 LINESTYLE 的指针</td>
 </tr>
@@ -435,16 +344,20 @@
 <td>userstylecount</td>
 <td>用户自定义样式数组的元素数量。</td>
 </tr>
-</tbody></table>
-<p>具体内容请参照[官方文档](<a target="_blank" rel="noopener" href="https://docs.easyx.cn/zh-cn/setlinestyle">EasyX 文档 - setlinestyle</a>)</p>
-<h2 id="设置当前设备多边形填充模式：setpolyfillmode"><a href="#设置当前设备多边形填充模式：setpolyfillmode" class="headerlink" title="设置当前设备多边形填充模式：setpolyfillmode"></a>设置当前设备多边形填充模式：setpolyfillmode</h2><table>
+</tbody>
+</table>
+</div>
+<p>具体内容请参照<a href="[EasyX 文档 - setlinestyle](https://docs.easyx.cn/zh-cn/setlinestyle">官方文档</a>)</p>
+<h2 id="设置当前设备多边形填充模式：setpolyfillmode"><a href="#设置当前设备多边形填充模式：setpolyfillmode" class="headerlink" title="设置当前设备多边形填充模式：setpolyfillmode"></a>设置当前设备多边形填充模式：setpolyfillmode</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>mode的各个值</th>
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>ALTERNATE</td>
 <td>交替填充模式（默认值）</td>
 </tr>
@@ -452,18 +365,22 @@
 <td>WINDING</td>
 <td>根据绘图方向填充的模式</td>
 </tr>
-</tbody></table>
-<p>详见[官方文档](<a target="_blank" rel="noopener" href="https://docs.easyx.cn/zh-cn/setpolyfillmode">EasyX 文档 - setpolyfillmode</a>)</p>
+</tbody>
+</table>
+</div>
+<p>详见<a href="[EasyX 文档 - setpolyfillmode](https://docs.easyx.cn/zh-cn/setpolyfillmode">官方文档</a>)</p>
 <hr>
 <h1 id="EasyX的部分函数文档索引"><a href="#EasyX的部分函数文档索引" class="headerlink" title="EasyX的部分函数文档索引"></a>EasyX的部分函数文档索引</h1><p>这里其实就是官方文档的内容，只是给大家引个路。</p>
-<h2 id="绘制图形"><a href="#绘制图形" class="headerlink" title="绘制图形"></a>绘制图形</h2><table>
+<h2 id="绘制图形"><a href="#绘制图形" class="headerlink" title="绘制图形"></a>绘制图形</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>函数或数据类型</th>
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><a target="_blank" rel="noopener" href="https://docs.easyx.cn/zh-cn/arc">arc</a></td>
 <td>画椭圆弧。</td>
 </tr>
@@ -595,15 +512,19 @@
 <td><a target="_blank" rel="noopener" href="https://docs.easyx.cn/zh-cn/solidroundrect">solidroundrect</a></td>
 <td>画无边框的填充圆角矩形。</td>
 </tr>
-</tbody></table>
-<h2 id="文字输出"><a href="#文字输出" class="headerlink" title="文字输出"></a>文字输出</h2><table>
+</tbody>
+</table>
+</div>
+<h2 id="文字输出"><a href="#文字输出" class="headerlink" title="文字输出"></a>文字输出</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>函数或数据类型</th>
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><a target="_blank" rel="noopener" href="https://docs.easyx.cn/zh-cn/gettextcolor">gettextcolor</a></td>
 <td>获取当前文字颜色。</td>
 </tr>
@@ -639,15 +560,19 @@
 <td><a target="_blank" rel="noopener" href="https://docs.easyx.cn/zh-cn/textwidth">textwidth</a></td>
 <td>获取字符串实际占用的像素宽度。</td>
 </tr>
-</tbody></table>
-<h2 id="图像处理"><a href="#图像处理" class="headerlink" title="图像处理"></a>图像处理</h2><table>
+</tbody>
+</table>
+</div>
+<h2 id="图像处理"><a href="#图像处理" class="headerlink" title="图像处理"></a>图像处理</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>函数或数据类型</th>
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><a target="_blank" rel="noopener" href="https://docs.easyx.cn/zh-cn/IMAGE">IMAGE</a></td>
 <td>保存图像的对象。</td>
 </tr>
@@ -691,15 +616,19 @@
 <td><a target="_blank" rel="noopener" href="https://docs.easyx.cn/zh-cn/GetImageHDC">GetImageHDC</a></td>
 <td>获取绘图设备句柄。</td>
 </tr>
-</tbody></table>
-<h2 id="消息处理"><a href="#消息处理" class="headerlink" title="消息处理"></a>消息处理</h2><table>
+</tbody>
+</table>
+</div>
+<h2 id="消息处理"><a href="#消息处理" class="headerlink" title="消息处理"></a>消息处理</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>函数或数据类型</th>
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><a target="_blank" rel="noopener" href="https://docs.easyx.cn/zh-cn/exmessage">ExMessage</a></td>
 <td>消息结构体。</td>
 </tr>
@@ -715,22 +644,21 @@
 <td><a target="_blank" rel="noopener" href="https://docs.easyx.cn/zh-cn/peekmessage">peekmessage</a></td>
 <td>获取一个消息，并立即返回。</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="连续绘图"><a href="#连续绘图" class="headerlink" title="连续绘图"></a>连续绘图</h2><p>实际上貌似是启用了双缓冲，可以有效解决连续绘图时的闪烁问题，使用如下。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">BeginBatchDraw</span>();</span><br><span class="line"><span class="comment">// 绘制你的内容...</span></span><br><span class="line"><span class="built_in">EndBatchDraw</span>();</span><br></pre></td></tr></table></figure>
-
 <p>EndBatchDraw会将绘制的内容输出，使用FlushBatchDraw能达到同样效果。</p>
 <h2 id="获取窗口句柄"><a href="#获取窗口句柄" class="headerlink" title="获取窗口句柄"></a>获取窗口句柄</h2><p>EasyX提供了GetHWnd函数以获得当前窗口的句柄，由此你可以使用Windows API对窗口进行进一步的操作，原型如下。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">HWND <span class="title">GetHWnd</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-
 <h2 id="输入对话框"><a href="#输入对话框" class="headerlink" title="输入对话框"></a>输入对话框</h2><p>EasyX提供了InputBox函数用于以对话框形式获取用户输入，原型如下。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">InputBox</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    LPTSTR    pString,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">int</span>        nMaxCount,</span></span></span><br><span class="line"><span class="params"><span class="function">    LPCTSTR    pPrompt = <span class="literal">NULL</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    LPCTSTR    pTitle = <span class="literal">NULL</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    LPCTSTR    pDefault = <span class="literal">NULL</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">int</span>        width = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">int</span>        height = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">bool</span>    bHideCancelBtn = <span class="literal">true</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
-
 <hr>
 <h1 id="关于使用EasyX构建一个简单的游戏简述"><a href="#关于使用EasyX构建一个简单的游戏简述" class="headerlink" title="关于使用EasyX构建一个简单的游戏简述"></a>关于使用EasyX构建一个简单的游戏简述</h1><ol>
 <li><p>EasyX仅仅是一个绘图库，它只能完成图形的绘制以及鼠标信息的捕获任务，要构建一个完整的游戏，所需要的不仅仅是EasyX。</p>
 </li>
-<li><p>VC&#x2F;VS中提供了conio.h，能实现非阻塞式的键盘监听（非全局）。</p>
+<li><p>VC/VS中提供了conio.h，能实现非阻塞式的键盘监听（非全局）。</p>
 </li>
 <li><p>Windows API中的mmsystem.h（需要链接winmm.lib）提供了一套简单的音乐播放功能。</p>
 </li>
@@ -837,12 +765,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -932,6 +860,8 @@
 
 
 
+
+  
 
   
 

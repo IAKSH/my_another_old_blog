@@ -192,69 +192,12 @@
         <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  近来我在云服务器上搭建潜渊症的游戏服务器，时常需要从本地打包文件上传以及从云端打包然后传回文件。<br>  我发现.zip虽然在Windows以及Linux上都通用，但却无法保留文件属性，相较之下，在Linux上，使用tar将文件打包为.tar.gz进行归档是个更好的选择。</p>
 <h1 id="什么是tar命令"><a href="#什么是tar命令" class="headerlink" title="什么是tar命令"></a>什么是tar命令</h1><p>  tar命令（英文全拼：tape archive ），用于备份文件。<br>  tar 是用来建立，还原备份文件的工具程序，它可以加入，解开备份文件内的文件。</p>
 <h1 id="最常用的三组tar命令"><a href="#最常用的三组tar命令" class="headerlink" title="最常用的三组tar命令"></a>最常用的三组tar命令</h1><h2 id="压缩文件"><a href="#压缩文件" class="headerlink" title="压缩文件"></a>压缩文件</h2>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -czvf test.tar.gz a.c   //压缩 a.c文件为test.tar.gz</span><br></pre></td></tr></table></figure>
-<p>  参数解释：</p>
-<table>
-<thead>
-<tr>
-<th>短参</th>
-<th>长参</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-c</td>
-<td>–create</td>
-<td>建立新的备份文件</td>
-</tr>
-<tr>
-<td>-z</td>
-<td>–gzip或–ungzip</td>
-<td>通过gzip指令处理备份文件</td>
-</tr>
-<tr>
-<td>-v</td>
-<td>–verbose</td>
-<td>显示指令执行过程</td>
-</tr>
-<tr>
-<td>-f xxx</td>
-<td>–file&#x3D;xxx</td>
-<td>指定备份文件</td>
-</tr>
-</tbody></table>
+<p>  参数解释：<br>  短参 | 长参 | 解释<br>  -|-|-<br>  -c|—create| 建立新的备份文件<br>  -z|—gzip或—ungzip|通过gzip指令处理备份文件<br>  -v|—verbose|显示指令执行过程<br>  -f xxx|—file=xxx|指定备份文件</p>
 <h2 id="列出压缩文件的内容"><a href="#列出压缩文件的内容" class="headerlink" title="列出压缩文件的内容"></a>列出压缩文件的内容</h2>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -tzvf test.tar.gz </span><br></pre></td></tr></table></figure>
-<p>  参数解释：</p>
-<table>
-<thead>
-<tr>
-<th>短参</th>
-<th>长参</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-t</td>
-<td>–list</td>
-<td>列出备份文件的内容</td>
-</tr>
-<tr>
-<td>-z</td>
-<td>–gzip或–ungzip</td>
-<td>通过gzip指令处理备份文件</td>
-</tr>
-<tr>
-<td>-v</td>
-<td>–verbose</td>
-<td>显示指令执行过程</td>
-</tr>
-<tr>
-<td>-f xxx</td>
-<td>–file&#x3D;xxx</td>
-<td>指定备份文件</td>
-</tr>
-</tbody></table>
+<p>  参数解释：<br>  短参 | 长参 | 解释<br>  -|-|-<br>  -t|—list|列出备份文件的内容<br>  -z|—gzip或—ungzip|通过gzip指令处理备份文件<br>  -v|—verbose|显示指令执行过程<br>  -f xxx|—file=xxx|指定备份文件</p>
 <h2 id="解压文件"><a href="#解压文件" class="headerlink" title="解压文件"></a>解压文件</h2>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xzvf test.tar.gz </span><br></pre></td></tr></table></figure>
-<p>  参数解释：</p>
+<p>  参数解释：<br>  短参 | 长参 | 解释<br>  -|-|-<br>  -x|—extract或—get|从备份文件中还原文件<br>  -z|—gzip或—ungzip|通过gzip指令处理备份文件<br>  -v|—verbose|显示指令执行过程<br>  -f xxx|—file=xxx|指定备份文件</p>
+<h1 id="其他一些可能有用的参数（部分）"><a href="#其他一些可能有用的参数（部分）" class="headerlink" title="其他一些可能有用的参数（部分）"></a>其他一些可能有用的参数（部分）</h1><div class="table-container">
 <table>
 <thead>
 <tr>
@@ -263,86 +206,60 @@
 <th>解释</th>
 </tr>
 </thead>
-<tbody><tr>
-<td>-x</td>
-<td>–extract或–get</td>
-<td>从备份文件中还原文件</td>
-</tr>
+<tbody>
 <tr>
-<td>-z</td>
-<td>–gzip或–ungzip</td>
-<td>通过gzip指令处理备份文件</td>
-</tr>
-<tr>
-<td>-v</td>
-<td>–verbose</td>
-<td>显示指令执行过程</td>
-</tr>
-<tr>
-<td>-f xxx</td>
-<td>–file&#x3D;xxx</td>
-<td>指定备份文件</td>
-</tr>
-</tbody></table>
-<h1 id="其他一些可能有用的参数（部分）"><a href="#其他一些可能有用的参数（部分）" class="headerlink" title="其他一些可能有用的参数（部分）"></a>其他一些可能有用的参数（部分）</h1><table>
-<thead>
-<tr>
-<th>短参</th>
-<th>长参</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-A</td>
-<td>–catenate</td>
+<td>  -A</td>
+<td>—catenate</td>
 <td>新增文件到已存在的备份文件</td>
 </tr>
 <tr>
-<td>-d</td>
-<td>–diff或–compare</td>
+<td>  -d</td>
+<td>—diff或—compare</td>
 <td>对比备份文件内和文件系统上的文件的差异</td>
 </tr>
 <tr>
-<td>-k</td>
-<td>–keep-old-files</td>
+<td>  -k</td>
+<td>—keep-old-files</td>
 <td>解开备份文件时，不覆盖已有的文件</td>
 </tr>
 <tr>
-<td>-m</td>
-<td>–modification-time</td>
+<td>  -m</td>
+<td>—modification-time</td>
 <td>还原文件时，不变更文件的更改时间</td>
 </tr>
 <tr>
-<td>-N&lt;日期格式&gt;</td>
-<td>–newer&#x3D;&lt;日期时间&gt;</td>
+<td>  -N&lt;日期格式&gt;</td>
+<td>—newer=&lt;日期时间&gt;</td>
 <td>只将较指定日期更新的文件保存到备份文件里</td>
 </tr>
 <tr>
-<td>-O</td>
-<td>–stdout</td>
+<td>  -O</td>
+<td>—stdout</td>
 <td>把从备份文件里还原的文件输出到标准输出设备</td>
 </tr>
 <tr>
-<td>-p</td>
-<td>–same-permissions</td>
+<td>  -p</td>
+<td>—same-permissions</td>
 <td>用原来的文件权限还原文件</td>
 </tr>
 <tr>
-<td>-r</td>
-<td>–append</td>
+<td>  -r</td>
+<td>—append</td>
 <td>新增文件到已存在的备份文件的结尾部分</td>
 </tr>
 <tr>
-<td>-u</td>
-<td>–update</td>
+<td>  -u</td>
+<td>—update</td>
 <td>仅置换较备份文件内的文件更新的文件</td>
 </tr>
 <tr>
-<td>N&#x2F;A</td>
-<td>–ignore-failed-read</td>
+<td>  N/A</td>
+<td>—ignore-failed-read</td>
 <td>忽略数据读取错误，不中断程序的执行</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h1 id="我的一些感想"><a href="#我的一些感想" class="headerlink" title="我的一些感想"></a>我的一些感想</h1><p>不只是tar，Linux上的很多工具都给我一种感觉。在Windows上需要某个第三方软件来完成的事，对Linux上的工具而言只是它们最基础的功能。Linux上的这些工具能很方便的嵌入自动化脚本中，整个系统就像是一个巨大的程序库，共给shell调用。</p>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-comm-tar.html">菜鸟教程-Linux tar 命令</a></p>
 
@@ -442,12 +359,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -537,6 +454,8 @@
 
 
 
+
+  
 
   
 

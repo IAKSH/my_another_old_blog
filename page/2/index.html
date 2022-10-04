@@ -146,6 +146,398 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/15/%E5%AF%B9%E7%AC%94%E8%AE%B0%E6%9C%AC%E6%B7%B7%E5%90%88%E8%BE%93%E5%87%BA%E7%9A%84%E6%8E%A2%E7%A9%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello world!">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/15/%E5%AF%B9%E7%AC%94%E8%AE%B0%E6%9C%AC%E6%B7%B7%E5%90%88%E8%BE%93%E5%87%BA%E7%9A%84%E6%8E%A2%E7%A9%B6/" class="post-title-link" itemprop="url">对笔记本混合输出的探究</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-15 01:00:36" itemprop="dateCreated datePublished" datetime="2022-08-15T01:00:36+08:00">2022-08-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-16 23:37:54" itemprop="dateModified" datetime="2022-09-16T23:37:54+08:00">2022-09-16</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>  这篇文章并没有写完，有待更新。</p>
+<h1 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h1><p>  几日前购置了一台游戏本，却无心拿它去玩什么游戏了。<br>  但又碍于发热过高，于是想到开启混合输出是否能在日常使用中平衡GPU负载，降低功耗。</p>
+<h1 id="测试机器"><a href="#测试机器" class="headerlink" title="测试机器"></a>测试机器</h1><p>  考虑到某些可能存在的隐患，我不想直接写出笔记本型号，这里列出其大致参数。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>参数</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>  CPU</td>
+<td>Intel Core i7 12700H</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>  GPU0</td>
+<td>Iris XE</td>
+<td>96eu</td>
+</tr>
+<tr>
+<td>  GPU1</td>
+<td>Nvidia GeForce RTX 3060 Laptop</td>
+<td>140W</td>
+</tr>
+<tr>
+<td>  电源适配器</td>
+<td>230W</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="测试项目"><a href="#测试项目" class="headerlink" title="测试项目"></a>测试项目</h1><p>  使用Windows 11 “电影和电视”程序播放 SONY DEMO 4K 演示片 ( 2160 X 3840 60fps )<br>  其他的，我暂时懒得弄了，下次继续。</p>
+<h1 id="功耗检测软件"><a href="#功耗检测软件" class="headerlink" title="功耗检测软件"></a>功耗检测软件</h1><p>  使用HWMonitor(x64)监控CPU GT Power。<br>  使用Nvidia Experience监控RTX 3060 Laptop功耗。</p>
+<h1 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h1><p>  混合输出：<br>  项目|最大功耗|平均功耗|平均使用率<br>  -|-|-|-<br>  CPU Powers|20.36W|10.5W|N/A<br>  CPU GT Powers|3.35W|1.5W|N/A<br>  Iris XE (96EU)|N/A|N/A|50%<br>  Nvidia GeForce RTX 3060 Laptop|N/A|N/A|0%</p>
+<p>  独显直连<br>  项目|最大功耗|平均功耗|平均使用率<br>  -|-|-|-<br>  CPU Powers|20.18W|7.3W|N/A<br>  Nvidia GeForce RTX 3060 Laptop|24W|21W|38%</p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>  在当前实验环境下，混合输出确实能减少观看4k 60fps hdr影片时的功耗，由此类推，在日常使用中，混合输出较独显直连更加省电，<em>理论上</em>能减少发热。<br>  但当前测试环境中独显为使用三星8nm工艺的RTX 3060 Laptop，考虑到三星工艺糟糕的能效表现，<strong>此次实验结果在Nvidia 20/10系显卡上的不一定适用</strong>。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/14/%E5%85%B3%E4%BA%8Estring-h%E7%9A%84%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello world!">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/14/%E5%85%B3%E4%BA%8Estring-h%E7%9A%84%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">关于string.h的笔记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-14 22:13:43" itemprop="dateCreated datePublished" datetime="2022-08-14T22:13:43+08:00">2022-08-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-15 01:23:26" itemprop="dateModified" datetime="2022-08-15T01:23:26+08:00">2022-08-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  近日在LeetCode上刷题，发现string.h内容忘差不多了，随手记一记（指复制粘贴）</p>
+<h1 id="string-h定义的类型"><a href="#string-h定义的类型" class="headerlink" title="string.h定义的类型"></a>string.h定义的类型</h1><h2 id="size-t"><a href="#size-t" class="headerlink" title="size_t"></a>size_t</h2><p>  其实就是个无符号整数（具体类型与编译器实现相关）。同时也是sizeof关键字所返回的类型。</p>
+<h1 id="string-h定义的宏"><a href="#string-h定义的宏" class="headerlink" title="string.h定义的宏"></a>string.h定义的宏</h1><h2 id="NULL"><a href="#NULL" class="headerlink" title="NULL"></a>NULL</h2><p>  不用再解释了吧。<br>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> NULL ((void *)0)</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="string-h定义的函数"><a href="#string-h定义的函数" class="headerlink" title="string.h定义的函数"></a>string.h定义的函数</h1><h2 id="mem系"><a href="#mem系" class="headerlink" title="mem系"></a>mem系</h2><h3 id="memchr"><a href="#memchr" class="headerlink" title="memchr"></a>memchr</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">memchr</span><span class="params">(<span class="type">const</span> <span class="type">void</span> *str, <span class="type">int</span> c, <span class="type">size_t</span> n)</span></span><br></pre></td></tr></table></figure>
+<p>  返回 str 所指向的内存中前 n 个字节里第一次出现的（无符号）字符 c 的指针。</p>
+<hr>
+<h3 id="memcmp"><a href="#memcmp" class="headerlink" title="memcmp"></a>memcmp</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">memcmp</span><span class="params">(<span class="type">const</span> <span class="type">void</span> *str1, <span class="type">const</span> <span class="type">void</span> *str2, <span class="type">size_t</span> n)</span></span><br></pre></td></tr></table></figure>
+<p>  比较从 str1 开始的 n 个字节与从 str2 开始的 n 个字节。<br>  <em>(cmp -&gt; compare)</em></p>
+<hr>
+<h3 id="memcpy"><a href="#memcpy" class="headerlink" title="memcpy"></a>memcpy</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">memcpy</span><span class="params">(<span class="type">void</span> *dest, <span class="type">const</span> <span class="type">void</span> *src, <span class="type">size_t</span> n)</span></span><br></pre></td></tr></table></figure>
+<p>  将以 src 为起点的 n 个字节复制到以 dest 为起点的 n 个字节。</p>
+<hr>
+<h3 id="memmove"><a href="#memmove" class="headerlink" title="memmove"></a>memmove</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">memmove</span><span class="params">(<span class="type">void</span> *str1, <span class="type">const</span> <span class="type">void</span> *str2, <span class="type">size_t</span> n)</span></span><br></pre></td></tr></table></figure>
+<p>  类似memcpy，但更安全。</p>
+<blockquote>
+<p>如果目标区域和源区域有重叠的话，memmove() 能够保证源串在被覆盖之前将重叠区域的字节拷贝到目标区域中，复制后源区域的内容会被更改。(来源：<a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-function-memmove.html">菜鸟教程</a>)</p>
+</blockquote>
+<hr>
+<h3 id="memset"><a href="#memset" class="headerlink" title="memset"></a>memset</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">memset</span><span class="params">(<span class="type">void</span> *str, <span class="type">int</span> c, <span class="type">size_t</span> n)</span></span><br></pre></td></tr></table></figure>
+<p>  设置以 str 为起点，位移 +n 的地址的值为 c。</p>
+<hr>
+<h2 id="str系"><a href="#str系" class="headerlink" title="str系"></a>str系</h2><h3 id="strcat"><a href="#strcat" class="headerlink" title="strcat"></a>strcat</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strcat</span><span class="params">(<span class="type">char</span> *dest, <span class="type">const</span> <span class="type">char</span> *src)</span></span><br></pre></td></tr></table></figure>
+<p>  把src所指向的字符串接到dest所指向的字符串的末尾。<br>  返回一个指向最终的目标字符串 dest 的指针</p>
+<hr>
+<h3 id="strncat"><a href="#strncat" class="headerlink" title="strncat"></a>strncat</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strncat</span><span class="params">(<span class="type">char</span> *dest, <span class="type">const</span> <span class="type">char</span> *src, <span class="type">size_t</span> n)</span></span><br></pre></td></tr></table></figure>
+<p>  将 scr 所指向的字符串的前 n 个字符复制到 dest 所指向的字符串的末尾。</p>
+<hr>
+<h3 id="strchr"><a href="#strchr" class="headerlink" title="strchr"></a>strchr</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strchr</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str, <span class="type">int</span> c)</span></span><br></pre></td></tr></table></figure>
+<p>  搜索 str 所指向的字符串中第一次出现的（无符号）字符 c 并返回其指针。</p>
+<hr>
+<h3 id="strcmp"><a href="#strcmp" class="headerlink" title="strcmp"></a>strcmp</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">strcmp</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str1, <span class="type">const</span> <span class="type">char</span> *str2)</span></span><br></pre></td></tr></table></figure>
+<p>  比较 str1 ， str2 两者所指向的字符串的内容。</p>
+<hr>
+<h3 id="strncmp"><a href="#strncmp" class="headerlink" title="strncmp"></a>strncmp</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">strncmp</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str1, <span class="type">const</span> <span class="type">char</span> *str2, <span class="type">size_t</span> n)</span></span><br></pre></td></tr></table></figure>
+<p>  比较 str1 ， str2 两者所指向的字符串的内容，但只比较前 n 个字符。</p>
+<hr>
+<h3 id="strcoll"><a href="#strcoll" class="headerlink" title="strcoll"></a>strcoll</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">strcoll</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str1, <span class="type">const</span> <span class="type">char</span> *str2)</span></span><br></pre></td></tr></table></figure>
+<p>  与Localization support有关，暂时无法理解。</p>
+<blockquote>
+<p>把 str1 和 str2 进行比较，结果取决于 LC_COLLATE 的位置设置。</p>
+</blockquote>
+<hr>
+<h3 id="strcpy"><a href="#strcpy" class="headerlink" title="strcpy"></a>strcpy</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strcpy</span><span class="params">(<span class="type">char</span> *dest, <span class="type">const</span> <span class="type">char</span> *src)</span></span><br></pre></td></tr></table></figure>
+<p>  将 src 所指向的字符串复制到 dest。</p>
+<hr>
+<h3 id="strncpy"><a href="#strncpy" class="headerlink" title="strncpy"></a>strncpy</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strncpy</span><span class="params">(<span class="type">char</span> *dest, <span class="type">const</span> <span class="type">char</span> *src, <span class="type">size_t</span> n)</span></span><br></pre></td></tr></table></figure>
+<p>  将 src 所指向的字符串复制到 dest，但只复制前 n 个字符。</p>
+<hr>
+<h3 id="strcspn"><a href="#strcspn" class="headerlink" title="strcspn"></a>strcspn</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">size_t</span> <span class="title function_">strcspn</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str1, <span class="type">const</span> <span class="type">char</span> *str2)</span></span><br></pre></td></tr></table></figure>
+<p>  返回 str1 中第几个字符与 str2 的某一个字符相同。</p>
+<h3 id="strerror"><a href="#strerror" class="headerlink" title="strerror"></a>strerror</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strerror</span><span class="params">(<span class="type">int</span> errnum)</span></span><br></pre></td></tr></table></figure>
+<p>  起初我不太理解，但看到这行：</p>
+<blockquote>
+<p>C 库函数 char *strerror(int errnum) 从内部数组中搜索错误号 errnum，并返回一个指向错误消息字符串的指针。strerror 生成的错误字符串取决于开发平台和编译器。（<a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-function-strerror.html">菜鸟教程</a>)</p>
+</blockquote>
+<p>  似乎是配合errno.h获取最近的报错描述字符串的。<br>  使用列如下。<br>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line">  <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line">  <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">  <span class="type">int</span> <span class="title function_">main</span> <span class="params">()</span></span><br><span class="line">  &#123;</span><br><span class="line">      FILE *fp;</span><br><span class="line">      fp = fopen(<span class="string">&quot;file.txt&quot;</span>,<span class="string">&quot;r&quot;</span>);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>( fp == <span class="literal">NULL</span> ) </span><br><span class="line">      &#123;</span><br><span class="line">          <span class="built_in">printf</span>(<span class="string">&quot;Error: %s\n&quot;</span>, strerror(errno));</span><br><span class="line">      &#125;</span><br><span class="line">   </span><br><span class="line">      <span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//输出：Error: No such file or directory</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="strlen"><a href="#strlen" class="headerlink" title="strlen"></a>strlen</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">size_t</span> <span class="title function_">strlen</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str)</span></span><br></pre></td></tr></table></figure>
+<p>  返回 str 所指向的字符串的长度（直到但不包括\0）。</p>
+<hr>
+<h3 id="strpbrk"><a href="#strpbrk" class="headerlink" title="strpbrk"></a>strpbrk</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strpbrk</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str1, <span class="type">const</span> <span class="type">char</span> *str2)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>依次检验字符串 str1 中的字符，当被检验字符在字符串 str2 中也包含时，则停止检验，并返回该字符位置。</p>
+</blockquote>
+<hr>
+<h3 id="strrchr"><a href="#strrchr" class="headerlink" title="strrchr"></a>strrchr</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strrchr</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str, <span class="type">int</span> c)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在参数 str 所指向的字符串中搜索<strong>最后一次</strong>出现字符 c（一个无符号字符）的位置。</p>
+</blockquote>
+<hr>
+<h3 id="strspn"><a href="#strspn" class="headerlink" title="strspn"></a>strspn</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">size_t</span> <span class="title function_">strspn</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str1, <span class="type">const</span> <span class="type">char</span> *str2)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>检索字符串 str1 中第一个不在字符串 str2 中出现的字符下标。</p>
+</blockquote>
+<hr>
+<h3 id="strstr"><a href="#strstr" class="headerlink" title="strstr"></a>strstr</h3><p>  <del>所以这是什么鬼名字</del><br>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strstr</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *haystack, <span class="type">const</span> <span class="type">char</span> *needle)</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>在字符串 haystack 中查找第一次出现字符串 needle（不包含空结束字符）的位置。</p>
+</blockquote>
+<hr>
+<h3 id="strtok"><a href="#strtok" class="headerlink" title="strtok"></a>strtok</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strtok</span><span class="params">(<span class="type">char</span> *str, <span class="type">const</span> <span class="type">char</span> *delim)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>分解字符串 str 为一组字符串，delim 为分隔符。</p>
+</blockquote>
+<hr>
+<h3 id="strxfrm"><a href="#strxfrm" class="headerlink" title="strxfrm"></a>strxfrm</h3>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">size_t</span> <span class="title function_">strxfrm</span><span class="params">(<span class="type">char</span> *dest, <span class="type">const</span> <span class="type">char</span> *src, <span class="type">size_t</span> n)</span></span><br></pre></td></tr></table></figure>
+<p>  也与Localization support有关，还是无法理解。</p>
+<blockquote>
+<p>根据程序当前的区域选项中的 LC_COLLATE 来转换字符串 src 的前 n 个字符，并把它们放置在字符串 dest 中。</p>
+</blockquote>
+<h1 id="末"><a href="#末" class="headerlink" title="末"></a>末</h1><p>  string.h中同时包括了memxxx和strxxx函数，很明显，这是因为char既是byte。一般来说，char的二进制占8位，共计1字节。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-standard-library-string-h.html">菜鸟教程 : C 标准库 - <string.h></a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/chapter/10305">腾讯云开发者社区开发者手册 : 本地化支持 | Localization support</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/13/%E5%9C%A8Linux%E4%B8%AD%E4%BD%BF%E7%94%A8tar%E7%AE%A1%E7%90%86%E5%BD%92%E6%A1%A3%E6%96%87%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello world!">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/13/%E5%9C%A8Linux%E4%B8%AD%E4%BD%BF%E7%94%A8tar%E7%AE%A1%E7%90%86%E5%BD%92%E6%A1%A3%E6%96%87%E4%BB%B6/" class="post-title-link" itemprop="url">在Linux中使用tar管理归档文件</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-13 11:37:01 / 修改时间：13:00:27" itemprop="dateCreated datePublished" datetime="2022-08-13T11:37:01+08:00">2022-08-13</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  近来我在云服务器上搭建潜渊症的游戏服务器，时常需要从本地打包文件上传以及从云端打包然后传回文件。<br>  我发现.zip虽然在Windows以及Linux上都通用，但却无法保留文件属性，相较之下，在Linux上，使用tar将文件打包为.tar.gz进行归档是个更好的选择。</p>
+<h1 id="什么是tar命令"><a href="#什么是tar命令" class="headerlink" title="什么是tar命令"></a>什么是tar命令</h1><p>  tar命令（英文全拼：tape archive ），用于备份文件。<br>  tar 是用来建立，还原备份文件的工具程序，它可以加入，解开备份文件内的文件。</p>
+<h1 id="最常用的三组tar命令"><a href="#最常用的三组tar命令" class="headerlink" title="最常用的三组tar命令"></a>最常用的三组tar命令</h1><h2 id="压缩文件"><a href="#压缩文件" class="headerlink" title="压缩文件"></a>压缩文件</h2>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -czvf test.tar.gz a.c   //压缩 a.c文件为test.tar.gz</span><br></pre></td></tr></table></figure>
+<p>  参数解释：<br>  短参 | 长参 | 解释<br>  -|-|-<br>  -c|—create| 建立新的备份文件<br>  -z|—gzip或—ungzip|通过gzip指令处理备份文件<br>  -v|—verbose|显示指令执行过程<br>  -f xxx|—file=xxx|指定备份文件</p>
+<h2 id="列出压缩文件的内容"><a href="#列出压缩文件的内容" class="headerlink" title="列出压缩文件的内容"></a>列出压缩文件的内容</h2>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -tzvf test.tar.gz </span><br></pre></td></tr></table></figure>
+<p>  参数解释：<br>  短参 | 长参 | 解释<br>  -|-|-<br>  -t|—list|列出备份文件的内容<br>  -z|—gzip或—ungzip|通过gzip指令处理备份文件<br>  -v|—verbose|显示指令执行过程<br>  -f xxx|—file=xxx|指定备份文件</p>
+<h2 id="解压文件"><a href="#解压文件" class="headerlink" title="解压文件"></a>解压文件</h2>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xzvf test.tar.gz </span><br></pre></td></tr></table></figure>
+<p>  参数解释：<br>  短参 | 长参 | 解释<br>  -|-|-<br>  -x|—extract或—get|从备份文件中还原文件<br>  -z|—gzip或—ungzip|通过gzip指令处理备份文件<br>  -v|—verbose|显示指令执行过程<br>  -f xxx|—file=xxx|指定备份文件</p>
+<h1 id="其他一些可能有用的参数（部分）"><a href="#其他一些可能有用的参数（部分）" class="headerlink" title="其他一些可能有用的参数（部分）"></a>其他一些可能有用的参数（部分）</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>短参</th>
+<th>长参</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>  -A</td>
+<td>—catenate</td>
+<td>新增文件到已存在的备份文件</td>
+</tr>
+<tr>
+<td>  -d</td>
+<td>—diff或—compare</td>
+<td>对比备份文件内和文件系统上的文件的差异</td>
+</tr>
+<tr>
+<td>  -k</td>
+<td>—keep-old-files</td>
+<td>解开备份文件时，不覆盖已有的文件</td>
+</tr>
+<tr>
+<td>  -m</td>
+<td>—modification-time</td>
+<td>还原文件时，不变更文件的更改时间</td>
+</tr>
+<tr>
+<td>  -N&lt;日期格式&gt;</td>
+<td>—newer=&lt;日期时间&gt;</td>
+<td>只将较指定日期更新的文件保存到备份文件里</td>
+</tr>
+<tr>
+<td>  -O</td>
+<td>—stdout</td>
+<td>把从备份文件里还原的文件输出到标准输出设备</td>
+</tr>
+<tr>
+<td>  -p</td>
+<td>—same-permissions</td>
+<td>用原来的文件权限还原文件</td>
+</tr>
+<tr>
+<td>  -r</td>
+<td>—append</td>
+<td>新增文件到已存在的备份文件的结尾部分</td>
+</tr>
+<tr>
+<td>  -u</td>
+<td>—update</td>
+<td>仅置换较备份文件内的文件更新的文件</td>
+</tr>
+<tr>
+<td>  N/A</td>
+<td>—ignore-failed-read</td>
+<td>忽略数据读取错误，不中断程序的执行</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="我的一些感想"><a href="#我的一些感想" class="headerlink" title="我的一些感想"></a>我的一些感想</h1><p>不只是tar，Linux上的很多工具都给我一种感觉。在Windows上需要某个第三方软件来完成的事，对Linux上的工具而言只是它们最基础的功能。Linux上的这些工具能很方便的嵌入自动化脚本中，整个系统就像是一个巨大的程序库，共给shell调用。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-comm-tar.html">菜鸟教程-Linux tar 命令</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/12/Dev-C-%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -177,7 +569,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-14 22:59:49" itemprop="dateModified" datetime="2022-08-14T22:59:49+08:00">2022-08-14</time>
+                <time title="修改时间：2022-09-16 23:37:32" itemprop="dateModified" datetime="2022-09-16T23:37:32+08:00">2022-09-16</time>
               </span>
 
           
@@ -192,8 +584,8 @@
 
       
           <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  其实，我有软件洁癖。但是学校好像要求要用Dev-C++，所以我在虚拟机里进行了配置，并写下了这篇博文。<br>  <del>（后日谈：后来我发现Dev-C++还是有几分优雅的，于是迅速在物理机上整了个）</del><br>  我对Dev-C++这样老掉牙且有先天缺陷的IDE一向是嗤之以鼻的，但看了一些文章以后，这样的看法似乎有一些改观了。<br>  Dev-C++也许不是一个趁手的工具，但它不失为一个合适的教具。</p>
-<h1 id="什么是Dev-C"><a href="#什么是Dev-C" class="headerlink" title="什么是Dev-C++"></a>什么是Dev-C++</h1><h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>  Dev-C++是以Delphi编写（存疑）的，运行在Windows上的，以MinGW-W64（或TDM-GCC）为后端的<strong>基于GPL协议开源</strong>的C&#x2F;C++集成开发环境（IDE）<br>  Dev-C++功能简陋…不，应该是某种意义上的简洁，对新人不太友好但却实际上适合新手入门以及充当C&#x2F;C++的教学工具。</p>
-<h2 id="Dev-C-的各个分支"><a href="#Dev-C-的各个分支" class="headerlink" title="Dev-C++的各个分支"></a>Dev-C++的各个分支</h2><p>  Dev-C++，作为一个开源项目，它也有着在大多数开源项目上常见的悲惨，却又幸运的命运。<br>  2000年左右，Bloodshed Software团队以构建一个轻量，免费，开源的C&#x2F;C++ IDE为宗旨，创建了Dev-C++项目。不过由于整个团队几乎是在用爱发电，到2005年时，Bloodshed以“失去开发动力”为由，宣布无限期暂停Dev-C++的更新，Dev-C++的版本号停滞在了4.9.9。<br>  但是当时的Dev-C++实在是太讨人喜欢了，在原团队停止开发后，无数的社区开发者们自发地扛起了Dev-C++的更新工作，其中最有名的当属Orwell团队。<br>  Orwell团队在2011年成功将Dev-C++的版本号推至5.x，在2016年发布了他们的最后一个版本——5.11。<br>  从2016年到2020年，只有一些个人维护的Dev-C++分支仍在更新，Dev-C++社区总体上停滞不前。<br>  但2020年7月，Embarcadero公司投入资金并以Orwell Dev-C++ 5.11为蓝本继续开发，这也就是我们即将接触的Embarcadero Dev-C++的来源。</p>
+<h1 id="什么是Dev-C"><a href="#什么是Dev-C" class="headerlink" title="什么是Dev-C++"></a>什么是Dev-C++</h1><h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>  Dev-C++是以Delphi编写（存疑）的，运行在Windows上的，以MinGW-W64（或TDM-GCC）为后端的<strong>基于GPL协议开源</strong>的C/C++集成开发环境（IDE）<br>  Dev-C++功能简陋…不，应该是某种意义上的简洁，对新人不太友好但却实际上适合新手入门以及充当C/C++的教学工具。</p>
+<h2 id="Dev-C-的各个分支"><a href="#Dev-C-的各个分支" class="headerlink" title="Dev-C++的各个分支"></a>Dev-C++的各个分支</h2><p>  Dev-C++，作为一个开源项目，它也有着在大多数开源项目上常见的悲惨，却又幸运的命运。<br>  2000年左右，Bloodshed Software团队以构建一个轻量，免费，开源的C/C++ IDE为宗旨，创建了Dev-C++项目。不过由于整个团队几乎是在用爱发电，到2005年时，Bloodshed以“失去开发动力”为由，宣布无限期暂停Dev-C++的更新，Dev-C++的版本号停滞在了4.9.9。<br>  但是当时的Dev-C++实在是太讨人喜欢了，在原团队停止开发后，无数的社区开发者们自发地扛起了Dev-C++的更新工作，其中最有名的当属Orwell团队。<br>  Orwell团队在2011年成功将Dev-C++的版本号推至5.x，在2016年发布了他们的最后一个版本——5.11。<br>  从2016年到2020年，只有一些个人维护的Dev-C++分支仍在更新，Dev-C++社区总体上停滞不前。<br>  但2020年7月，Embarcadero公司投入资金并以Orwell Dev-C++ 5.11为蓝本继续开发，这也就是我们即将接触的Embarcadero Dev-C++的来源。</p>
 <h2 id="我为什么认为Dev-C-是一个好的C语言教具"><a href="#我为什么认为Dev-C-是一个好的C语言教具" class="headerlink" title="我为什么认为Dev-C++是一个好的C语言教具"></a>我为什么认为Dev-C++是一个好的C语言教具</h2><p>  众所周知，完事开头难，如果你让一个从未学习过编程的人一来就使用Visual Studio这样的工具，它多半还没有开始敲字就被一堆又一堆的按钮给吓住了。<br>  使用Dev-C++这样老旧的IDE有一个好处，就是它并不会像Visua Studio那样将编译链接的过程隐藏起来，也没有IntelliCode来掩盖你记不住关键字和函数的事实。Dev-C++将编译链接的理论模型简单套上一层自动化脚本，然后直接摆在使用者的面前，给人一种好像就是在用终端指令操纵gcc去编译程序的感觉，熟悉Dev-C++的操作流程以后，能较为方便地切换到Makefile以及CMake这样更加专业的构建工具上，我想这也是老一辈程序员们热爱它的原因，某种意义上它难以理解，某种意义上它也简单干净，它不为资本所追求的快速迭代而服务，它忠于技术本身，它属于程序员。</p>
 <h1 id="Dev-C-的下载与安装"><a href="#Dev-C-的下载与安装" class="headerlink" title="Dev-C++的下载与安装"></a>Dev-C++的下载与安装</h1><h2 id="下载Dev-C-安装包"><a href="#下载Dev-C-安装包" class="headerlink" title="下载Dev-C++安装包"></a>下载Dev-C++安装包</h2><p>  作为名副其实的老开源项目，Orwell Dev-C++的仓库托管在<a target="_blank" rel="noopener" href="https://sourceforge.net/projects/orwelldevcpp/">Sourceforge</a>，而重生于2020年的Embarcadero Dev-C++则开源于<a target="_blank" rel="noopener" href="https://github.com/Embarcadero/Dev-Cpp">Github</a><br>  你可以在上述Github仓库页面找到Embarcadero Dev-C++的最新Release。截至本文完稿时的最新版本为6.3，附带的编译器为TDM-GCC，这也是下面我用到的版本。</p>
 <h2 id="安装Dev-C"><a href="#安装Dev-C" class="headerlink" title="安装Dev-C++"></a>安装Dev-C++</h2><p>  <del>你不会拿到安装包了还不会装吧？</del><br>  <del>不会吧不会吧？</del><br>  Embarcadero Dev-C++的Github Release里应该同时包含了exe安装包和可绿色安装的压缩包，我的建议是使用后者，解压即用，双击devcpp.exe起飞。<br>  第一次启动Dev-C++时会要你选择语言和一些主题设置，我的建议是使用Visual Studio Dark配色以及Windows10图标，不包你喜欢但是保证不辣眼睛。</p>
@@ -206,7 +598,7 @@
 <h1 id="使用快捷键替代鼠标操纵"><a href="#使用快捷键替代鼠标操纵" class="headerlink" title="使用快捷键替代鼠标操纵"></a>使用快捷键替代鼠标操纵</h1><p>  说句大实话，这是提升你的生产效率的必要途径。在各个选项卡中你可以在找到各个功能对应的快捷键（写在右侧，比如调试的快捷键是F5），熟练后尽量使用那些快捷键，而不是慢吞吞地摸出鼠标然后到处点点点。</p>
 <h1 id="Dev-C-其他的一些功能"><a href="#Dev-C-其他的一些功能" class="headerlink" title="Dev-C++其他的一些功能"></a>Dev-C++其他的一些功能</h1><h2 id="代码格式化工具"><a href="#代码格式化工具" class="headerlink" title="代码格式化工具"></a>代码格式化工具</h2><p>  Dev-C++集成了AStyle，可以快速按照某种代码风格来格式化你的代码。<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/vYDG5D"><img src="https://s1.ax1x.com/2022/08/12/vYDG5D.png" alt="vYDG5D.png"></a><br>  具体的格式化策略你可以点击“格式化选项”来修改。<br>  顺便一提：<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/vYDxZ6"><img src="https://s1.ax1x.com/2022/08/12/vYDxZ6.png" alt="vYDxZ6.png"></a><br>  好吧，只是抖个机灵。<br>  实际上我也并没有完全遵守Allman风格。</p>
 <h2 id="添加编译选项"><a href="#添加编译选项" class="headerlink" title="添加编译选项"></a>添加编译选项</h2><p>  在“工具”选项卡里你可以找到“编译选项”，值得一提的是这里将编译指令和链接指令分开了。<br>  至于这里应该写些什么，你可能得先去了解一下gcc和ld，以后我可能会写一文介绍它们。</p>
-<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>  至此，你应该以及能够使用Dev-C++进行基本的开发和调试了，剩下的就是学习C&#x2F;C++这两门语言本身，以及它们的生态了。<br>  作为（半个）过来人，相信我，在C++面前，起初你可能心情激动，满脑子“就这？”，但越是学到后面，你会愈发地痛不欲生。</p>
+<h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>  至此，你应该以及能够使用Dev-C++进行基本的开发和调试了，剩下的就是学习C/C++这两门语言本身，以及它们的生态了。<br>  作为（半个）过来人，相信我，在C++面前，起初你可能心情激动，满脑子“就这？”，但越是学到后面，你会愈发地痛不欲生。</p>
 <h1 id="附：Dev-C-构建系统的实质"><a href="#附：Dev-C-构建系统的实质" class="headerlink" title="附：Dev-C++构建系统的实质"></a>附：Dev-C++构建系统的实质</h1><p>  其实如果你去看一眼创建的工程的目录就会发现，Dev-C++其实是调用的Makefile进行的项目构建。<br>  具体的Makefile脚本就是项目根目录下的“Makefile.win”。<br>  至于Makefile是什么以及有什么用，那就说来话长了，等我以后再写一文吧。<br>  但是要简单说说也行，Makefile提供了一套简单的系统来按需编译源文件然后链接，主要解决的就是编译问题，Makefile只会重新编译那些被修改了的源文件，而保留其他没有被修改的源文件的目标文件，大大减少了大型项目中重复的不必要编译，提高了项目整体的编译速度。<br>  当然Makefile也可以玩得很花，远远不止上述内容，不过那些就真的是另一文的内容了。</p>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/408296605/answer/1534214395">知乎：如何评价Embarcadero Dev-C++? - JohnLu的回答</a><br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/Dev-C++">百度百科：Dev-C++</a></p>
 
@@ -273,8 +665,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022&#x2F;1&#x2F;30，我对其内容几乎没有修改，亦未检查本文可靠性，请自行斟酌。</p>
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022/1/30，我对其内容几乎没有修改，亦未检查本文可靠性，请自行斟酌。</p>
 <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>  翻遍了谷歌百度发现一堆人Python3和Python2傻傻分不清，拿着Python2的函数写Python3的调用，API还是错的，简直是误人子弟，Python官方的API文档也没多大用。这里列出经过一上午的激战摸索出来的正确方案。<br>  C中Python3脚本的调用可以分为以下步骤：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -282,9 +675,10 @@
 <th>代码</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>导入Python库</td>
-<td>#include &lt;Python.h&gt;</td>
+<td>#include <Python.h></td>
 </tr>
 <tr>
 <td>初始化Python解释器</td>
@@ -292,7 +686,7 @@
 </tr>
 <tr>
 <td>设置模块路径（可选）</td>
-<td>PyRunSimpleString(“import sys\nsys.path.append(‘.&#x2F;‘)”);</td>
+<td>PyRunSimpleString(“import sys\nsys.path.append(‘./‘)”);</td>
 </tr>
 <tr>
 <td>导入模块</td>
@@ -314,10 +708,11 @@
 <td>清理Python解释器</td>
 <td>Py_Finalize();</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>  Python是一门动态的脚本语言，在C API中也体现了这一点：C API中Python的一切数据类型和对象都是PyObject的“派生类”（但其实C中并没有class，虽然可以有OOP），可以使用PyObject的指针储存。</p>
 <h1 id="使用列"><a href="#使用列" class="headerlink" title="使用列"></a>使用列</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Python.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">Py_Initialize</span>();</span><br><span class="line">    <span class="built_in">PyRun_SimpleString</span>(<span class="string">&quot;import sys&quot;</span>);</span><br><span class="line">    <span class="built_in">PyRun_SimpleString</span>(<span class="string">&quot;sys.path.append(&#x27;./&#x27;)&quot;</span>);</span><br><span class="line">    <span class="comment">// 在C中导入指定py模块</span></span><br><span class="line">    PyObject* pyModule = <span class="built_in">PyImport_ImportModule</span>(<span class="string">&quot;my_test&quot;</span>);</span><br><span class="line">    <span class="comment">// 导入方法并调用</span></span><br><span class="line">    PyObject* pyMethod = <span class="built_in">PyObject_GetAttrString</span>(pModule,<span class="string">&quot;main&quot;</span>);</span><br><span class="line">    PyObject* pyReturn = <span class="built_in">PyEval_CallObject</span>(pMethod, <span class="built_in">Py_BuildValue</span>(<span class="string">&quot;(s)&quot;</span>,<span class="string">&quot;Hi PYTHON!&quot;</span>));</span><br><span class="line">    <span class="type">char</span>* buffer;</span><br><span class="line">    <span class="comment">// 将Python返回的str对象转为C可以使用的char*</span></span><br><span class="line">    <span class="built_in">PyArg_Parse</span>(send_back, <span class="string">&quot;s&quot;</span>, &amp;buffer);</span><br><span class="line">    <span class="comment">// 输出返回值</span></span><br><span class="line">    <span class="built_in">printf</span>(“%s”,buffer);</span><br><span class="line">    <span class="built_in">Py_Finalize</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h1 id="对C-封装Python模块的设想"><a href="#对C-封装Python模块的设想" class="headerlink" title="对C++封装Python模块的设想"></a>对C++封装Python模块的设想</h1><p>  综上，从一个Python模块中调用函数并接受返回值需要整整八（或者七？）步。是否可以用C++，在一个文件对应一个同名模块的前提下进行一个简单的封装以实现开箱即用？</p>
 <h1 id="后日谈"><a href="#后日谈" class="headerlink" title="后日谈"></a>后日谈</h1><p>  原文到上面那里就已经没有了，关于那个封装，我确实有试过，但是现在有<a target="_blank" rel="noopener" href="https://github.com/pybind/pybind11">更好的选择</a>。<br>  另外，Boost库里也有对Python API的封装，但是，感觉不如pybind11。。。画质（x</p>
 
@@ -378,15 +773,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022&#x2F;1&#x2F;30，现简单修改并重新发布。</p>
-<h1 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h1><table>
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022/1/30，现简单修改并重新发布。</p>
+<h1 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h1><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>项目</th>
 <th>参数</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>操作系统</td>
 <td>Fedora Linux 35 (Kernel-5.15.16-200)</td>
 </tr>
@@ -398,30 +795,15 @@
 <td>计时工具</td>
 <td>time指令</td>
 </tr>
-</tbody></table>
-<p>实验机器部分配置：</p>
-<table>
-<thead>
-<tr>
-<th>项目</th>
-<th>参数</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>CPU</td>
-<td>Intel Core I5 - 4460</td>
-</tr>
-<tr>
-<td>RAM</td>
-<td>4G DDR3 1600Mhz（单通道）</td>
-</tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
+<p>实验机器部分配置：<br>项目 | 参数<br>-|-<br>CPU|Intel Core I5 - 4460<br>RAM|4G DDR3 1600Mhz（单通道）</p>
 <h1 id="实验代码"><a href="#实验代码" class="headerlink" title="实验代码"></a>实验代码</h1><h2 id="std-cout"><a href="#std-cout" class="headerlink" title="std::cout"></a>std::cout</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">114514</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;any str\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="std-cout-std-endl"><a href="#std-cout-std-endl" class="headerlink" title="std::cout + std::endl"></a>std::cout + std::endl</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">114514</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;any str&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="std-stringstream-std-cout"><a href="#std-stringstream-std-cout" class="headerlink" title="std::stringstream + std::cout"></a>std::stringstream + std::cout</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::stringstream ss;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">114514</span>;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        ss &lt;&lt; <span class="string">&quot;any str\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; ss.<span class="built_in">str</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><table>
+<h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>项目</th>
@@ -431,7 +813,8 @@
 <th>平均</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>std::cout</td>
 <td>0.225</td>
 <td>0.224</td>
@@ -452,7 +835,9 @@
 <td>0.069</td>
 <td>0.0720</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>  柱状图如下<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/vJr03j"><img src="https://s1.ax1x.com/2022/08/12/vJr03j.png" alt="vJr03j.png"></a><br>  <em>（注：std::ostringstream和std::istringstream因都是std::stringstream派生类不再讨论，且实验表明他们的速度基本没有差别。）</em></p>
 <h1 id="实验结论"><a href="#实验结论" class="headerlink" title="实验结论"></a>实验结论</h1><p>  实验结果表明，在当前实验环境下，使用std::stringstream缓冲字符串，再用std::stringstream::str()将缓冲的字符串转至std::cout进行输出，较直接使用std::cout有明显的性能优势。</p>
 
@@ -497,10 +882,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-08-12 13:35:38 / 修改时间：14:53:30" itemprop="dateCreated datePublished" datetime="2022-08-12T13:35:38+08:00">2022-08-12</time>
+              <time title="创建时间：2022-08-12 13:35:38" itemprop="dateCreated datePublished" datetime="2022-08-12T13:35:38+08:00">2022-08-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-16 23:37:16" itemprop="dateModified" datetime="2022-09-16T23:37:16+08:00">2022-09-16</time>
+              </span>
 
           
 
@@ -513,9 +904,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022&#x2F;2&#x2F;1，现简单修改并重新发布。</p>
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022/2/1，现简单修改并重新发布。</p>
 <h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>  首先，我们需要知道十六进制数是由 0 1 2 3 4 5 6 7 8 9 A B C D E F(大小写无关)任意排列所得的数，它们分别表示十进制中的0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15，没有16是因为到16时已经进一位了。</p>
 <p>  我们已经知道二进制和十进制之间相互转换的方法，则通过上述对照关系，我们可以以十进制为桥梁，对二进制和十六进制进行相互的转化，例如：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -524,7 +916,8 @@
 <th>二进制</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>C</td>
 <td>12</td>
 <td>1100</td>
@@ -539,8 +932,10 @@
 <td>107794431</td>
 <td>11001101100110011111111</td>
 </tr>
-</tbody></table>
-<p>  上述方法原理简单，但多少有些难以计算，对此我们有一种更好的方法:<br>易得16&#x2F;2&#x3D;4，则只需要四位二进制数即可表示一个十六进制数，反之亦然。<br>  由此我们可以得出如下过程：<br>  有一二进制数0010 0001 0110 （空格只为了方便阅读）<br>  则每四位一读，读出三个四位的二进制数：0010，0001，0110<br>  四位二进制可以方便地直接转为十六进制，将上述内容转为十六进制得:2,1,6<br>  则上述二进制数的十六进制表达为2 1 6，即十六进制数216。</p>
+</tbody>
+</table>
+</div>
+<p>  上述方法原理简单，但多少有些难以计算，对此我们有一种更好的方法:<br>易得16/2=4，则只需要四位二进制数即可表示一个十六进制数，反之亦然。<br>  由此我们可以得出如下过程：<br>  有一二进制数0010 0001 0110 （空格只为了方便阅读）<br>  则每四位一读，读出三个四位的二进制数：0010，0001，0110<br>  四位二进制可以方便地直接转为十六进制，将上述内容转为十六进制得:2,1,6<br>  则上述二进制数的十六进制表达为2 1 6，即十六进制数216。</p>
 <p>  另:由上述推理过程我们不难看出计算机程序设计中十六进制数大量使用的原因：用十六进制数表示的二进制数更短，适合人类阅读，同时也能快速地转换回二进制。（毕竟计算机里没有奇数位的二进制数不是吗？）</p>
 
       
@@ -584,10 +979,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-08-12 13:26:14 / 修改时间：14:53:23" itemprop="dateCreated datePublished" datetime="2022-08-12T13:26:14+08:00">2022-08-12</time>
+              <time title="创建时间：2022-08-12 13:26:14" itemprop="dateCreated datePublished" datetime="2022-08-12T13:26:14+08:00">2022-08-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-16 23:38:00" itemprop="dateModified" datetime="2022-09-16T23:38:00+08:00">2022-09-16</time>
+              </span>
 
           
 
@@ -600,8 +1001,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022&#x2F;2&#x2F;1，现简单修改并重新发布。</p>
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  这是一篇翻新文档，最初写于2022/2/1，现简单修改并重新发布。</p>
 <h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>  先来看几个实例</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -609,7 +1011,8 @@
 <th>十进制</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>00000001</td>
 <td>1</td>
 </tr>
@@ -641,11 +1044,13 @@
 <td>10000000</td>
 <td>128</td>
 </tr>
-</tbody></table>
-<p>  上表列举了一个八位二进制数（1字节）00000001按位左移的结果。<br>  由图易得：设一个二进制数00000001向左位移次数为x，则有将其转换为十进制的方程f(x)&#x3D;2∧(x-1)<br>  经检验，该结论正确，过程略。</p>
+</tbody>
+</table>
+</div>
+<p>  上表列举了一个八位二进制数（1字节）00000001按位左移的结果。<br>  由图易得：设一个二进制数00000001向左位移次数为x，则有将其转换为十进制的方程f(x)=2∧(x-1)<br>  经检验，该结论正确，过程略。</p>
 <p>  由上述结论我们不难推测，是否存在任意长度的任意二进制数，可以拆分为多个形如00…001向左位移得到的二进制数，再带入上述方程的结果之合为该二进制数的十进制值？</p>
 <p>  经过验证，发现该假设成立，过程简要如下：</p>
-<p>  例如：有一个二进制数000010100<br>  单独看1的位置，发现有两个1，分别位于第5和第3位。<br>  则将此二进制数拆分为两个二进制数：000010000和000000100。<br>  将此二者带入上述f（x），分别得解为2 ∧ 4 &#x3D; 16， 2 ∧ 2 &#x3D; 4<br>  两解相加为20</p>
+<p>  例如：有一个二进制数000010100<br>  单独看1的位置，发现有两个1，分别位于第5和第3位。<br>  则将此二进制数拆分为两个二进制数：000010000和000000100。<br>  将此二者带入上述f（x），分别得解为2 ∧ 4 = 16， 2 ∧ 2 = 4<br>  两解相加为20</p>
 <p>  经过检验，成立。</p>
 <p>  综上所述，我们得到一种由二进制数转换为十进制数的快速方法：<br>  只看1的位置，对于每一个1，将自右数起到该1的位数的值（不包括该1所在位）作为2的幂得到多个中间值，再将所有中间值相加得到该二进制数的十进制值。</p>
 <h1 id="后日谈"><a href="#后日谈" class="headerlink" title="后日谈"></a>后日谈</h1><p>  其实现在看来，二进制转十进制实际上就是一个等比数列求和，具体自己看吧。<br>  对了，高考之前我甚至真的遇到这样的题目了。</p>
@@ -699,7 +1104,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-12 14:53:47" itemprop="dateModified" datetime="2022-08-12T14:53:47+08:00">2022-08-12</time>
+                <time title="修改时间：2022-09-16 23:38:33" itemprop="dateModified" datetime="2022-09-16T23:38:33+08:00">2022-09-16</time>
               </span>
 
           
@@ -726,10 +1131,10 @@
 <p>  解压appx后点击相应的xxx.exe即可，我相信你应该找得到（<br>  不过，有的发行版会将多个架构的版本打包在同一个appx里，也就是套了个娃，找找就有了。</p>
 <h2 id="编辑WSL2配置文件"><a href="#编辑WSL2配置文件" class="headerlink" title="编辑WSL2配置文件"></a>编辑WSL2配置文件</h2><p>  WSL2的配置文件不会自动创建，你需要在自己的User文件夹中新建一个叫“.wslconfig”的文件，注意只有后缀没有名字。<br>  用你最喜欢的文本编辑器打开它，在第一行写上“[wsl2]”，即可开始配置你的WSL2。<br>  这里我提供了一份带有注释的配置文件，仅供参考。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[wsl2]</span><br><span class="line">memory=4GB                  #WSL2最大可使用多少内存，单位可为GB或MB</span><br><span class="line">swap=1GB                    #WSL2最大可用的交换空间，其实就是虚拟内存，单位同上</span><br><span class="line">processor=4                 #分配给WSl2多少个CPU核心（其实是线程）（似乎对Intel 12th大小核不起作用）</span><br><span class="line">localhostForwarding=true    #是否将WSL2的localhost覆盖到物理机的localhost</span><br></pre></td></tr></table></figure>
-<p>  注意：当WSL2完全关闭并且等待一段时间后才能加载修改过的.wslconfig（详见下述文档中的“第 8 秒的规则”），不过你可以在PowerShell中使用指令“wsl –shutdown”来加快这个过程。<br>  其实你甚至能在.wslconfig中指定WSL2使用的内核镜像 ，根据这一特性你甚至能打包任何Linux发行版到WSl2，但我懒得写了。<br>  更多内容见<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/wsl-config">微软的WSL高级配置文档</a></p>
-<h2 id="在WSL2中访问物理机的文件"><a href="#在WSL2中访问物理机的文件" class="headerlink" title="在WSL2中访问物理机的文件"></a>在WSL2中访问物理机的文件</h2><p>  <em>注：不同的发行版可能有不同的挂在策略，此处仅列出Debian与Ubuntu通用的方案。</em><br>  在WSL2启动时，物理机的各个磁盘会被自动挂载至&#x2F;mnt目录，根据盘符（但是是小写）即可进入物理机对应的磁盘。<br>  例如，我在WSL2（debian）中进入物理机的桌面文件夹，指令为：$cd &#x2F;mnt&#x2F;c&#x2F;Users&#x2F;iaksh&#x2F;Desktop<br>  实际上本地磁盘在WSL2中的挂载是通过网络实现的，这也是WSL2与物理机目录IO缓慢的原因。</p>
+<p>  注意：当WSL2完全关闭并且等待一段时间后才能加载修改过的.wslconfig（详见下述文档中的“第 8 秒的规则”），不过你可以在PowerShell中使用指令“wsl —shutdown”来加快这个过程。<br>  其实你甚至能在.wslconfig中指定WSL2使用的内核镜像 ，根据这一特性你甚至能打包任何Linux发行版到WSl2，但我懒得写了。<br>  更多内容见<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/wsl-config">微软的WSL高级配置文档</a></p>
+<h2 id="在WSL2中访问物理机的文件"><a href="#在WSL2中访问物理机的文件" class="headerlink" title="在WSL2中访问物理机的文件"></a>在WSL2中访问物理机的文件</h2><p>  <em>注：不同的发行版可能有不同的挂在策略，此处仅列出Debian与Ubuntu通用的方案。</em><br>  在WSL2启动时，物理机的各个磁盘会被自动挂载至/mnt目录，根据盘符（但是是小写）即可进入物理机对应的磁盘。<br>  例如，我在WSL2（debian）中进入物理机的桌面文件夹，指令为：$cd /mnt/c/Users/iaksh/Desktop<br>  实际上本地磁盘在WSL2中的挂载是通过网络实现的，这也是WSL2与物理机目录IO缓慢的原因。</p>
 <h1 id="部署WSLg"><a href="#部署WSLg" class="headerlink" title="部署WSLg"></a>部署WSLg</h1><h2 id="有关本文时效性的警告"><a href="#有关本文时效性的警告" class="headerlink" title="有关本文时效性的警告"></a>有关本文时效性的警告</h2><p>  虽然Windows11和WSLg的推出都有一段时间了，但WSLg目前的安装方式总是让我感到奇怪。<br>  这样的安装方式说不定哪天就被微软吃掉了，所以当你看见这篇文章的时候，请明确本文所属有关WSLg的内容可能已经失效。</p>
-<h2 id="在WSL2的基础上手动安装WSLg"><a href="#在WSL2的基础上手动安装WSLg" class="headerlink" title="在WSL2的基础上手动安装WSLg"></a>在WSL2的基础上手动安装WSLg</h2><p>  以管理员权限打开Windows Terminal（Windows10下以管理员权限打开PowerShell），在确保WSL2已经关闭的情况下输入指令“wsl –update”。<br>  经过漫长的更新后，你的WSL2内核应该已经支持WSLg了。<br>  此时你可以在WSL2里运行任意GUI程序（比如从你的包管理器下载一个热乎的GIMP然后运行），需要注意的是加载时间可能会略长（视配置而定），而且当某些程序占用全屏时，运行在WSL2上的X11将会崩溃，紧接着Linux GUI程序也会崩溃。（目前发现QQ截图会触发此BUG）。</p>
+<h2 id="在WSL2的基础上手动安装WSLg"><a href="#在WSL2的基础上手动安装WSLg" class="headerlink" title="在WSL2的基础上手动安装WSLg"></a>在WSL2的基础上手动安装WSLg</h2><p>  以管理员权限打开Windows Terminal（Windows10下以管理员权限打开PowerShell），在确保WSL2已经关闭的情况下输入指令“wsl —update”。<br>  经过漫长的更新后，你的WSL2内核应该已经支持WSLg了。<br>  此时你可以在WSL2里运行任意GUI程序（比如从你的包管理器下载一个热乎的GIMP然后运行），需要注意的是加载时间可能会略长（视配置而定），而且当某些程序占用全屏时，运行在WSL2上的X11将会崩溃，紧接着Linux GUI程序也会崩溃。（目前发现QQ截图会触发此BUG）。</p>
 
       
     </div>
@@ -813,192 +1218,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/10/%E4%BD%BF%E7%94%A8Hexo%E6%A1%86%E6%9E%B6%E5%92%8CGithub-Pages%E6%90%AD%E5%BB%BA%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="IAKSH">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hello world!">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/08/10/%E4%BD%BF%E7%94%A8Hexo%E6%A1%86%E6%9E%B6%E5%92%8CGithub-Pages%E6%90%AD%E5%BB%BA%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/" class="post-title-link" itemprop="url">使用Hexo框架和Github Pages搭建静态博客</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-08-10 23:03:43" itemprop="dateCreated datePublished" datetime="2022-08-10T23:03:43+08:00">2022-08-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-12 22:32:40" itemprop="dateModified" datetime="2022-08-12T22:32:40+08:00">2022-08-12</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener" href="https://imgtu.com/i/v8E9ne"><img src="https://s1.ax1x.com/2022/08/10/v8E9ne.png" alt="v8E9ne.png"></a></p>
-<blockquote>
-<p>Hexo was originally created and maintained by Tommy Chen in 2012. Since then, it has helped thousands of people to build their dream website&#x2F;blog.</p>
-</blockquote>
-<h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  作为一名“Geek”，哪能没有自己的博客？这就好像一名司机必须要有车，而车需要花买，服务器也需要。但好在博客不一定要有自己的服务器。车，也不一定非要是自己的。</p>
-<p>  2020年的夏天，Hexo框架偶然进入我的视野，这是一个基于Node.js构建的静态博客框架，该框架以Markdown作为博文源码，根据自定义的博客主题自动生成html页面。配合Github pages自动部署，甚至可以做到零成本搭建博客。</p>
-<p>  时隔两年，恍惚中，我竟再次回到了这里，只愿记录下自己搭建博客的一点心得，为大家献上一篇微不足道的教程。</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://hexo.io/">Hexo官网</a><br><a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages介绍</a></p>
-</blockquote>
-<h1 id="一切开始之前的准备"><a href="#一切开始之前的准备" class="headerlink" title="一切开始之前的准备"></a>一切开始之前的准备</h1><p>  正如前文所述，Hexo基于Node.js构建，考虑到Node.js开发环境在Windows系统上的种种不便利因素，我选择了WSL2（Debian），如果你坚持要在Windows上完成搭建，这篇博文依然适用，不过你可能需要格外找方法在Windows上搭建下述环境（因为我懒）。</p>
-<blockquote>
-<p>如果你不知道什么是WSL，请翻阅以下文档<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/about">什么是适用于 Linux 的 Windows 子系统？</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/compare-versions">比较 WSL 1 和 WSL 2</a></p>
-</blockquote>
-<h2 id="安装Node-js，npm，以及hexo模块"><a href="#安装Node-js，npm，以及hexo模块" class="headerlink" title="安装Node.js，npm，以及hexo模块"></a>安装Node.js，npm，以及hexo模块</h2><p>  首先我们需要安装Node.js运行时及其包管理器npm。<br>[<img src="https://bkimg.cdn.bcebos.com/pic/6609c93d70cf3bc79f3ded3c434bada1cd11738bfc82?x-bce-process=image/watermark,image_d2F0ZXIvYmFpa2UxODA=,g_7,xp_5,yp_5/format,f_auto" alt="Node.js.png">]</p>
-<blockquote>
-<p>Node.js发布于2009年5月，由Ryan Dahl开发，是一个基于Chrome V8引擎的JavaScript运行环境，使用了一个事件驱动、非阻塞式I&#x2F;O模型，让JavaScript 运行在服务端的开发平台，它让JavaScript成为与PHP、Python、Perl、Ruby等服务端语言平起平坐的脚本语言<br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/node.js">百度百科</a></p>
-</blockquote>
-<p>  在Debian上可以使用命令apt install nodejs来安装nodejs（需要管理员权限），其余发行版请使用相应的包管理器并寻找对应的包名，下同。<br>  Hexo框架并不是Node.js的一部分，它被封装为Node.js的一个第三方模块，需要使用Node.js的包管理器（npm）进行安装。在Debian上可以使用命令apt install npm进行安装。<br>  接着我们需要使用npm安装Hexo框架，使用指令npm install -g hexo-cli即可（需要管理员权限），其中，-g代表全局安装。</p>
-<blockquote>
-<p>如果你不知道什么是包管理器，请点击下面的链接<br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8">百度百科</a></p>
-</blockquote>
-<p>  运行上述命令，hexo框架将会被自动安装至系统，此时可以使用指令hexo version查看其版本。<br>  下面是我这里的输出。<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/v8ey3q"><img src="https://s1.ax1x.com/2022/08/10/v8ey3q.png" alt="v8ey3q.png"></a></p>
-<p>  你可以使用指令hexo help查看更多指令。</p>
-<h2 id="搭建Github-Pages"><a href="#搭建Github-Pages" class="headerlink" title="搭建Github Pages"></a>搭建Github Pages</h2><p>  由于没有专用的云服务器用于运行博客，我们需要寻找一家可靠的托管方，比如Github。<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/v8mu2q"><img src="https://s1.ax1x.com/2022/08/10/v8mu2q.png" alt="v8mu2q.png"></a></p>
-<p>  首先你需要登入你的Github账号，并创建一个新的Repository，其命名格式需为username.gitHub.io（比如我的，iaksh.github.io）。符合该命名格式的Repository会自动进行Github Pages构建。<br>当然，截至目前，这里可能只有一个孤零零的README.md。</p>
-<h1 id="创建你的Hexo博客"><a href="#创建你的Hexo博客" class="headerlink" title="创建你的Hexo博客"></a>创建你的Hexo博客</h1><p>  找一个你喜欢的地方兴建文件夹，然后在终端中cd进哪个文件夹并使用命令hexo init，一个hexo博客工程就完成了。<br>此时你可以使用hexo server（或简写为hexo s)试运行博客，使用浏览器访问localhots:4000即可预览。<br>使用hexo new name（hexo n name）即可开始一篇新的博文，此命令将会在工程根目录的source文件夹中生成对应名称的markdown源文件，该markdown源文件即为你的博文源码。<br>其他的命令还有hexo generate（hexo g），hexo deploy（hexo d）。前者能将博客生成为一份完整的html+css+js文件，后者自动将其按照预设配置进行部署</p>
-<h1 id="修改你的博客配置"><a href="#修改你的博客配置" class="headerlink" title="修改你的博客配置"></a>修改你的博客配置</h1><p>  工程根目录中有一配置文件名为“_config.yml”，这是hexo最顶层的配置文件，在这里你可以指定网站的一些基本内容。此外，你可以将第三方主题包放在工程根目录的themes文件夹中，然后修改主题包内的“_config.yml”。<br>另：由于各个主题配置文件不尽相同，具体请见其中的注释。</p>
-<h1 id="将你的Hexo博客推送至Github并自动部署"><a href="#将你的Hexo博客推送至Github并自动部署" class="headerlink" title="将你的Hexo博客推送至Github并自动部署"></a>将你的Hexo博客推送至Github并自动部署</h1><p>  在推送博客至github之前，你需要在工程根目录启用hexo的git部署模块，命令为npm install hexo-deployer-git –save<br>  完成上述操作后，还需修改工程根目录下的“_config.yml”中的deploy项目，将其中的type改为git，添加repo子项以指定git仓库，添加branch子项以指定上传分支。<br>  在这之后，使用指令hexo g &amp;&amp; hexo d即可自动完成博客的生成与部署。</p>
-<h1 id="可能遇到的问题以及解决方案"><a href="#可能遇到的问题以及解决方案" class="headerlink" title="可能遇到的问题以及解决方案"></a>可能遇到的问题以及解决方案</h1><h2 id="我无法用Github密码完成Push"><a href="#我无法用Github密码完成Push" class="headerlink" title="我无法用Github密码完成Push"></a>我无法用Github密码完成Push</h2><p>  在进行推送时，git会需要你输入自己的Gihub账户名以及密码，但你可能已经发现，密码已经不再适用了。<br>  事实上，自2021年8月13日起，github不再支持使用密码在git上push代码，取而代之的是token。</p>
-<blockquote>
-<p>As previously announced, starting on August 13, 2021, at 09:00 PST, we will no longer accept account passwords when authenticating Git operations on GitHub.com. Instead, token-based authentication (for example, personal access, OAuth, SSH Key, or GitHub App installation token) will be required for all authenticated Git operations. Please refer to this blog post for instructions on what you need to do to continue using git operations securely.<br> Removal</p>
-</blockquote>
-<p>你需要在自己的github设置中找到“Developer Settings”中的“Personal access tokens”，点击右侧按钮新建token，勾选repo权限，然后填入git的密码框中即可。<br>需要格外注意的是，token被创建之后仅会被显示一次，你需要自己记好它。</p>
-<h2 id="我连接不上Github"><a href="#我连接不上Github" class="headerlink" title="我连接不上Github"></a>我连接不上Github</h2><p>  这是一个非常令人头痛的问题，种种不稳定因素干扰下，Github在国内可谓是风雨飘摇。但就目前而言，你可以使用github镜像站（比如<a target="_blank" rel="noopener" href="https://doc.fastgit.org/zh-cn/">fastgit</a>）来加速访问。<br>  当然，我不能保证它们是绝对安全的，你需要自己承担风险。</p>
-<h2 id="Github-Pages没有更新我刚刚Push的内容"><a href="#Github-Pages没有更新我刚刚Push的内容" class="headerlink" title="Github Pages没有更新我刚刚Push的内容"></a>Github Pages没有更新我刚刚Push的内容</h2><p>  你先别急。<br>  <a target="_blank" rel="noopener" href="https://imgtu.com/i/v8oV0J"><img src="https://s1.ax1x.com/2022/08/11/v8oV0J.jpg" alt="v8oV0J.jpg"></a></p>
-<p>  Github Pages的部署是需要时间的，具体视Github服务器状况而定，实在着急的话可以去Github仓库的Environment里看一眼Deployment history，还是不行就多等等吧。</p>
-<p>  另外，Github Pages的服务器运行在UTC时区，而我们国内通常是UTC+8（北京时间），Github Pages只会编译在当前时间（UTC）之前的内容，所以如果你的博文长时间没有被自动部署请尝试将时间更改到一天前。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/1970/01/01/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="IAKSH">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hello world!">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/1970/01/01/hello-world/" class="post-title-link" itemprop="url">Hello World!</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：1970-01-01 08:00:00" itemprop="dateCreated datePublished" datetime="1970-01-01T08:00:00+08:00">1970-01-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-15 11:22:24" itemprop="dateModified" datetime="2022-08-15T11:22:24+08:00">2022-08-15</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><del>迟来的再会</del></p>
-<p>其实我从2020年就开始写博文了，但受种种干扰，更新总是断断续续，最后神隐。</p>
-<p>考虑到学校组织要求，以及我个人仅存的那一丁点追求，我决定从现在开始，重启博客。<br>我会花点时间把我近期的经历与经验，还有心得，总结成文，然后再把从前的博文再写一遍。</p>
-<p>奥，对了，由于我不是社交恐怖分子，写文说话大概都会很意识流，要是觉得难受就用你的大拳头揍翻你面前正在显示这行字的屏幕吧（</p>
-<p><img src="https://s3.ax1x.com/2021/02/18/yWKNZT.gif" alt="小伞.gif"></p>
-<p>这里大概会写一些各种IT相关的，以及游戏，还有一些可能的碎碎念。</p>
-<p>我从前的博客在about页里写了“既然你能看见这些那大概是我认识的人，那问候什么的就免了吧”<br>虽然现在依然懒得写（是的，懒得写）问候之类的，但是这个博客也许不再是我的树洞了，我可能会在各种地方宣传它，以后可能会加上评论区，可能接少量广告，可能刚写了一句话又觉得不妥，然后删删改改一个小时，可能写了文章以后又害怕被谁看见所以突然删掉，可能，有很多可能…<br>不过还是以后再说吧。</p>
-<p>以上<br>二零二二年八月十一日</p>
-<hr>
-<p>写了两天博文，还是没把想写的写完啊。<br>我想写Linux的tar，想写我最近白嫖云服务器来开游戏服务器的经历，想写C，C++，C#，Java里我认为比较重要的几个点，想写我感兴趣的游戏，想写我最近拿到的笔记本，想写关于我想学编曲这件事，想写关于我想学画画这件事（</p>
-<p>说实话，当一个想不完的人也好，也不好。</p>
-<p>但是，等写完这些我就差不多得去军训，然后再次神隐了吧。<br>谁知道呢。</p>
-<p>以上<br>二零二零年八月十二日</p>
-<hr>
-<p>突然发现自己好像在按着某种莫名其妙的格式在写文章，非常难受。<br>所以我决定，以后就不要格式了。</p>
-<p>以上<br>二零二零年八月十五日</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1064,12 +1287,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -1159,6 +1382,8 @@
 
 
 
+
+  
 
   
 
