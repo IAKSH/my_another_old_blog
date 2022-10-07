@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"iaksh.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="闲话少叙，直接来吧。  math.hmath.h作为C标准库的一部分，提供了部分数学运算函数以及数学常量。其中绝大部分函数都只在头文件内完成声明和定义，仅有部分需要链接数学库（linux）。  math.h中提供的函数的返回类型和参数类型几乎都是double。  作为标准库的一部分，为了实现兼容，math.h的内容非常复杂，很难一一列举，**我仅仅举出了部分内容**，仅供参考。 宏常量 INFIN">
+  <meta name="description" content="闲话少叙，直接来吧。  math.h    math.h作为C标准库的一部分，提供了部分数学运算函数以及数学常量。其中绝大部分函数都只在头文件内完成声明和定义，仅有部分需要链接数学库（linux）。     math.h中提供的函数的返回类型和参数类型几乎都是double。     作为标准库的一部分，为了实现兼容，math.h的内容非常复杂，很难一一列举，我仅仅举出了部分内容，仅供参考。 宏常量">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于math.h的笔记">
 <meta property="og:url" content="https://iaksh.github.io/2022/08/19/%E5%85%B3%E4%BA%8Emath-h%E7%9A%84%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="Hello world!">
-<meta property="og:description" content="闲话少叙，直接来吧。  math.hmath.h作为C标准库的一部分，提供了部分数学运算函数以及数学常量。其中绝大部分函数都只在头文件内完成声明和定义，仅有部分需要链接数学库（linux）。  math.h中提供的函数的返回类型和参数类型几乎都是double。  作为标准库的一部分，为了实现兼容，math.h的内容非常复杂，很难一一列举，**我仅仅举出了部分内容**，仅供参考。 宏常量 INFIN">
+<meta property="og:description" content="闲话少叙，直接来吧。  math.h    math.h作为C标准库的一部分，提供了部分数学运算函数以及数学常量。其中绝大部分函数都只在头文件内完成声明和定义，仅有部分需要链接数学库（linux）。     math.h中提供的函数的返回类型和参数类型几乎都是double。     作为标准库的一部分，为了实现兼容，math.h的内容非常复杂，很难一一列举，我仅仅举出了部分内容，仅供参考。 宏常量">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-18T17:21:52.000Z">
 <meta property="article:modified_time" content="2022-08-18T18:12:27.418Z">
@@ -190,20 +190,17 @@
 
       
         <p>闲话少叙，直接来吧。 </p>
-<h1 id="math-h"><a href="#math-h" class="headerlink" title="math.h"></a>math.h</h1><pre><code>math.h作为C标准库的一部分，提供了部分数学运算函数以及数学常量。其中绝大部分函数都只在头文件内完成声明和定义，仅有部分需要链接数学库（linux）。
-
-math.h中提供的函数的返回类型和参数类型几乎都是double。
-
-作为标准库的一部分，为了实现兼容，math.h的内容非常复杂，很难一一列举，**我仅仅举出了部分内容**，仅供参考。
-</code></pre><h1 id="宏常量"><a href="#宏常量" class="headerlink" title="宏常量"></a>宏常量</h1><ol>
+<h1 id="math-h"><a href="#math-h" class="headerlink" title="math.h"></a>math.h</h1><p>    math.h作为C标准库的一部分，提供了部分数学运算函数以及数学常量。其中绝大部分函数都只在头文件内完成声明和定义，仅有部分需要链接数学库（linux）。</p>
+<p>    math.h中提供的函数的返回类型和参数类型几乎都是double。</p>
+<p>    作为标准库的一部分，为了实现兼容，math.h的内容非常复杂，很难一一列举，<strong>我仅仅举出了部分内容</strong>，仅供参考。</p>
+<h1 id="宏常量"><a href="#宏常量" class="headerlink" title="宏常量"></a>宏常量</h1><ol>
 <li><p>INFINITY : 正无穷，返回一个 float。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __USE_ISOC99</span></span><br><span class="line"><span class="comment">/* IEEE positive infinity.  */</span></span><br><span class="line"><span class="meta"># <span class="keyword">if</span> __GNUC_PREREQ (3, 3)</span></span><br><span class="line"><span class="meta">#  <span class="keyword">define</span> INFINITY (__builtin_inff ())</span></span><br><span class="line"><span class="meta"># <span class="keyword">else</span></span></span><br><span class="line"><span class="meta">#  <span class="keyword">define</span> INFINITY HUGE_VALF</span></span><br><span class="line"><span class="meta"># <span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>NAN ：非数字（Not-A-Number)，返回一个float。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* IEEE Not A Number.  */</span></span><br><span class="line"><span class="meta"># <span class="keyword">if</span> __GNUC_PREREQ (3, 3)</span></span><br><span class="line"><span class="meta">#  <span class="keyword">define</span> NAN (__builtin_nanf (<span class="string">&quot;&quot;</span>))</span></span><br><span class="line"><span class="meta"># <span class="keyword">else</span></span></span><br><span class="line"><span class="comment">/* This will raise an &quot;invalid&quot; exception outside static initializers,</span></span><br><span class="line"><span class="comment">   but is the best that can be done in ISO C while remaining a</span></span><br><span class="line"><span class="comment">   constant expression.  */</span></span><br><span class="line"><span class="meta">#  <span class="keyword">define</span> NAN (0.0f / 0.0f)</span></span><br><span class="line"><span class="meta"># <span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">/* __USE_ISOC99 */</span></span></span><br></pre></td></tr></table></figure>
-<p><em>实际上还有很多宏，无法完全列举，请查阅标准库头文件。</em> </p>
-</li>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* IEEE Not A Number.  */</span></span><br><span class="line"><span class="meta"># <span class="keyword">if</span> __GNUC_PREREQ (3, 3)</span></span><br><span class="line"><span class="meta">#  <span class="keyword">define</span> NAN (__builtin_nanf (<span class="string">&quot;&quot;</span>))</span></span><br><span class="line"><span class="meta"># <span class="keyword">else</span></span></span><br><span class="line"><span class="comment">/* This will raise an &quot;invalid&quot; exception outside static initializers,</span></span><br><span class="line"><span class="comment">   but is the best that can be done in ISO C while remaining a</span></span><br><span class="line"><span class="comment">   constant expression.  */</span></span><br><span class="line"><span class="meta">#  <span class="keyword">define</span> NAN (0.0f / 0.0f)</span></span><br><span class="line"><span class="meta"># <span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">/* __USE_ISOC99 */</span></span></span><br></pre></td></tr></table></figure></li>
 </ol>
+<p>   <em>实际上还有很多宏，无法完全列举，请查阅标准库头文件。</em> </p>
 <h1 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h1><ol>
 <li><p>float_t : （当前系统）最有效执行 float 运算的类型，宽度至少与 float 一样。</p>
 </li>
@@ -213,27 +210,143 @@ math.h中提供的函数的返回类型和参数类型几乎都是double。
 </ol>
 <h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><ol>
 <li><p>三角函数</p>
-<p>| 函数原型                             | 描述                     |<br>| ———————————————— | ——————————— |<br>| double acos(double x)            | 反余弦（x为弧度制，下同）          |<br>| double asin(double x)            | 反正弦                    |<br>| double atan(double x)            | 反正切                    |<br>| double atan2(double y, double x) | y/x 的反正切，y 和 x 的符号决定象限 |<br>| double cos(double x)             | 余弦                     |<br>| double sin(double x)             | 正弦                     |</p>
+<table>
+<thead>
+<tr>
+<th>函数原型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>double acos(double x)</td>
+<td>反余弦（x为弧度制，下同）</td>
+</tr>
+<tr>
+<td>double asin(double x)</td>
+<td>反正弦</td>
+</tr>
+<tr>
+<td>double atan(double x)</td>
+<td>反正切</td>
+</tr>
+<tr>
+<td>double atan2(double y, double x)</td>
+<td>y&#x2F;x 的反正切，y 和 x 的符号决定象限</td>
+</tr>
+<tr>
+<td>double cos(double x)</td>
+<td>余弦</td>
+</tr>
+<tr>
+<td>double sin(double x)</td>
+<td>正弦</td>
+</tr>
+</tbody></table>
 </li>
 <li><p>双曲函数</p>
-<p>| 函数原型                  | 描述   |<br>| ——————————- | —— |<br>| double cosh(double x) | 双曲余弦 |<br>| double sinh(double x) | 双曲正弦 |<br>| double tanh(double x) | 双曲正切 |</p>
+<table>
+<thead>
+<tr>
+<th>函数原型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>double cosh(double x)</td>
+<td>双曲余弦</td>
+</tr>
+<tr>
+<td>double sinh(double x)</td>
+<td>双曲正弦</td>
+</tr>
+<tr>
+<td>double tanh(double x)</td>
+<td>双曲正切</td>
+</tr>
+</tbody></table>
 </li>
 <li><p>指数,对数函数</p>
-<p>| 函数原型                                   | 描述                   |<br>| ——————————————————— | —————————— |<br>| double exp(double x)                   | 自然数e 的 x 次幂          |<br>| double log(double x)                   | x 的自然对数              |<br>| double log10(double x)                 | x 的常用对数              |<br>| double sqrt(double x)                  | 平方根                  |<br>| double pow(double x, double y)         | x 的 y 次幂             |<br>| double modf(double x, double *integer) | x 的常用对数              |<br>| double log(double x)                   | x 的自然对数              |<br>| double ldexp(double x, int exponent)   | x 乘以 2 的 exponent 次幂 |</p>
+<table>
+<thead>
+<tr>
+<th>函数原型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>double exp(double x)</td>
+<td>自然数e 的 x 次幂</td>
+</tr>
+<tr>
+<td>double log(double x)</td>
+<td>x 的自然对数</td>
+</tr>
+<tr>
+<td>double log10(double x)</td>
+<td>x 的常用对数</td>
+</tr>
+<tr>
+<td>double sqrt(double x)</td>
+<td>平方根</td>
+</tr>
+<tr>
+<td>double pow(double x, double y)</td>
+<td>x 的 y 次幂</td>
+</tr>
+<tr>
+<td>double modf(double x, double *integer)</td>
+<td>x 的常用对数</td>
+</tr>
+<tr>
+<td>double log(double x)</td>
+<td>x 的自然对数</td>
+</tr>
+<tr>
+<td>double ldexp(double x, int exponent)</td>
+<td>x 乘以 2 的 exponent 次幂</td>
+</tr>
+</tbody></table>
 </li>
 <li><p>其他</p>
-<p>| 函数原型                                  | 描述                                                                         |<br>| ——————————————————- | ————————————————————————————————————— |<br>| double floor(double x)                | 小于或等于 x 的最大的整数值。                                                           |<br>| double fmod(double x, double y)       | x 除以 y 的余数。                                                                |<br>| double fabs(double x)                 | 绝对值                                                                        |<br>| double ceil(double x)                 | 大于或等于 x 的最小的整数值                                                            |<br>| double frexp(double x, int <em>exponent) | 把浮点数 x 分解成尾数和指数。返回值是尾数，并将指数存入 exponent 中。所得的值是 x = mantissa </em> 2 ^ exponent |</p>
+<table>
+<thead>
+<tr>
+<th>函数原型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>double floor(double x)</td>
+<td>小于或等于 x 的最大的整数值。</td>
+</tr>
+<tr>
+<td>double fmod(double x, double y)</td>
+<td>x 除以 y 的余数。</td>
+</tr>
+<tr>
+<td>double fabs(double x)</td>
+<td>绝对值</td>
+</tr>
+<tr>
+<td>double ceil(double x)</td>
+<td>大于或等于 x 的最小的整数值</td>
+</tr>
+<tr>
+<td>double frexp(double x, int *exponent)</td>
+<td>把浮点数 x 分解成尾数和指数。返回值是尾数，并将指数存入 exponent 中。所得的值是 x &#x3D; mantissa * 2 ^ exponent</td>
+</tr>
+</tbody></table>
 </li>
 </ol>
 <h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><ol>
 <li><p>math.h中进行了庞大的编译器判断，以使用在当前平台速度最快的数据类型。</p>
 </li>
-<li><p>math.h是十分重要的，它补充了C/C++相比于更新的语言在运算符上的不足，并且提供了一套简单易用，且通用，高效的数学运算。</p>
+<li><p>math.h是十分重要的，它补充了C&#x2F;C++相比于更新的语言在运算符上的不足，并且提供了一套简单易用，且通用，高效的数学运算。</p>
 </li>
 </ol>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>glibc标准库头文件</p>
 <p><a target="_blank" rel="noopener" href="https://www.bookstack.cn/read/wangdoc-clang-tutorial/docs-lib-math.h.md">标准库 - math.h - 《阮一峰《C 语言教程》》 - 书栈网 · BookStack</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-standard-library-math-h.html">C 标准库 – <math.h> | 菜鸟教程 (runoob.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-standard-library-math-h.html">C 标准库 – &lt;math.h&gt; | 菜鸟教程 (runoob.com)</a></p>
 <p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/math.h/10991856">math.h_百度百科 (baidu.com)</a></p>
 
     </div>
@@ -332,7 +445,7 @@ math.h中提供的函数的返回类型和参数类型几乎都是double。
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

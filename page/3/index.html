@@ -146,6 +146,155 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/11/WSL2%E4%B8%8EWSLg%E7%9A%84%E9%83%A8%E7%BD%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello world!">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/11/WSL2%E4%B8%8EWSLg%E7%9A%84%E9%83%A8%E7%BD%B2/" class="post-title-link" itemprop="url">WSL2与WSLg的部署</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-11 22:04:01" itemprop="dateCreated datePublished" datetime="2022-08-11T22:04:01+08:00">2022-08-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-16 23:38:33" itemprop="dateModified" datetime="2022-09-16T23:38:33+08:00">2022-09-16</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  今日拿到了新的笔记本，很是开心，但是又得从头配置一遍自己的开发环境了，很是难受。<br>  不过既然事已至此，就随着配置的步伐，顺便水一文吧！</p>
+<h2 id="什么是WSL2和WSLg"><a href="#什么是WSL2和WSLg" class="headerlink" title="什么是WSL2和WSLg"></a>什么是WSL2和WSLg</h2><p>  其实我更建议你去翻<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/">微软的文档</a>。<br>  简单来说，WSL（Windwos下的Linux子系统）提供了一套内核级的翻译机制，能在Windows上翻译执行Linux的ELF格式程序。<br>  而WSL2则是微软妥协的结果，放弃了初代的翻译机制，转而投靠了日渐成熟的Hyper-V虚拟机（一个微软开发的内核级虚拟化平台）。<br>  WSL2实际上就是一个运行在Windows Hyper-V虚拟化平台上的Linux虚拟机，但是相比于直接在虚拟化软件中创建虚拟机，WSL2占用资源相对较少，且提供了对Windows资源管理器的部分集成。<br>  WSLg则是在WSL2的基础上增加了一套图像渲染系统，这套系统的Linux底层是Xorg（X11），通过Windows上dwm混成得到窗口。<br>  简而言之，WSLg能够让你在WSL2中运行绝大多数Linux GUI程序。</p>
+<h2 id="本文适用条件"><a href="#本文适用条件" class="headerlink" title="本文适用条件"></a>本文适用条件</h2><p>  WSLg：我的环境是Windows11，Windows10印象中也是支持的。<br>  WSL2：Windows10与Windows11皆可。</p>
+<h1 id="部署WSL2"><a href="#部署WSL2" class="headerlink" title="部署WSL2"></a>部署WSL2</h1><h2 id="开启相应的Windows功能"><a href="#开启相应的Windows功能" class="headerlink" title="开启相应的Windows功能"></a>开启相应的Windows功能</h2><p>  按Win键-&gt;点设置-&gt;点应用-&gt;往下翻-&gt;点更多Windows功能<br>  勾选 Windows虚拟机监控平台 | 适用于Windows的Linux子系统 | 虚拟机平台<br>  <del>（实际上，虚拟机监控平台大概是不必要的，但是为了兼容其他虚拟机，比如VMware，VirtualBox，还是开着吧）</del></p>
+<h2 id="安装WSL2内核文件"><a href="#安装WSL2内核文件" class="headerlink" title="安装WSL2内核文件"></a>安装WSL2内核文件</h2><p>  尽管<a target="_blank" rel="noopener" href="https://github.com/microsoft/WSL2-Linux-Kernel">WSL2-Linux-Kernal项目</a>的Release早已实装5.15版本内核，但并没有提供相应版本的二进制文件。微软的WSL2文档也依然在提供5.10版本内核的链接。<br>  对于这方面，我的建议通常是使用尽可能新的内核，除非你是在配置一个生产环境。<br>  但这次情况特殊，除非你真的有能力编译一个Linux Kernel，那就老老实实用<a target="_blank" rel="noopener" href="https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi">5.10</a>吧。</p>
+<h2 id="设置WSL默认版本至WSL2"><a href="#设置WSL默认版本至WSL2" class="headerlink" title="设置WSL默认版本至WSL2"></a>设置WSL默认版本至WSL2</h2><p>  以管理员权限运行Windows Terminal（或者Windows10的管理员权限运行的PowerShell），运行如下指令<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --set-default-version 2</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装一个WSL2发行版"><a href="#安装一个WSL2发行版" class="headerlink" title="安装一个WSL2发行版"></a>安装一个WSL2发行版</h2><p>  最方便的做法是在微软商店中搜索然后一键安装，但这样你的WSL2会被安装在C盘里（User文件夹深处，具体太复杂，自己查吧），如果你不在乎那点空间占用，可以这样做。<br>  还有一种方法是下载发行版的appx安装包，然后手动安装，具体见下文。</p>
+<h3 id="一键安装"><a href="#一键安装" class="headerlink" title="一键安装"></a>一键安装</h3><p>  打开微软商店，搜索你喜欢的发行版，一键安装，点击运行，输入用户名和密码，一切就大功告成了。<br>  下次想要进入WSL2可以直接打开Windows Terminal，使用此种安装方式，你所安装的WSL2发行版的选项卡会自动加入到Windows Terminal的备选终端中。</p>
+<h3 id="手动安装"><a href="#手动安装" class="headerlink" title="手动安装"></a>手动安装</h3><p>  微软商店内的应用实际上都被打包为.appx安装包，你可以将其粗略地理解为Android的.apk。<br>  和apk类似的，appx实际上也是一个归档文件，你可以使用任意压缩软件打开它。<br>  如上所属，如果你能拿到某个WSL发行版的appx安装包，你可以将里面的内容解压到一个你认为合适的目录，这样，WSL2就能被安装到任意位置了。<br>  你可以在微软的文档里找到部分发行版appx安装包的下载直连，这里我搬运了一些。</p>
+<p>  <a target="_blank" rel="noopener" href="https://aka.ms/wslubuntu2204">Ubuntu 22.04 LTS</a><br>  <a target="_blank" rel="noopener" href="https://aka.ms/wslubuntu2004arm">Ubuntu 20.04 ARM</a><br>  <a target="_blank" rel="noopener" href="https://aka.ms/wsl-debian-gnulinux">Debian</a><br>  <a target="_blank" rel="noopener" href="https://aka.ms/wsl-kali-linux-new">Kali</a><br>  <a target="_blank" rel="noopener" href="https://aka.ms/wsl-opensuse-tumbleweed">OpenSUSE Tumbleweed</a><br>  <a target="_blank" rel="noopener" href="https://github.com/WhitewaterFoundry/WSLFedoraRemix/releases/">Fedora Remix for WSL</a></p>
+<p>  解压appx后点击相应的xxx.exe即可，我相信你应该找得到（<br>  不过，有的发行版会将多个架构的版本打包在同一个appx里，也就是套了个娃，找找就有了。</p>
+<h2 id="编辑WSL2配置文件"><a href="#编辑WSL2配置文件" class="headerlink" title="编辑WSL2配置文件"></a>编辑WSL2配置文件</h2><p>  WSL2的配置文件不会自动创建，你需要在自己的User文件夹中新建一个叫“.wslconfig”的文件，注意只有后缀没有名字。<br>  用你最喜欢的文本编辑器打开它，在第一行写上“[wsl2]”，即可开始配置你的WSL2。<br>  这里我提供了一份带有注释的配置文件，仅供参考。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[wsl2]</span><br><span class="line">memory=4GB                  #WSL2最大可使用多少内存，单位可为GB或MB</span><br><span class="line">swap=1GB                    #WSL2最大可用的交换空间，其实就是虚拟内存，单位同上</span><br><span class="line">processor=4                 #分配给WSl2多少个CPU核心（其实是线程）（似乎对Intel 12th大小核不起作用）</span><br><span class="line">localhostForwarding=true    #是否将WSL2的localhost覆盖到物理机的localhost</span><br></pre></td></tr></table></figure>
+<p>  注意：当WSL2完全关闭并且等待一段时间后才能加载修改过的.wslconfig（详见下述文档中的“第 8 秒的规则”），不过你可以在PowerShell中使用指令“wsl –shutdown”来加快这个过程。<br>  其实你甚至能在.wslconfig中指定WSL2使用的内核镜像 ，根据这一特性你甚至能打包任何Linux发行版到WSl2，但我懒得写了。<br>  更多内容见<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/wsl-config">微软的WSL高级配置文档</a></p>
+<h2 id="在WSL2中访问物理机的文件"><a href="#在WSL2中访问物理机的文件" class="headerlink" title="在WSL2中访问物理机的文件"></a>在WSL2中访问物理机的文件</h2><p>  <em>注：不同的发行版可能有不同的挂在策略，此处仅列出Debian与Ubuntu通用的方案。</em><br>  在WSL2启动时，物理机的各个磁盘会被自动挂载至&#x2F;mnt目录，根据盘符（但是是小写）即可进入物理机对应的磁盘。<br>  例如，我在WSL2（debian）中进入物理机的桌面文件夹，指令为：$cd &#x2F;mnt&#x2F;c&#x2F;Users&#x2F;iaksh&#x2F;Desktop<br>  实际上本地磁盘在WSL2中的挂载是通过网络实现的，这也是WSL2与物理机目录IO缓慢的原因。</p>
+<h1 id="部署WSLg"><a href="#部署WSLg" class="headerlink" title="部署WSLg"></a>部署WSLg</h1><h2 id="有关本文时效性的警告"><a href="#有关本文时效性的警告" class="headerlink" title="有关本文时效性的警告"></a>有关本文时效性的警告</h2><p>  虽然Windows11和WSLg的推出都有一段时间了，但WSLg目前的安装方式总是让我感到奇怪。<br>  这样的安装方式说不定哪天就被微软吃掉了，所以当你看见这篇文章的时候，请明确本文所属有关WSLg的内容可能已经失效。</p>
+<h2 id="在WSL2的基础上手动安装WSLg"><a href="#在WSL2的基础上手动安装WSLg" class="headerlink" title="在WSL2的基础上手动安装WSLg"></a>在WSL2的基础上手动安装WSLg</h2><p>  以管理员权限打开Windows Terminal（Windows10下以管理员权限打开PowerShell），在确保WSL2已经关闭的情况下输入指令“wsl –update”。<br>  经过漫长的更新后，你的WSL2内核应该已经支持WSLg了。<br>  此时你可以在WSL2里运行任意GUI程序（比如从你的包管理器下载一个热乎的GIMP然后运行），需要注意的是加载时间可能会略长（视配置而定），而且当某些程序占用全屏时，运行在WSL2上的X11将会崩溃，紧接着Linux GUI程序也会崩溃。（目前发现QQ截图会触发此BUG）。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/11/apt%E6%8A%A5%E9%94%99Certificate-verification-failed%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello world!">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/11/apt%E6%8A%A5%E9%94%99Certificate-verification-failed%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">apt报错Certificate verification failed的解决方案</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-11 11:28:51" itemprop="dateCreated datePublished" datetime="2022-08-11T11:28:51+08:00">2022-08-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-13 11:29:02" itemprop="dateModified" datetime="2022-08-13T11:29:02+08:00">2022-08-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  今日重新配置WSL2（Debian）开发环境，又遇此问题，故记之。</p>
+<h1 id="现象描述"><a href="#现象描述" class="headerlink" title="现象描述"></a>现象描述</h1><p>  Debian安装好后直接换清华源（使用https协议），再使用apt update时出现上述错误。</p>
+<h1 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h1><p>  https协议是需要CA证书的，崭新出厂的Debian没有相应的支持。</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>  方案1. 换回之前默认的源，管理员权限下运行指令“apt update &amp;&amp; apt install ca-certificates”（大概会很慢，因为官方源不慢那你就不会换源然后遇到这个问题了）<br>  方案2. 将source.list中的所有源地址由https协议更改为http，再运行方案1的指令，最后将http改回https（安全起见）</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/08/10/%E4%BD%BF%E7%94%A8Hexo%E6%A1%86%E6%9E%B6%E5%92%8CGithub-Pages%E6%90%AD%E5%BB%BA%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -193,7 +342,7 @@
       
           <p><a target="_blank" rel="noopener" href="https://imgtu.com/i/v8E9ne"><img src="https://s1.ax1x.com/2022/08/10/v8E9ne.png" alt="v8E9ne.png"></a></p>
 <blockquote>
-<p>Hexo was originally created and maintained by Tommy Chen in 2012. Since then, it has helped thousands of people to build their dream website/blog.</p>
+<p>Hexo was originally created and maintained by Tommy Chen in 2012. Since then, it has helped thousands of people to build their dream website&#x2F;blog.</p>
 </blockquote>
 <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>  作为一名“Geek”，哪能没有自己的博客？这就好像一名司机必须要有车，而车需要花买，服务器也需要。但好在博客不一定要有自己的服务器。车，也不一定非要是自己的。</p>
 <p>  2020年的夏天，Hexo框架偶然进入我的视野，这是一个基于Node.js构建的静态博客框架，该框架以Markdown作为博文源码，根据自定义的博客主题自动生成html页面。配合Github pages自动部署，甚至可以做到零成本搭建博客。</p>
@@ -207,7 +356,7 @@
 </blockquote>
 <h2 id="安装Node-js，npm，以及hexo模块"><a href="#安装Node-js，npm，以及hexo模块" class="headerlink" title="安装Node.js，npm，以及hexo模块"></a>安装Node.js，npm，以及hexo模块</h2><p>  首先我们需要安装Node.js运行时及其包管理器npm。<br>[<img src="https://bkimg.cdn.bcebos.com/pic/6609c93d70cf3bc79f3ded3c434bada1cd11738bfc82?x-bce-process=image/watermark,image_d2F0ZXIvYmFpa2UxODA=,g_7,xp_5,yp_5/format,f_auto" alt="Node.js.png">]</p>
 <blockquote>
-<p>Node.js发布于2009年5月，由Ryan Dahl开发，是一个基于Chrome V8引擎的JavaScript运行环境，使用了一个事件驱动、非阻塞式I/O模型，让JavaScript 运行在服务端的开发平台，它让JavaScript成为与PHP、Python、Perl、Ruby等服务端语言平起平坐的脚本语言<br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/node.js">百度百科</a></p>
+<p>Node.js发布于2009年5月，由Ryan Dahl开发，是一个基于Chrome V8引擎的JavaScript运行环境，使用了一个事件驱动、非阻塞式I&#x2F;O模型，让JavaScript 运行在服务端的开发平台，它让JavaScript成为与PHP、Python、Perl、Ruby等服务端语言平起平坐的脚本语言<br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/node.js">百度百科</a></p>
 </blockquote>
 <p>  在Debian上可以使用命令apt install nodejs来安装nodejs（需要管理员权限），其余发行版请使用相应的包管理器并寻找对应的包名，下同。<br>  Hexo框架并不是Node.js的一部分，它被封装为Node.js的一个第三方模块，需要使用Node.js的包管理器（npm）进行安装。在Debian上可以使用命令apt install npm进行安装。<br>  接着我们需要使用npm安装Hexo框架，使用指令npm install -g hexo-cli即可（需要管理员权限），其中，-g代表全局安装。</p>
 <blockquote>
@@ -219,7 +368,7 @@
 <p>  首先你需要登入你的Github账号，并创建一个新的Repository，其命名格式需为username.gitHub.io（比如我的，iaksh.github.io）。符合该命名格式的Repository会自动进行Github Pages构建。<br>当然，截至目前，这里可能只有一个孤零零的README.md。</p>
 <h1 id="创建你的Hexo博客"><a href="#创建你的Hexo博客" class="headerlink" title="创建你的Hexo博客"></a>创建你的Hexo博客</h1><p>  找一个你喜欢的地方兴建文件夹，然后在终端中cd进哪个文件夹并使用命令hexo init，一个hexo博客工程就完成了。<br>此时你可以使用hexo server（或简写为hexo s)试运行博客，使用浏览器访问localhots:4000即可预览。<br>使用hexo new name（hexo n name）即可开始一篇新的博文，此命令将会在工程根目录的source文件夹中生成对应名称的markdown源文件，该markdown源文件即为你的博文源码。<br>其他的命令还有hexo generate（hexo g），hexo deploy（hexo d）。前者能将博客生成为一份完整的html+css+js文件，后者自动将其按照预设配置进行部署</p>
 <h1 id="修改你的博客配置"><a href="#修改你的博客配置" class="headerlink" title="修改你的博客配置"></a>修改你的博客配置</h1><p>  工程根目录中有一配置文件名为“_config.yml”，这是hexo最顶层的配置文件，在这里你可以指定网站的一些基本内容。此外，你可以将第三方主题包放在工程根目录的themes文件夹中，然后修改主题包内的“_config.yml”。<br>另：由于各个主题配置文件不尽相同，具体请见其中的注释。</p>
-<h1 id="将你的Hexo博客推送至Github并自动部署"><a href="#将你的Hexo博客推送至Github并自动部署" class="headerlink" title="将你的Hexo博客推送至Github并自动部署"></a>将你的Hexo博客推送至Github并自动部署</h1><p>  在推送博客至github之前，你需要在工程根目录启用hexo的git部署模块，命令为npm install hexo-deployer-git —save<br>  完成上述操作后，还需修改工程根目录下的“_config.yml”中的deploy项目，将其中的type改为git，添加repo子项以指定git仓库，添加branch子项以指定上传分支。<br>  在这之后，使用指令hexo g &amp;&amp; hexo d即可自动完成博客的生成与部署。</p>
+<h1 id="将你的Hexo博客推送至Github并自动部署"><a href="#将你的Hexo博客推送至Github并自动部署" class="headerlink" title="将你的Hexo博客推送至Github并自动部署"></a>将你的Hexo博客推送至Github并自动部署</h1><p>  在推送博客至github之前，你需要在工程根目录启用hexo的git部署模块，命令为npm install hexo-deployer-git –save<br>  完成上述操作后，还需修改工程根目录下的“_config.yml”中的deploy项目，将其中的type改为git，添加repo子项以指定git仓库，添加branch子项以指定上传分支。<br>  在这之后，使用指令hexo g &amp;&amp; hexo d即可自动完成博客的生成与部署。</p>
 <h1 id="可能遇到的问题以及解决方案"><a href="#可能遇到的问题以及解决方案" class="headerlink" title="可能遇到的问题以及解决方案"></a>可能遇到的问题以及解决方案</h1><h2 id="我无法用Github密码完成Push"><a href="#我无法用Github密码完成Push" class="headerlink" title="我无法用Github密码完成Push"></a>我无法用Github密码完成Push</h2><p>  在进行推送时，git会需要你输入自己的Gihub账户名以及密码，但你可能已经发现，密码已经不再适用了。<br>  事实上，自2021年8月13日起，github不再支持使用密码在git上push代码，取而代之的是token。</p>
 <blockquote>
 <p>As previously announced, starting on August 13, 2021, at 09:00 PST, we will no longer accept account passwords when authenticating Git operations on GitHub.com. Instead, token-based authentication (for example, personal access, OAuth, SSH Key, or GitHub App installation token) will be required for all authenticated Git operations. Please refer to this blog post for instructions on what you need to do to continue using git operations securely.<br> Removal</p>
@@ -393,7 +542,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

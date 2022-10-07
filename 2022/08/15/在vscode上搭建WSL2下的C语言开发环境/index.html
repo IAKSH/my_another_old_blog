@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"iaksh.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="由于Visua Studio仅有C++编译器，且其对C标准库改动过大，我的C程序开发主要在WSL2上进行。这篇文档将会引导你在Windows10&#x2F;11上使用vscode连接本地WSL2进行Linux环境下的C程序开发。如果你尚未部署WSL2，请翻阅这篇文章 注意我没有使用微软官方的C&#x2F;C++插件，因为它从某种角度来说太糟糕了。这也意味着这套开发环境能够在vscodium上正常部署。 我选用的技术栈">
+  <meta name="description" content="由于Visua Studio仅有C++编译器，且其对C标准库改动过大，我的C程序开发主要在WSL2上进行。这篇文档将会引导你在Windows10&#x2F;11上使用vscode连接本地WSL2进行Linux环境下的C程序开发。如果你尚未部署WSL2，请翻阅这篇文章 注意我没有使用微软官方的C&#x2F;C++插件，因为它从某种角度来说太糟糕了。这也意味着这套开发环境能够在vscodium上正常部">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在vscode上搭建WSL2下的C语言开发环境">
 <meta property="og:url" content="https://iaksh.github.io/2022/08/15/%E5%9C%A8vscode%E4%B8%8A%E6%90%AD%E5%BB%BAWSL2%E4%B8%8B%E7%9A%84C%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/index.html">
 <meta property="og:site_name" content="Hello world!">
-<meta property="og:description" content="由于Visua Studio仅有C++编译器，且其对C标准库改动过大，我的C程序开发主要在WSL2上进行。这篇文档将会引导你在Windows10&#x2F;11上使用vscode连接本地WSL2进行Linux环境下的C程序开发。如果你尚未部署WSL2，请翻阅这篇文章 注意我没有使用微软官方的C&#x2F;C++插件，因为它从某种角度来说太糟糕了。这也意味着这套开发环境能够在vscodium上正常部署。 我选用的技术栈">
+<meta property="og:description" content="由于Visua Studio仅有C++编译器，且其对C标准库改动过大，我的C程序开发主要在WSL2上进行。这篇文档将会引导你在Windows10&#x2F;11上使用vscode连接本地WSL2进行Linux环境下的C程序开发。如果你尚未部署WSL2，请翻阅这篇文章 注意我没有使用微软官方的C&#x2F;C++插件，因为它从某种角度来说太糟糕了。这也意味着这套开发环境能够在vscodium上正常部">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-15T13:02:39.000Z">
 <meta property="article:modified_time" content="2022-09-16T15:38:11.485Z">
 <meta property="article:author" content="IAKSH">
 <meta property="article:tag" content="C">
-<meta property="article:tag" content="Linux">
 <meta property="article:tag" content="技术">
+<meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://iaksh.github.io/2022/08/15/%E5%9C%A8vscode%E4%B8%8A%E6%90%AD%E5%BB%BAWSL2%E4%B8%8B%E7%9A%84C%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">
@@ -197,18 +197,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>由于Visua Studio仅有C++编译器，且其对C标准库改动过大，我的C程序开发主要在WSL2上进行。<br>这篇文档将会引导你在Windows10/11上使用vscode连接本地WSL2进行Linux环境下的C程序开发。<br>如果你尚未部署WSL2，请翻阅<a href="https://iaksh.github.io/2022/08/11/WSL2%E4%B8%8EWSLg%E7%9A%84%E9%83%A8%E7%BD%B2/">这篇文章</a></p>
-<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>我没有使用微软官方的C/C++插件，因为它从某种角度来说太糟糕了。<br>这也意味着这套开发环境能够在vscodium上正常部署。</p>
-<h1 id="我选用的技术栈"><a href="#我选用的技术栈" class="headerlink" title="我选用的技术栈"></a>我选用的技术栈</h1><div class="table-container">
-<table>
+        <p>由于Visua Studio仅有C++编译器，且其对C标准库改动过大，我的C程序开发主要在WSL2上进行。<br>这篇文档将会引导你在Windows10&#x2F;11上使用vscode连接本地WSL2进行Linux环境下的C程序开发。<br>如果你尚未部署WSL2，请翻阅<a href="https://iaksh.github.io/2022/08/11/WSL2%E4%B8%8EWSLg%E7%9A%84%E9%83%A8%E7%BD%B2/">这篇文章</a></p>
+<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>我没有使用微软官方的C&#x2F;C++插件，因为它从某种角度来说太糟糕了。<br>这也意味着这套开发环境能够在vscodium上正常部署。</p>
+<h1 id="我选用的技术栈"><a href="#我选用的技术栈" class="headerlink" title="我选用的技术栈"></a>我选用的技术栈</h1><table>
 <thead>
 <tr>
 <th>项目</th>
 <th>参数</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>文本编辑器</td>
 <td>Visual Studio Code</td>
 </tr>
@@ -232,10 +230,8 @@
 <td>代码格式化</td>
 <td>clang-format</td>
 </tr>
-</tbody>
-</table>
-</div>
-<p><em>（其实你也可以选用全套LLVM/Clang工具链，但依然无法摆脱gcc）</em></p>
+</tbody></table>
+<p><em>（其实你也可以选用全套LLVM&#x2F;Clang工具链，但依然无法摆脱gcc）</em></p>
 <h1 id="配置过程"><a href="#配置过程" class="headerlink" title="配置过程"></a>配置过程</h1><h2 id="在Windows上为vscode安装插件"><a href="#在Windows上为vscode安装插件" class="headerlink" title="在Windows上为vscode安装插件"></a>在Windows上为vscode安装插件</h2><p><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl">Remote - WSL</a></p>
 <h2 id="在WSL2上安装C工具链"><a href="#在WSL2上安装C工具链" class="headerlink" title="在WSL2上安装C工具链"></a>在WSL2上安装C工具链</h2><ol>
 <li><p>安装gcc工具链以及CMake，git<br><em>（部分发行版的部分安装策略中是包含了这一工具链的，若有，无视这条。）</em><br>Debian系：</p>
@@ -243,11 +239,10 @@
 <p>Redhat系：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install gcc gdb make cmake git</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>安装cland和clang-format<br>注：这一步实际上<strong>会安装LLVM/Clang工具链</strong><br>Debian系：</p>
+<li><p>安装cland和clang-format<br>注：这一步实际上<strong>会安装LLVM&#x2F;Clang工具链</strong><br>Debian系：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install clangd clang-format</span><br></pre></td></tr></table></figure>
 <p>Redhat系：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install clang-tools-extra</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install clang-tools-extra</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h2 id="使用vscode在WSL2中安装插件"><a href="#使用vscode在WSL2中安装插件" class="headerlink" title="使用vscode在WSL2中安装插件"></a>使用vscode在WSL2中安装插件</h2><p>在Windows上使用vscode的Remote - WSL插件连接到WSL2后，安装以下插件至WSL2：</p>
 <ol>
@@ -261,7 +256,7 @@
 </li>
 <li><p>调用clang-tidy：<br>clang-format的功能被集成到了clangd插件中，在编辑器中右键选择格式化文档即可。</p>
 </li>
-<li><p>Debug：<br>打断点之类的操作流程没有变化，但是在开始Debug之前，你需要手动指定可执行文件路径。<br>除非CMakeLists.txt里指定了别的构建位置，可执行文件一般会生成在项目的build/目录中。<br>第一次运行Debug时，请点击vscode左侧的“运行和调试”选项卡，点击“创建 launch.json文件”，调试器选择“GDB(Beyond)”。<br>将”program”键的值该为你的可执行文件路径，即可正常Debug。<br>另：你可以使用${workspaceRoot}（vscode提供的宏）来匹配路径，以保证项目文件的可移植性。</p>
+<li><p>Debug：<br>打断点之类的操作流程没有变化，但是在开始Debug之前，你需要手动指定可执行文件路径。<br>除非CMakeLists.txt里指定了别的构建位置，可执行文件一般会生成在项目的build&#x2F;目录中。<br>第一次运行Debug时，请点击vscode左侧的“运行和调试”选项卡，点击“创建 launch.json文件”，调试器选择“GDB(Beyond)”。<br>将”program”键的值该为你的可执行文件路径，即可正常Debug。<br>另：你可以使用${workspaceRoot}（vscode提供的宏）来匹配路径，以保证项目文件的可移植性。</p>
 </li>
 </ol>
 
@@ -274,8 +269,8 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/C/" rel="tag"># C</a>
-              <a href="/tags/Linux/" rel="tag"># Linux</a>
               <a href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag"># 技术</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
           </div>
 
         
@@ -363,7 +358,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"iaksh.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="这个部分我老是学了又忘，忘了又学…再写一遍吧。 什么是重载运算符学习编程之初我们就接触过一些运算符，比如这样 123456int* a;*a &#x3D; 1;if( *a + b &#x3D;&#x3D; d)&amp;#123;    func(myArray[1]);&amp;#125; 这里的 * ，+ ，&#x3D;&#x3D; ，[ ]，都是运算符，你可曾想过，在C++中，我们可以使用一个函数来重载他们？ 你可能听不懂我在说什么，也搞不懂重载他们有什">
+  <meta name="description" content="这个部分我老是学了又忘，忘了又学…再写一遍吧。 什么是重载运算符学习编程之初我们就接触过一些运算符，比如这样 123456int* a;*a &#x3D; 1;if( *a + b &#x3D;&#x3D; d)&amp;#123;    func(myArray[1]);&amp;#125;   这里的 * ，+ ，&#x3D;&#x3D; ，[ ]，都是运算符，你可曾想过，在C++中，我们可以使用一个函数来重载他们？ 你可能听不懂我在说什">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++中的重载运算符">
 <meta property="og:url" content="https://iaksh.github.io/2022/08/31/C-%E4%B8%AD%E7%9A%84%E9%87%8D%E8%BD%BD%E8%BF%90%E7%AE%97%E7%AC%A6/index.html">
 <meta property="og:site_name" content="Hello world!">
-<meta property="og:description" content="这个部分我老是学了又忘，忘了又学…再写一遍吧。 什么是重载运算符学习编程之初我们就接触过一些运算符，比如这样 123456int* a;*a &#x3D; 1;if( *a + b &#x3D;&#x3D; d)&amp;#123;    func(myArray[1]);&amp;#125; 这里的 * ，+ ，&#x3D;&#x3D; ，[ ]，都是运算符，你可曾想过，在C++中，我们可以使用一个函数来重载他们？ 你可能听不懂我在说什么，也搞不懂重载他们有什">
+<meta property="og:description" content="这个部分我老是学了又忘，忘了又学…再写一遍吧。 什么是重载运算符学习编程之初我们就接触过一些运算符，比如这样 123456int* a;*a &#x3D; 1;if( *a + b &#x3D;&#x3D; d)&amp;#123;    func(myArray[1]);&amp;#125;   这里的 * ，+ ，&#x3D;&#x3D; ，[ ]，都是运算符，你可曾想过，在C++中，我们可以使用一个函数来重载他们？ 你可能听不懂我在说什">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-31T09:35:11.000Z">
 <meta property="article:modified_time" content="2022-08-31T10:28:43.297Z">
@@ -192,21 +192,27 @@
         <p>这个部分我老是学了又忘，忘了又学…再写一遍吧。</p>
 <h1 id="什么是重载运算符"><a href="#什么是重载运算符" class="headerlink" title="什么是重载运算符"></a>什么是重载运算符</h1><p>学习编程之初我们就接触过一些运算符，比如这样</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* a;</span><br><span class="line">*a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">if</span>( *a + b == d)</span><br><span class="line">&#123;</span><br><span class="line">    func(myArray[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里的 * ，+ ，== ，[ ]，都是运算符，你可曾想过，在C++中，我们可以使用一个函数来重载他们？</p>
+
+
+<p>这里的 * ，+ ，&#x3D;&#x3D; ，[ ]，都是运算符，你可曾想过，在C++中，我们可以使用一个函数来重载他们？</p>
 <p>你可能听不懂我在说什么，也搞不懂重载他们有什么用，我给你看一段代码</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C++</span></span><br><span class="line"><span class="comment">// 我最近写的一个加载.png文件的类，就叫Image</span></span><br><span class="line"><span class="comment">// 我截取了工程中的部分代码，这是没有重载运算符时，它的使用操作</span></span><br><span class="line"></span><br><span class="line"><span class="function">Image <span class="title">img</span><span class="params">(<span class="string">&quot;a.png&quot;</span>)</span></span>;</span><br><span class="line">Pixel pixel = img.<span class="built_in">getPixel</span>(<span class="number">1</span>,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
 <p>这是重载[]运算符后的效果</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C++</span></span><br><span class="line"><span class="function">Image <span class="title">img</span><span class="params">(<span class="string">&quot;a.png&quot;</span>)</span></span>;</span><br><span class="line">Pixel pixel = img[<span class="number">1</span>][<span class="number">1</span>];</span><br></pre></td></tr></table></figure>
+
 <p>再举个例子，假如你自己定义了一个超大数类，叫SuperBigNum，在不重载运算符时，想要两者相加，你可能需要这样写。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">SuperBigNum <span class="title">a</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line"><span class="function">SuperBigNum <span class="title">b</span><span class="params">(<span class="number">2</span>)</span></span>;</span><br><span class="line">a.<span class="built_in">add</span>(b);</span><br></pre></td></tr></table></figure>
+
 <p>但重载运算符后，你可以这样写</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">SuperBigNum <span class="title">a</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line"><span class="function">SuperBigNum <span class="title">b</span><span class="params">(<span class="number">2</span>)</span></span>;</span><br><span class="line">a += b;</span><br></pre></td></tr></table></figure>
+
 <p>你可能还看不出来这有啥用，让代码里难看的符号多点，用的时候少打几个字？</p>
 <p>事实上，重载运算符统一了代码编写时相同逻辑的代码操作，使得模板具有更大的发挥空间，我随意举一个简单的例子：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 假设有俩类，Box和Cube，现在有一个进行加法操作的函数模板</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">T <span class="title">add</span><span class="params">(T t1,T t2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//return t1 + t2;</span></span><br><span class="line">    <span class="comment">// or something else</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 在不重载运算符的情况下，你能让这一个模板同时兼容Box和Cube类吗？</span></span><br></pre></td></tr></table></figure>
+
 <p>ISO C++ 98的一大招牌就是模板，可见重载运算符的意义。</p>
 <h1 id="那些运算符可以重载"><a href="#那些运算符可以重载" class="headerlink" title="那些运算符可以重载"></a>那些运算符可以重载</h1><p>不可重载的运算符如下</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -214,13 +220,12 @@
 <th>描述</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>.</td>
 <td>成员访问运算符</td>
 </tr>
 <tr>
-<td>.<em> 和 -&gt;</em></td>
+<td>.* 和 -&gt;*</td>
 <td>成员指针访问运算符</td>
 </tr>
 <tr>
@@ -239,19 +244,21 @@
 <td>#</td>
 <td>预处理符号</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>除上述内容外，所有的运算符都能被重载，甚至包括new与delete。</p>
 <h1 id="如何重载运算符"><a href="#如何重载运算符" class="headerlink" title="如何重载运算符"></a>如何重载运算符</h1><p>其语法大致如下</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 以class Box为例，重载其+运算符</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Box</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:<span class="comment">//...</span></span><br><span class="line"><span class="keyword">public</span>: <span class="comment">//...</span></span><br><span class="line">    Box <span class="keyword">operator</span>+(<span class="type">const</span> Box&amp;);<span class="comment">//参数中的Box是被加的Box的引用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>当然重载运算符也可以在类外进行</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 运算符左右的两者都列入参数</span></span><br><span class="line">Box <span class="keyword">operator</span>+(<span class="type">const</span> Box&amp; b1,<span class="type">const</span> Box&amp; b2)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>对其他运算符的重载也是类似的操作，只需要注意参数即可。</p>
-<p>顺便一提，谁说一定要有Box + Box = Box呢？</p>
+<p>顺便一提，谁说一定要有Box + Box &#x3D; Box呢？</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="keyword">operator</span>+(<span class="type">const</span> Box&amp; b1,<span class="type">const</span> Box&amp; b2)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> (b1.<span class="built_in">add</span>(b2)).<span class="built_in">getLength</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>又为何下标里的参数一定是个int呢？</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Image</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:<span class="comment">//...</span></span><br><span class="line"><span class="keyword">public</span>: <span class="comment">//...</span></span><br><span class="line">    Pixel <span class="keyword">operator</span>[](std::array&lt;<span class="type">int</span>,<span class="number">2</span>&gt; pos)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> Image.<span class="built_in">getPixel</span>(pos[<span class="number">0</span>],pos[<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>一切皆有可能。</p>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/cpp-overloading.html">C++ 重载运算符和重载函数 | 菜鸟教程 (runoob.com)</a></p>
 
@@ -351,7 +358,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

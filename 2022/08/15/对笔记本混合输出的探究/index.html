@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"iaksh.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="前言  这篇文章并没有写完，有待更新。 缘起  几日前购置了一台游戏本，却无心拿它去玩什么游戏了。  但又碍于发热过高，于是想到开启混合输出是否能在日常使用中平衡GPU负载，降低功耗。 测试机器  考虑到某些可能存在的隐患，我不想直接写出笔记本型号，这里列出其大致参数。     项目 参数 备注       CPU Intel Core i7 12700H N&#x2F;A     GPU0 Iris XE">
+  <meta name="description" content="前言  这篇文章并没有写完，有待更新。 缘起  几日前购置了一台游戏本，却无心拿它去玩什么游戏了。  但又碍于发热过高，于是想到开启混合输出是否能在日常使用中平衡GPU负载，降低功耗。 测试机器  考虑到某些可能存在的隐患，我不想直接写出笔记本型号，这里列出其大致参数。    项目 参数 备注    CPU Intel Core i7 12700H N&#x2F;A   GPU0 Iris XE">
 <meta property="og:type" content="article">
 <meta property="og:title" content="对笔记本混合输出的探究">
 <meta property="og:url" content="https://iaksh.github.io/2022/08/15/%E5%AF%B9%E7%AC%94%E8%AE%B0%E6%9C%AC%E6%B7%B7%E5%90%88%E8%BE%93%E5%87%BA%E7%9A%84%E6%8E%A2%E7%A9%B6/index.html">
 <meta property="og:site_name" content="Hello world!">
-<meta property="og:description" content="前言  这篇文章并没有写完，有待更新。 缘起  几日前购置了一台游戏本，却无心拿它去玩什么游戏了。  但又碍于发热过高，于是想到开启混合输出是否能在日常使用中平衡GPU负载，降低功耗。 测试机器  考虑到某些可能存在的隐患，我不想直接写出笔记本型号，这里列出其大致参数。     项目 参数 备注       CPU Intel Core i7 12700H N&#x2F;A     GPU0 Iris XE">
+<meta property="og:description" content="前言  这篇文章并没有写完，有待更新。 缘起  几日前购置了一台游戏本，却无心拿它去玩什么游戏了。  但又碍于发热过高，于是想到开启混合输出是否能在日常使用中平衡GPU负载，降低功耗。 测试机器  考虑到某些可能存在的隐患，我不想直接写出笔记本型号，这里列出其大致参数。    项目 参数 备注    CPU Intel Core i7 12700H N&#x2F;A   GPU0 Iris XE">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-14T17:00:36.000Z">
 <meta property="article:modified_time" content="2022-09-16T15:37:54.803Z">
@@ -198,7 +198,6 @@
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>  这篇文章并没有写完，有待更新。</p>
 <h1 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h1><p>  几日前购置了一台游戏本，却无心拿它去玩什么游戏了。<br>  但又碍于发热过高，于是想到开启混合输出是否能在日常使用中平衡GPU负载，降低功耗。</p>
 <h1 id="测试机器"><a href="#测试机器" class="headerlink" title="测试机器"></a>测试机器</h1><p>  考虑到某些可能存在的隐患，我不想直接写出笔记本型号，这里列出其大致参数。</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -207,35 +206,88 @@
 <th>备注</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td>  CPU</td>
+<tbody><tr>
+<td>CPU</td>
 <td>Intel Core i7 12700H</td>
-<td>N/A</td>
+<td>N&#x2F;A</td>
 </tr>
 <tr>
-<td>  GPU0</td>
+<td>GPU0</td>
 <td>Iris XE</td>
 <td>96eu</td>
 </tr>
 <tr>
-<td>  GPU1</td>
+<td>GPU1</td>
 <td>Nvidia GeForce RTX 3060 Laptop</td>
 <td>140W</td>
 </tr>
 <tr>
-<td>  电源适配器</td>
+<td>电源适配器</td>
 <td>230W</td>
-<td>N/A</td>
+<td>N&#x2F;A</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h1 id="测试项目"><a href="#测试项目" class="headerlink" title="测试项目"></a>测试项目</h1><p>  使用Windows 11 “电影和电视”程序播放 SONY DEMO 4K 演示片 ( 2160 X 3840 60fps )<br>  其他的，我暂时懒得弄了，下次继续。</p>
 <h1 id="功耗检测软件"><a href="#功耗检测软件" class="headerlink" title="功耗检测软件"></a>功耗检测软件</h1><p>  使用HWMonitor(x64)监控CPU GT Power。<br>  使用Nvidia Experience监控RTX 3060 Laptop功耗。</p>
-<h1 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h1><p>  混合输出：<br>  项目|最大功耗|平均功耗|平均使用率<br>  -|-|-|-<br>  CPU Powers|20.36W|10.5W|N/A<br>  CPU GT Powers|3.35W|1.5W|N/A<br>  Iris XE (96EU)|N/A|N/A|50%<br>  Nvidia GeForce RTX 3060 Laptop|N/A|N/A|0%</p>
-<p>  独显直连<br>  项目|最大功耗|平均功耗|平均使用率<br>  -|-|-|-<br>  CPU Powers|20.18W|7.3W|N/A<br>  Nvidia GeForce RTX 3060 Laptop|24W|21W|38%</p>
-<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>  在当前实验环境下，混合输出确实能减少观看4k 60fps hdr影片时的功耗，由此类推，在日常使用中，混合输出较独显直连更加省电，<em>理论上</em>能减少发热。<br>  但当前测试环境中独显为使用三星8nm工艺的RTX 3060 Laptop，考虑到三星工艺糟糕的能效表现，<strong>此次实验结果在Nvidia 20/10系显卡上的不一定适用</strong>。</p>
+<h1 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h1><p>  混合输出：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>最大功耗</th>
+<th>平均功耗</th>
+<th>平均使用率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU Powers</td>
+<td>20.36W</td>
+<td>10.5W</td>
+<td>N&#x2F;A</td>
+</tr>
+<tr>
+<td>CPU GT Powers</td>
+<td>3.35W</td>
+<td>1.5W</td>
+<td>N&#x2F;A</td>
+</tr>
+<tr>
+<td>Iris XE (96EU)</td>
+<td>N&#x2F;A</td>
+<td>N&#x2F;A</td>
+<td>50%</td>
+</tr>
+<tr>
+<td>Nvidia GeForce RTX 3060 Laptop</td>
+<td>N&#x2F;A</td>
+<td>N&#x2F;A</td>
+<td>0%</td>
+</tr>
+</tbody></table>
+<p>  独显直连</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>最大功耗</th>
+<th>平均功耗</th>
+<th>平均使用率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU Powers</td>
+<td>20.18W</td>
+<td>7.3W</td>
+<td>N&#x2F;A</td>
+</tr>
+<tr>
+<td>Nvidia GeForce RTX 3060 Laptop</td>
+<td>24W</td>
+<td>21W</td>
+<td>38%</td>
+</tr>
+</tbody></table>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>  在当前实验环境下，混合输出确实能减少观看4k 60fps hdr影片时的功耗，由此类推，在日常使用中，混合输出较独显直连更加省电，<em>理论上</em>能减少发热。<br>  但当前测试环境中独显为使用三星8nm工艺的RTX 3060 Laptop，考虑到三星工艺糟糕的能效表现，<strong>此次实验结果在Nvidia 20&#x2F;10系显卡上的不一定适用</strong>。</p>
 
     </div>
 
@@ -333,7 +385,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

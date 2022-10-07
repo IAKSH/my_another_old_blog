@@ -203,6 +203,7 @@
 </blockquote>
 <p>只让判断是否有环，非常简单，根据之前的备忘录算法我很快写出了这串代码：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">hasCycle</span><span class="params">(ListNode* head)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!head) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        std::unordered_map&lt;ListNode*,<span class="type">int</span>&gt; mem;</span><br><span class="line">        <span class="keyword">while</span>(head-&gt;next != <span class="literal">nullptr</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(mem.<span class="built_in">find</span>(head) != mem.<span class="built_in">end</span>()) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            mem.<span class="built_in">insert</span>(std::<span class="built_in">pair</span>&lt;ListNode*,<span class="type">int</span>&gt;(head,head-&gt;val));</span><br><span class="line">            head = head-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
 <p>非常优雅，但…</p>
 <p><a target="_blank" rel="noopener" href="https://imgse.com/i/xm3a34"><img src="https://img-blog.csdnimg.cn/img_convert/7f642122d7d69074c1dd06b38808ec0b.png" alt="xm3a34.png"></a></p>
 <p><a target="_blank" rel="noopener" href="https://imgse.com/i/xm3YNT"><img src="https://img-blog.csdnimg.cn/img_convert/21dce248550383629dec746fd4e85b52.png" alt="xm3YNT.png"></a></p>
@@ -211,6 +212,7 @@
 <h2 id="快慢指针算法"><a href="#快慢指针算法" class="headerlink" title="快慢指针算法"></a>快慢指针算法</h2><p>又叫Floyd判圈法（弗洛伊德判圈法），简单地说就是在表的头部放置两个前进速度不同的指针，使他们同时出发，如果该表不是线性表，则前进速度快的指针会率先进入”循环圈“，慢指针紧随其后，使快指针追击慢指针。由于有速度差异，只要该”循环圈“存在，快指针在”循环圈“内运行若干周期后，总会追上慢指针，所以只要指针和慢指针相遇，我们就能认定该链表是环形链表。</p>
 <p>基于以上理解，我们可以写出如下代码：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">hasCycle</span><span class="params">(ListNode* head)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!head) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="type">int</span> count = <span class="number">2</span>;</span><br><span class="line">        ListNode* slow = head;</span><br><span class="line">        <span class="keyword">while</span>(head-&gt;next)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(count == <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                count = <span class="number">2</span>;</span><br><span class="line">                slow = slow-&gt;next;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                --count;</span><br><span class="line">                head = head-&gt;next;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(slow == head) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
 <p>效果立竿见影</p>
 <p><a target="_blank" rel="noopener" href="https://imgse.com/i/xm3UCF"><img src="https://img-blog.csdnimg.cn/img_convert/ac1ad8672de95b6f019aebdc264b0667.png" alt="xm3UCF.png"></a></p>
 
@@ -234,7 +236,10 @@
     <a href="/2022/09/16/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%E5%92%8C%E5%93%88%E5%B8%8C%E8%A1%A8/" rel="prev" title="哈希算法和哈希表">
       <i class="fa fa-chevron-left"></i> 哈希算法和哈希表
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/10/04/%E8%AE%B0%E5%BF%86%E5%8C%96%E9%80%92%E5%BD%92%E5%92%8C%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="next" title="记忆化递归和动态规划">
+      记忆化递归和动态规划 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -307,7 +312,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
