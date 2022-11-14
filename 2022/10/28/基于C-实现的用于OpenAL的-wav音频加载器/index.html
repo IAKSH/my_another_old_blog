@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"iaksh.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="0x00 | 前言近日学习OpenAL，想从最简单的.wav格式入手，但苦于找不到合适的解析库，最终写下此文。 另，该库已开源 IAKSH&#x2F;libwavaudio (github.com) 0x01 | .wav格式的标准结构.wav音频格式按照一定的采样率（通常是44.1KHz，和CD音频一样）保存了音频的波形数据，不进行任何压缩，其数据结构简单易懂，十分便于操作。 标准的.wav音频文件主要由">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于C++实现的用于OpenAL的 .wav音频加载器">
+<meta property="og:url" content="https://iaksh.github.io/2022/10/28/%E5%9F%BA%E4%BA%8EC-%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%94%A8%E4%BA%8EOpenAL%E7%9A%84-wav%E9%9F%B3%E9%A2%91%E5%8A%A0%E8%BD%BD%E5%99%A8/index.html">
+<meta property="og:site_name" content="Hello world!">
+<meta property="og:description" content="0x00 | 前言近日学习OpenAL，想从最简单的.wav格式入手，但苦于找不到合适的解析库，最终写下此文。 另，该库已开源 IAKSH&#x2F;libwavaudio (github.com) 0x01 | .wav格式的标准结构.wav音频格式按照一定的采样率（通常是44.1KHz，和CD音频一样）保存了音频的波形数据，不进行任何压缩，其数据结构简单易懂，十分便于操作。 标准的.wav音频文件主要由">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/5546e76b98bd758004361b35827c5d63.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/46be692d2d1ced6ffdd07924fe74d180.png">
+<meta property="article:published_time" content="2022-10-28T03:36:07.000Z">
+<meta property="article:modified_time" content="2022-11-14T02:21:04.646Z">
+<meta property="article:author" content="IAKSH">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="OpenAL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/img_convert/5546e76b98bd758004361b35827c5d63.png">
+
+<link rel="canonical" href="https://iaksh.github.io/2022/10/28/%E5%9F%BA%E4%BA%8EC-%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%94%A8%E4%BA%8EOpenAL%E7%9A%84-wav%E9%9F%B3%E9%A2%91%E5%8A%A0%E8%BD%BD%E5%99%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>基于C++实现的用于OpenAL的 .wav音频加载器 | Hello world!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello world!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/10/28/%E5%9F%BA%E4%BA%8EC-%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%94%A8%E4%BA%8EOpenAL%E7%9A%84-wav%E9%9F%B3%E9%A2%91%E5%8A%A0%E8%BD%BD%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello world!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          基于C++实现的用于OpenAL的 .wav音频加载器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-28 11:36:07" itemprop="dateCreated datePublished" datetime="2022-10-28T11:36:07+08:00">2022-10-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-14 10:21:04" itemprop="dateModified" datetime="2022-11-14T10:21:04+08:00">2022-11-14</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 | 前言"></a>0x00 | 前言</h1><p>近日学习OpenAL，想从最简单的.wav格式入手，但苦于找不到合适的解析库，最终写下此文。</p>
+<p>另，该库已开源</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/IAKSH/libwavaudio">IAKSH/libwavaudio (github.com)</a></p>
+<h1 id="0x01-wav格式的标准结构"><a href="#0x01-wav格式的标准结构" class="headerlink" title="0x01 | .wav格式的标准结构"></a>0x01 | .wav格式的标准结构</h1><p>.wav音频格式按照一定的采样率（通常是<code>44.1KHz</code>，和CD音频一样）保存了音频的波形数据，不进行任何压缩，其数据结构简单易懂，十分便于操作。</p>
+<p>标准的.wav音频文件主要由以下部分组成：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/5546e76b98bd758004361b35827c5d63.png" alt="xh4sOK.png"></p>
+<p>如图所示，整个文件大致分为三个部分:</p>
+<ul>
+<li><p>RIFF Chunk（文件头）</p>
+<p>这一部分是资源交换档案标准（Resource Interchange File Format）所规定的文件头，Windows操作系统中许多媒体文件格式，如<code>.wav</code>和<code>.avi</code>，均遵循这一标准。这一文件头的出现表示该文件是一个标准的RIFF文件，可以按照RIFF标准对其进行解析。</p>
+<p>RIFF Chunk的标准大小为<code>12Byte</code>，由三个<code>4Byte</code>数据组成，它们分别是：</p>
+<ul>
+<li><p>ChunkID（4Byte）</p>
+<p>描述该区块的类别，对于RIFF Chunk，其值应为”RIFF”</p>
+</li>
+<li><p>ChunkSize（4Byte）</p>
+<p>块大小，单位Byte，描述<strong>除<code>ChunkID</code>与<code>ChunkSize</code>所占用的8字节外的</strong>整个RIFF标准文件的大小</p>
+</li>
+<li><p>Format（4Byte）</p>
+<p>描述该RIFF标准文件内的媒体数据格式，对于我们的.wav文件，其值应该是”WAVE”</p>
+</li>
+</ul>
+</li>
+<li><p>fmt Chunk</p>
+<p>这一部分是音频数据的格式块，描述了该音频数据的格式以及相关参数，如采样率，码率等。</p>
+<p>在.wav格式中，fmt Chunk的标准大小是<code>24Byte</code>，由4个<code>4Byte</code>数据和4个<code>2Byte</code>数据组成，从头至尾以此为：</p>
+<ul>
+<li><p>SubChunk1ID（4Byte）</p>
+<p>标明这是一个子区块，同时描述该区块的类别，对于fmt Chunk，此值应为”fmt”</p>
+</li>
+<li><p>SubChunk1Size（4Byte）</p>
+<p>描述了该子区块（fmt Chunk）<strong>除<code>SubChunk1ID</code>和<code>SubChunk1Size</code>所占用的8字节外的</strong>大小（单位Byte）</p>
+</li>
+<li><p>AudioFormat（2Byte）</p>
+<p>描述了音频数据的格式，对于我们的.wav文件，其值通常为1。</p>
+</li>
+<li><p>NumChannels（2Byte）</p>
+<p>描述了音频数据的总通道数</p>
+</li>
+<li><p>SampleRate（4Byte）</p>
+<p>描述了音频数据的采样率（每个通道每秒包含多少帧数据），对于我们的.wav文件，这个值通常是<code>44100</code></p>
+</li>
+<li><p>ByteRate（4Byte）</p>
+<p>描述音频数据每秒钟的音频包含多少字节的数据</p>
+</li>
+<li><p>BlockAlign（2Byte）</p>
+<p>描述音频数据每帧所有通道总共有多少字节的数据</p>
+</li>
+<li><p>BitsPerSample（2Byte）</p>
+<p>描述每帧包含多少bit数据</p>
+</li>
+</ul>
+</li>
+<li><p>data Chunk</p>
+<ul>
+<li><p>SubChunk2ID（4Byte）</p>
+<p>标明这是一个子区块，同时描述该区块的类别，对于data Chunk，其值应为<code>data</code></p>
+</li>
+<li><p>SubChunk2Size（4Byte）</p>
+<p>描述音频数据（data）的总大小（单位Byte）</p>
+</li>
+<li><p>data（大小不定）</p>
+<p>音频波形帧数据，即<code>PCM</code>（脉冲编码调制）数据，整个文件中真正保存音频的地方。其大小为<code>SubChunk2Size</code>的值（单位Byte）。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="0x02-wav格式的非标准结构"><a href="#0x02-wav格式的非标准结构" class="headerlink" title="0x02 | .wav格式的非标准结构"></a>0x02 | .wav格式的非标准结构</h1><p>和PE格式一样，<code>.wav</code>的各数据块的位置是不定的。对于某些编码实现，各个Chunk之间完全可能被随意插入某些数据，比如，ffmpeg在转换音频格式时会在文件中插入<code>libavformat</code>的版本信息。</p>
+<p>使用互联网上的一些在线mp3转wav网页得到的wav文件，通过16进制编辑器打开后可以发现这一现象：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/46be692d2d1ced6ffdd07924fe74d180.png" alt="xh4OYj.png"></p>
+<p>这其实是合乎RIFF标准的，但并不是我们所理解的普适化的”.wav标准格式”。这意味着一个.wav文件中各Chunk的偏移量并不是确定的，我们需要通过ChunkID动态地解析地址。</p>
+<h1 id="0x03-C-按字节读取文件的方法"><a href="#0x03-C-按字节读取文件的方法" class="headerlink" title="0x03 | C++按字节读取文件的方法"></a>0x03 | C++按字节读取文件的方法</h1><p>想要动态解析Chunk，我们就需要按字节读取文件，然后解析。C++标准库中的<code>fstream</code>库提供了相关功能。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fstream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> noexcpet</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">std::ifstream <span class="title">fs</span><span class="params">(<span class="string">&quot;test.wav&quot;</span>,std::ios::in | std::ios::binary)</span></span>;</span><br><span class="line">    fs.<span class="built_in">seekg</span>(<span class="number">1</span>,std::ios::beg);</span><br><span class="line">    <span class="type">char</span> c;</span><br><span class="line">    fs.<span class="built_in">read</span>(&amp;c,<span class="number">1</span>);</span><br><span class="line">    fs.<span class="built_in">close</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码使用<code>fstream</code>库打开了<code>test.wav</code>文件，并读取了其第2个字节到变量<code>c</code>中。</p>
+<p>其中，我们通过<code>std::ifstream::seekg(...)</code>函数对文件流进行了偏移以读取指定地址。使用<code>std::ifstream::read(...)</code>函数在文件流中读取了指定大小的数据到<code>c</code>中。</p>
+<h1 id="0x04-OpenAL播放音频的流程"><a href="#0x04-OpenAL播放音频的流程" class="headerlink" title="0x04 | OpenAL播放音频的流程"></a>0x04 | OpenAL播放音频的流程</h1><p>我们还需要将解码出的波形数据播放出来以验证代码是否按照我们的期望运行，理所当然，这里我选用了OpenAL。</p>
+<p>OpenAL API的设计与OpenGL API高度相似，但其主要围绕两种对象进行操作：</p>
+<ol>
+<li><p>Buffer（缓存）</p>
+<p>是音频数据的缓存，实际上其内存由OpenAL状态机管理，我们只能拿到其ID。</p>
+</li>
+<li><p>Source（声源）</p>
+<p>声源用于播放音频，其记录了自己的方位，速度属性，以进行混音。</p>
+</li>
+</ol>
+<p>除此之外，还需要建立OpenAL上下文，加载音频设备。我们可以粗略的将其封装为一个类。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AudioPlayer</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    ALCdevice *device = <span class="literal">nullptr</span>;</span><br><span class="line">    ALCcontext *context = <span class="literal">nullptr</span>;</span><br><span class="line">    ALuint audioSource;</span><br><span class="line">    ALfloat audioSourcePos[<span class="number">3</span>];</span><br><span class="line">    ALfloat audioSourceVel[<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">initializeOpenAL</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        device = <span class="built_in">alcOpenDevice</span>(<span class="literal">nullptr</span>); <span class="comment">// open defeault device</span></span><br><span class="line">        context = <span class="built_in">alcCreateContext</span>(device, <span class="literal">nullptr</span>);</span><br><span class="line">        <span class="built_in">alcMakeContextCurrent</span>(context);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">closeOpenAL</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">alcMakeContextCurrent</span>(<span class="literal">nullptr</span>);</span><br><span class="line">        <span class="built_in">alcDestroyContext</span>(context);</span><br><span class="line">        <span class="built_in">alcCloseDevice</span>(device);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">AudioPlayer</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">initializeOpenAL</span>();</span><br><span class="line">        <span class="built_in">alGenSources</span>(<span class="number">1</span>, &amp;audioSource);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">AudioPlayer</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">closeOpenAL</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">play</span><span class="params">(wava::WavAudio &amp;wav, <span class="type">bool</span> loopable, <span class="type">float</span> posX, <span class="type">float</span> posY, <span class="type">float</span> posZ, <span class="type">float</span> velX, <span class="type">float</span> velY, <span class="type">float</span> velZ)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        audioSourcePos[<span class="number">0</span>] = posX;</span><br><span class="line">        audioSourcePos[<span class="number">1</span>] = posY;</span><br><span class="line">        audioSourcePos[<span class="number">2</span>] = posZ;</span><br><span class="line"></span><br><span class="line">        audioSourceVel[<span class="number">0</span>] = velX;</span><br><span class="line">        audioSourceVel[<span class="number">1</span>] = velY;</span><br><span class="line">        audioSourceVel[<span class="number">2</span>] = velZ;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">alSourcei</span>(audioSource, AL_BUFFER, wav.<span class="built_in">getBuffer</span>());</span><br><span class="line">        <span class="built_in">alSourcef</span>(audioSource, AL_PITCH, <span class="number">1.0f</span>);</span><br><span class="line">        <span class="built_in">alSourcef</span>(audioSource, AL_GAIN, <span class="number">1.0f</span>);</span><br><span class="line">        <span class="built_in">alSourcefv</span>(audioSource, AL_POSITION, audioSourcePos);</span><br><span class="line">        <span class="built_in">alSourcefv</span>(audioSource, AL_VELOCITY, audioSourceVel);</span><br><span class="line">        <span class="built_in">alSourcei</span>(audioSource, AL_LOOPING, <span class="built_in">static_cast</span>&lt;ALboolean&gt;(loopable));</span><br><span class="line"></span><br><span class="line">        <span class="built_in">alSourcePlay</span>(audioSource);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">stop</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">alSourceStop</span>(audioSource);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="0x05-构建-wav加载器"><a href="#0x05-构建-wav加载器" class="headerlink" title="0x05 | 构建.wav加载器"></a>0x05 | 构建.wav加载器</h1><p>我们的目标是解析出.wav文件中的<code>PCM</code>数据，在上述分析的基础上，我们可以写出以下代码。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// wavaudio.hpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;AL/al.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;AL/alc.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;array&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdint&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> wava</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">WavAudio</span></span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">        <span class="type">uint32_t</span> buffer;</span><br><span class="line">        <span class="type">bool</span> loop = <span class="literal">true</span>;</span><br><span class="line">        <span class="type">bool</span> loaded = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// RIFF chunk (main chunk)</span></span><br><span class="line">        <span class="type">uint32_t</span> chunkSize;</span><br><span class="line">        <span class="type">char</span> format[<span class="number">5</span>] = &#123;<span class="string">&#x27;\0&#x27;</span>&#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// sub-chunk 1 (fmt chunk)</span></span><br><span class="line">        <span class="type">uint32_t</span> subChunk1Size;</span><br><span class="line">        <span class="type">uint16_t</span> audioFormat;</span><br><span class="line">        <span class="type">uint16_t</span> numChannels;</span><br><span class="line">        <span class="type">uint32_t</span> sampleRate;</span><br><span class="line">        <span class="type">uint32_t</span> byteRate;</span><br><span class="line">        <span class="type">uint16_t</span> blockAlign;</span><br><span class="line">        <span class="type">uint16_t</span> bitsPerSample;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// sub-chunk 2 (data)</span></span><br><span class="line">        <span class="type">uint32_t</span> subChunk2Size;</span><br><span class="line">        <span class="type">unsigned</span> <span class="type">char</span> *data;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="type">int</span> <span class="title">getFileCursorMark</span><span class="params">(std::ifstream &amp;fs, std::string mark)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="built_in">WavAudio</span>();</span><br><span class="line">        <span class="built_in">WavAudio</span>(<span class="type">const</span> <span class="type">char</span> *path);</span><br><span class="line">        ~<span class="built_in">WavAudio</span>();</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">load</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *path)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">uint32_t</span> <span class="title">getBuffer</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以及实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// wavaudio.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;wavaudio.hpp&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> wava::WavAudio::<span class="built_in">getFileCursorMark</span>(std::ifstream &amp;fs, std::string mark)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> len = mark.<span class="built_in">length</span>();</span><br><span class="line">    <span class="type">char</span> buf[len + <span class="number">1</span>];</span><br><span class="line">    buf[len] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">    <span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (!fs.<span class="built_in">eof</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        fs.<span class="built_in">seekg</span>(i++, std::ios::beg);</span><br><span class="line">        fs.<span class="built_in">read</span>(buf, <span class="built_in">sizeof</span>(<span class="type">char</span>) * len);</span><br><span class="line">        <span class="keyword">if</span> (mark.<span class="built_in">compare</span>(buf) == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line">    std::cerr &lt;&lt; <span class="string">&quot;[libwavaudio] ERROR: failed to locate mark (&quot;</span> &lt;&lt; mark &lt;&lt; <span class="string">&quot;) in moveFileCursorToMark()\n&quot;</span>;</span><br><span class="line">    <span class="built_in">abort</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">wava::WavAudio::<span class="built_in">WavAudio</span>()</span><br><span class="line">&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">wava::WavAudio::<span class="built_in">WavAudio</span>(<span class="type">const</span> <span class="type">char</span> *path)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">load</span>(path);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">wava::WavAudio::~<span class="built_in">WavAudio</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">alDeleteBuffers</span>(<span class="number">1</span>, &amp;buffer);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> wava::WavAudio::<span class="built_in">load</span>(<span class="type">const</span> <span class="type">char</span> *path)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="function">std::ifstream <span class="title">fs</span><span class="params">(path, std::ios::in | std::ios::binary)</span></span>;</span><br><span class="line">    <span class="keyword">if</span>(!fs)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;[libwavaudio] ERROR: can&#x27;t open file (&quot;</span> &lt;&lt; path &lt;&lt; <span class="string">&quot;)\n&quot;</span>;</span><br><span class="line">        <span class="built_in">abort</span>(); </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    i = <span class="built_in">getFileCursorMark</span>(fs, <span class="string">&quot;RIFF&quot;</span>) - <span class="number">1</span>;</span><br><span class="line">    fs.<span class="built_in">seekg</span>(i + <span class="number">4</span>, std::ios::beg);</span><br><span class="line">    fs.<span class="built_in">read</span>((<span class="type">char</span> *)&amp;chunkSize, <span class="number">4</span>);</span><br><span class="line">    fs.<span class="built_in">seekg</span>(i + <span class="number">8</span>, std::ios::beg);</span><br><span class="line">    fs.<span class="built_in">read</span>((<span class="type">char</span> *)&amp;format, <span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (std::<span class="built_in">string</span>(format).<span class="built_in">compare</span>(<span class="string">&quot;WAVE&quot;</span>) != <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;[libwavaudio] ERROR: trying to load a none-wav format file (&quot;</span> &lt;&lt; path &lt;&lt; <span class="string">&quot;)\n&quot;</span>;</span><br><span class="line">        <span class="built_in">abort</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    i = <span class="built_in">getFileCursorMark</span>(fs, <span class="string">&quot;fmt&quot;</span>) - <span class="number">1</span>;</span><br><span class="line">    fs.<span class="built_in">seekg</span>(i + <span class="number">4</span>, std::ios::beg);</span><br><span class="line">    fs.<span class="built_in">read</span>((<span class="type">char</span> *)&amp;subChunk1Size, <span class="number">4</span>);</span><br><span class="line">    fs.<span class="built_in">seekg</span>(i + <span class="number">8</span>, std::ios::beg);</span><br><span class="line">    fs.<span class="built_in">read</span>((<span class="type">char</span> *)&amp;audioFormat, <span class="number">2</span>);</span><br><span class="line">    fs.<span class="built_in">seekg</span>(i + <span class="number">10</span>, std::ios::beg);</span><br><span class="line">    fs.<span class="built_in">read</span>((<span class="type">char</span> *)&amp;numChannels, <span class="number">2</span>);</span><br><span class="line">    fs.<span class="built_in">seekg</span>(i + <span class="number">12</span>, std::ios::beg);</span><br><span class="line">    fs.<span class="built_in">read</span>((<span class="type">char</span> *)&amp;sampleRate, <span class="number">4</span>);</span><br><span class="line">    fs.<span class="built_in">seekg</span>(i + <span class="number">16</span>, std::ios::beg);</span><br><span class="line">    fs.<span class="built_in">read</span>((<span class="type">char</span> *)&amp;byteRate, <span class="number">4</span>);</span><br><span class="line">    fs.<span class="built_in">seekg</span>(i + <span class="number">20</span>, std::ios::beg);</span><br><span class="line">    fs.<span class="built_in">read</span>((<span class="type">char</span> *)&amp;blockAlign, <span class="number">2</span>);</span><br><span class="line">    fs.<span class="built_in">seekg</span>(i + <span class="number">22</span>, std::ios::beg);</span><br><span class="line">    fs.<span class="built_in">read</span>((<span class="type">char</span> *)&amp;bitsPerSample, <span class="number">2</span>);</span><br><span class="line">    fs.<span class="built_in">seekg</span>(i + <span class="number">24</span>, std::ios::beg);</span><br><span class="line"></span><br><span class="line">    i = <span class="built_in">getFileCursorMark</span>(fs, <span class="string">&quot;data&quot;</span>) - <span class="number">1</span>;</span><br><span class="line">    fs.<span class="built_in">seekg</span>(i + <span class="number">4</span>, std::ios::beg);</span><br><span class="line">    fs.<span class="built_in">read</span>((<span class="type">char</span> *)&amp;subChunk2Size, <span class="number">4</span>);</span><br><span class="line">    fs.<span class="built_in">seekg</span>(i + <span class="number">8</span>, std::ios::beg);</span><br><span class="line">    data = <span class="keyword">new</span> <span class="type">unsigned</span> <span class="type">char</span>[subChunk2Size];</span><br><span class="line">    fs.<span class="built_in">read</span>((<span class="type">char</span> *)data, subChunk2Size);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// load data to OpenAL buffer</span></span><br><span class="line">    <span class="built_in">alGenBuffers</span>(<span class="number">1</span>, &amp;buffer);</span><br><span class="line">    <span class="keyword">if</span> (bitsPerSample == <span class="number">16</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (numChannels == <span class="number">1</span>)</span><br><span class="line">            <span class="built_in">alBufferData</span>(buffer, AL_FORMAT_MONO16, data, subChunk2Size, sampleRate);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (numChannels == <span class="number">2</span>)</span><br><span class="line">            <span class="built_in">alBufferData</span>(buffer, AL_FORMAT_STEREO16, data, subChunk2Size, sampleRate);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">abort</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (bitsPerSample == <span class="number">8</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (numChannels == <span class="number">1</span>)</span><br><span class="line">            <span class="built_in">alBufferData</span>(buffer, AL_FORMAT_MONO8, data, subChunk2Size, sampleRate);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (numChannels == <span class="number">2</span>)</span><br><span class="line">            <span class="built_in">alBufferData</span>(buffer, AL_FORMAT_STEREO8, data, subChunk2Size, sampleRate);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">abort</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">abort</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// release data</span></span><br><span class="line">    <span class="keyword">delete</span>[] data;</span><br><span class="line">    fs.<span class="built_in">close</span>();</span><br><span class="line"></span><br><span class="line">    loaded = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">uint32_t</span> wava::WavAudio::<span class="built_in">getBuffer</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (loaded)</span><br><span class="line">        <span class="keyword">return</span> buffer;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;[libwavaudio] ERROR: called getBuffer() from an unloaded WavAudio\n&quot;</span>;</span><br><span class="line">        <span class="built_in">abort</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="0x06-测试"><a href="#0x06-测试" class="headerlink" title="0x06 | 测试"></a>0x06 | 测试</h1><p>我使用上述<code>AudioPlayer</code>和<code>WavAudio</code>类编写了简单的测试代码。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../wavaudio.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;chrono&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AudioPlayer</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    ALCdevice *device = <span class="literal">nullptr</span>;</span><br><span class="line">    ALCcontext *context = <span class="literal">nullptr</span>;</span><br><span class="line">    ALuint audioSource;</span><br><span class="line">    ALfloat audioSourcePos[<span class="number">3</span>];</span><br><span class="line">    ALfloat audioSourceVel[<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">initializeOpenAL</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        device = <span class="built_in">alcOpenDevice</span>(<span class="literal">nullptr</span>); <span class="comment">// open defeault device</span></span><br><span class="line">        context = <span class="built_in">alcCreateContext</span>(device, <span class="literal">nullptr</span>);</span><br><span class="line">        <span class="built_in">alcMakeContextCurrent</span>(context);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">closeOpenAL</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">alcMakeContextCurrent</span>(<span class="literal">nullptr</span>);</span><br><span class="line">        <span class="built_in">alcDestroyContext</span>(context);</span><br><span class="line">        <span class="built_in">alcCloseDevice</span>(device);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">AudioPlayer</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">initializeOpenAL</span>();</span><br><span class="line">        <span class="built_in">alGenSources</span>(<span class="number">1</span>, &amp;audioSource);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">AudioPlayer</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">closeOpenAL</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">play</span><span class="params">(wava::WavAudio &amp;wav, <span class="type">bool</span> loopable, <span class="type">float</span> posX, <span class="type">float</span> posY, <span class="type">float</span> posZ, <span class="type">float</span> velX, <span class="type">float</span> velY, <span class="type">float</span> velZ)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        audioSourcePos[<span class="number">0</span>] = posX;</span><br><span class="line">        audioSourcePos[<span class="number">1</span>] = posY;</span><br><span class="line">        audioSourcePos[<span class="number">2</span>] = posZ;</span><br><span class="line"></span><br><span class="line">        audioSourceVel[<span class="number">0</span>] = velX;</span><br><span class="line">        audioSourceVel[<span class="number">1</span>] = velY;</span><br><span class="line">        audioSourceVel[<span class="number">2</span>] = velZ;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">alSourcei</span>(audioSource, AL_BUFFER, wav.<span class="built_in">getBuffer</span>());</span><br><span class="line">        <span class="built_in">alSourcef</span>(audioSource, AL_PITCH, <span class="number">1.0f</span>);</span><br><span class="line">        <span class="built_in">alSourcef</span>(audioSource, AL_GAIN, <span class="number">1.0f</span>);</span><br><span class="line">        <span class="built_in">alSourcefv</span>(audioSource, AL_POSITION, audioSourcePos);</span><br><span class="line">        <span class="built_in">alSourcefv</span>(audioSource, AL_VELOCITY, audioSourceVel);</span><br><span class="line">        <span class="built_in">alSourcei</span>(audioSource, AL_LOOPING, <span class="built_in">static_cast</span>&lt;ALboolean&gt;(loopable));</span><br><span class="line"></span><br><span class="line">        <span class="built_in">alSourcePlay</span>(audioSource);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">stop</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">alSourceStop</span>(audioSource);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> <span class="keyword">noexcept</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;hello world!\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">    AudioPlayer ap;</span><br><span class="line">    <span class="function">wava::WavAudio <span class="title">wa</span><span class="params">(<span class="string">&quot;../test/sounds/heart.wav&quot;</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    ap.<span class="built_in">play</span>(wa, <span class="literal">false</span>, <span class="number">0.0f</span>, <span class="number">0.0f</span>, <span class="number">0.0f</span>, <span class="number">0.0f</span>, <span class="number">0.0f</span>, <span class="number">0.0f</span>);</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;finished!\n&quot;</span>;</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">        std::this_thread::<span class="built_in">sleep_for</span>(std::chrono::<span class="built_in">seconds</span>(<span class="number">1</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码尝试加载位于<code>../test/sounds/heart.wav</code>的.wav文件，并使用<code>AudioPlayer</code>调用OpenAL进行播放。如果你使用我的这个.wav文件，运行该代码你应该可以听见不间断的心跳声。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/OpenAL/" rel="tag"># OpenAL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/10/20/const-type-%E5%92%8C-const-type-const/" rel="prev" title="const type 和 const type* const">
+      <i class="fa fa-chevron-left"></i> const type 和 const type* const
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/03/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="next" title="快速入门正则表达式">
+      快速入门正则表达式 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x00-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0x00 | 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-wav%E6%A0%BC%E5%BC%8F%E7%9A%84%E6%A0%87%E5%87%86%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">0x01 | .wav格式的标准结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-wav%E6%A0%BC%E5%BC%8F%E7%9A%84%E9%9D%9E%E6%A0%87%E5%87%86%E7%BB%93%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">0x02 | .wav格式的非标准结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-C-%E6%8C%89%E5%AD%97%E8%8A%82%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">0x03 | C++按字节读取文件的方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-OpenAL%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="nav-number">5.</span> <span class="nav-text">0x04 | OpenAL播放音频的流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x05-%E6%9E%84%E5%BB%BA-wav%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">6.</span> <span class="nav-text">0x05 | 构建.wav加载器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x06-%E6%B5%8B%E8%AF%95"><span class="nav-number">7.</span> <span class="nav-text">0x06 | 测试</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">IAKSH</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/IAKSH" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;IAKSH" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:askzrj21@163.com" title="E-Mail → mailto:askzrj21@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">IAKSH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

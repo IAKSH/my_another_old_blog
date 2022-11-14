@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"iaksh.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="单变量表示多状态如果你有使用过SDL2库，你一定见过这样的代码 1renderer &#x3D; SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC); 这其中有一个奇怪的用法 1SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC 这里只输">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言位运算的一些应用">
+<meta property="og:url" content="https://iaksh.github.io/2022/10/19/C%E8%AF%AD%E8%A8%80%E4%BD%8D%E8%BF%90%E7%AE%97/index.html">
+<meta property="og:site_name" content="Hello world!">
+<meta property="og:description" content="单变量表示多状态如果你有使用过SDL2库，你一定见过这样的代码 1renderer &#x3D; SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC); 这其中有一个奇怪的用法 1SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC 这里只输">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-19T15:25:58.000Z">
+<meta property="article:modified_time" content="2022-11-14T02:21:23.533Z">
+<meta property="article:author" content="IAKSH">
+<meta property="article:tag" content="C">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://iaksh.github.io/2022/10/19/C%E8%AF%AD%E8%A8%80%E4%BD%8D%E8%BF%90%E7%AE%97/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>C语言位运算的一些应用 | Hello world!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello world!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://iaksh.github.io/2022/10/19/C%E8%AF%AD%E8%A8%80%E4%BD%8D%E8%BF%90%E7%AE%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="IAKSH">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello world!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C语言位运算的一些应用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-19 23:25:58" itemprop="dateCreated datePublished" datetime="2022-10-19T23:25:58+08:00">2022-10-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-14 10:21:23" itemprop="dateModified" datetime="2022-11-14T10:21:23+08:00">2022-11-14</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="单变量表示多状态"><a href="#单变量表示多状态" class="headerlink" title="单变量表示多状态"></a>单变量表示多状态</h1><p>如果你有使用过SDL2库，你一定见过这样的代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">renderer = SDL_CreateRenderer(window, <span class="number">-1</span>, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);</span><br></pre></td></tr></table></figure>
+<p>这其中有一个奇怪的用法</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC</span><br></pre></td></tr></table></figure>
+<p>这里只输入了一个参数，但是就好像是输入了两个</p>
+<p>在C++标准库中也有类似的用法</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::fstream fs;</span><br><span class="line">fs.open(<span class="string">&quot;a.data&quot;</span>,<span class="built_in">std</span>::ios::in | <span class="built_in">std</span>::ios::binary);</span><br></pre></td></tr></table></figure>
+<p>这是怎么回事呢？我们以<code>std::ios::binary</code>为例，先来看看它在<code>iso_base.h</code>中的定义。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ...  </span></span><br><span class="line">  <span class="keyword">enum</span> <span class="title class_">_Ios_Openmode</span> </span><br><span class="line">    &#123; </span><br><span class="line">      _S_app 		= <span class="number">1L</span> &lt;&lt; <span class="number">0</span>,</span><br><span class="line">      _S_ate 		= <span class="number">1L</span> &lt;&lt; <span class="number">1</span>,</span><br><span class="line">      _S_bin 		= <span class="number">1L</span> &lt;&lt; <span class="number">2</span>,</span><br><span class="line">      _S_in 		= <span class="number">1L</span> &lt;&lt; <span class="number">3</span>,</span><br><span class="line">      _S_out 		= <span class="number">1L</span> &lt;&lt; <span class="number">4</span>,</span><br><span class="line">      _S_trunc 		= <span class="number">1L</span> &lt;&lt; <span class="number">5</span>,</span><br><span class="line">      _S_noreplace 	= <span class="number">1L</span> &lt;&lt; <span class="number">6</span>,</span><br><span class="line">      _S_ios_openmode_end = <span class="number">1L</span> &lt;&lt; <span class="number">16</span>,</span><br><span class="line">      _S_ios_openmode_max = __INT_MAX__,</span><br><span class="line">      _S_ios_openmode_min = ~__INT_MAX__</span><br><span class="line">    &#125;;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> openmode binary =	_S_bin;</span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+<p>可以看出C++标准库的做法是将每一个“标签“用一个64bit（即8byte）整数<code>000...001</code>按位左移不同的位数得到。使该64bit数据的每一位都表示一个标签的真假，一共可以表示64个不同的标签，再用按位或操作即可将多个标签混合到一个值，具体如下表所示。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>值1</th>
+<th>值2</th>
+<th>两者按位或</th>
+<th>结果描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00..001</td>
+<td>00..010</td>
+<td>00..011</td>
+<td>读结果后两位可知，值1，2均表示真</td>
+</tr>
+<tr>
+<td>00..000</td>
+<td>00..010</td>
+<td>00..010</td>
+<td>读结果后两位可知，值1，2分别表示假，真</td>
+</tr>
+<tr>
+<td>00..001</td>
+<td>00..000</td>
+<td>00..001</td>
+<td>读结果后两位可知，值1，2分别表示真，假</td>
+</tr>
+<tr>
+<td>00..000</td>
+<td>00..000</td>
+<td>00..000</td>
+<td>读结果后两位可知，值1，2均表示假</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>可以写一个C程序来验证上述操作。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// int32_t 自然是32位二进制</span></span><br><span class="line"><span class="comment">// 一个八进制数表示两个比特位</span></span><br><span class="line"><span class="comment">// 一个十六进制数表示四个比特位</span></span><br><span class="line"><span class="comment">// 例如：</span></span><br><span class="line"><span class="comment">// 0x0 = 0000</span></span><br><span class="line"><span class="comment">// 0xF = 1111</span></span><br><span class="line"><span class="comment">// 0xFF = 1111 1111（空格仅为方便阅读，可去除）</span></span><br><span class="line"><span class="comment">// 0xAC = 1010 1100</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">check</span><span class="params">(<span class="type">int</span> input,<span class="type">int</span> val)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> mark,i;</span><br><span class="line">    <span class="keyword">for</span>(mark = <span class="number">0</span>;val != <span class="number">1</span>;val &gt;&gt;= <span class="number">1</span>) mark++;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; mark;i++) input &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> (input &amp; val) == <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> a = <span class="number">1</span>;                  <span class="comment">//bin: 0000 ... 0000 0001   hex: 0x0...01</span></span><br><span class="line">    <span class="type">int</span> b = <span class="number">2</span>;                  <span class="comment">//bin: 0000 ... 0000 0010   hex: 0x0...02</span></span><br><span class="line">    <span class="type">int</span> c = <span class="number">4</span>;                  <span class="comment">//bin: 0000 ... 0000 0100   hex: 0x0...04</span></span><br><span class="line">    <span class="type">int</span> d = <span class="number">8</span>;                  <span class="comment">//bin: 0000 ... 0000 1000   hex: 0x0...08</span></span><br><span class="line">    <span class="type">int</span> e = <span class="number">16</span>;                 <span class="comment">//bin: 0000 ... 0001 0000   hex: 0x0...10</span></span><br><span class="line">    <span class="type">int</span> input = a | b | c | d;  <span class="comment">//bin: 0000 ... 0000 1111   hex: 0x0...0F</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,check(input,a));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,check(input,b));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,check(input,c));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,check(input,d));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,check(input,e));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注释中的<code>bin</code>表示二进制，<code>hex</code>表示十六进制，此处赋值时直接使用了十进制。</p>
+<h1 id="更快的乘2运算"><a href="#更快的乘2运算" class="headerlink" title="更快的乘2运算"></a>更快的乘2运算</h1><p>先来看几个二进制数</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>二进制</th>
+<th>十进制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0001</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0010</td>
+<td>2</td>
+</tr>
+<tr>
+<td>0100</td>
+<td>4</td>
+</tr>
+<tr>
+<td>1000</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>不难看出，亦不难证出一个二进制数按位左移1位即能使其乘以2。</p>
+<p>术业有专攻，这种专门乘2的算法理应是要比传统的万用乘法运算符要快的，我们可以通过一个简单的C程序验证这个猜测。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PCD 100000</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i,j;</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> n = <span class="number">1</span>;</span><br><span class="line">    <span class="type">float</span> s,e;</span><br><span class="line">    s = clock();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; PCD;i++) <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; PCD;j++) n *= <span class="number">2</span>;</span><br><span class="line">    e = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lf sec.\n&quot;</span>,(e - s)/CLOCKS_PER_SEC);</span><br><span class="line"></span><br><span class="line">    n = <span class="number">1</span>;</span><br><span class="line">    s = clock();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; PCD;i++) <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; PCD;j++) n &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">    e = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lf sec.\n&quot;</span>,(e - s)/CLOCKS_PER_SEC);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试结果如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>第一次</th>
+<th>第二次</th>
+<th>第三次</th>
+<th>平均</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>n *= 2</td>
+<td>4.257221 sec</td>
+<td>4.125867 sec</td>
+<td>4. 176448 sec</td>
+<td>4.186512 sec</td>
+</tr>
+<tr>
+<td>n &lt;&lt;= 1</td>
+<td>3.519814 sec</td>
+<td>3.600015 sec</td>
+<td>3.618779 sec</td>
+<td>3.579536 sec</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>确实有所提升，事实上，大多数编译器启用代码优化后都会尝试将<code>n * 2</code>替换为<code>n &lt;&lt; 1</code>，以此提升程序性能。</p>
+<h1 id="更快的除2运算"><a href="#更快的除2运算" class="headerlink" title="更快的除2运算"></a>更快的除2运算</h1><p>原理和上述乘2运算一样，测试代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PCD 100000</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i,j;</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> n = <span class="number">10000</span>;</span><br><span class="line">    <span class="type">float</span> s,e;</span><br><span class="line">    s = clock();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; PCD;i++) <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; PCD;j++) n /= <span class="number">2</span>;</span><br><span class="line">    e = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lf sec.\n&quot;</span>,(e - s)/CLOCKS_PER_SEC);</span><br><span class="line"></span><br><span class="line">    n = <span class="number">10000</span>;</span><br><span class="line">    s = clock();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; PCD;i++) <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; PCD;j++) n &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    e = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lf sec.\n&quot;</span>,(e - s)/CLOCKS_PER_SEC);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试结果如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>第一次</th>
+<th>第二次</th>
+<th>第三次</th>
+<th>平均</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>n /= 2</td>
+<td>7.669598 sec</td>
+<td>7.514236 sec</td>
+<td>7.551863 sec</td>
+<td>7.578565 sec</td>
+</tr>
+<tr>
+<td>n &gt;&gt;= 1</td>
+<td>3.414502 sec</td>
+<td>3.584141 sec</td>
+<td>3.611094 sec</td>
+<td>3.536579 sec</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>同样的，大多编译器也会在开启代码优化时尝试将<code>n /2</code>替换为<code>n &gt;&gt; 1</code>以提升性能。</p>
+<h1 id="哈希函数"><a href="#哈希函数" class="headerlink" title="哈希函数"></a>哈希函数</h1><p>哈希函数肯定离不开位运算，以<code>FNV-1a</code> 算法为例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">uint32_t</span> <span class="title function_">fnv1a_32</span><span class="params">(<span class="type">char</span>* data)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 32bit version of the algorithm FNV-1a</span></span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> <span class="type">uint32_t</span> HASH_OFFSET_BASIS_32 = <span class="number">0x811C9DC5</span>;</span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> <span class="type">uint32_t</span> FNV_PRIME_32         = <span class="number">16777619</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">uint32_t</span> hash = HASH_OFFSET_BASIS_32;</span><br><span class="line">    <span class="type">int</span> len = <span class="built_in">strlen</span>(data);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        hash *= FNV_PRIME_32;</span><br><span class="line">        hash ^= data[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><del>详见我的另一篇博文。</del></p>
+<h1 id="位运算的一些奇怪用法"><a href="#位运算的一些奇怪用法" class="headerlink" title="位运算的一些奇怪用法"></a>位运算的一些奇怪用法</h1><h2 id="更快但有局限的模运算"><a href="#更快但有局限的模运算" class="headerlink" title="更快但有局限的模运算"></a>更快但有局限的模运算</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> QUICK_MODE(M,N) ((M) &amp; ((N) - 1))</span></span><br></pre></td></tr></table></figure>
+<p>测试代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> QUICK_MODE(M,N) ((M) &amp; ((N) - 1))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PCD 100000</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> N 2</span></span><br><span class="line"><span class="comment">// 当且仅当 N = 2^n 时 QUICK_MODE(M,N) 可用，否则计算出错</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">float</span> s,e;</span><br><span class="line">    <span class="type">int</span> i,j,x1,x2,y = <span class="number">114514</span>;</span><br><span class="line"></span><br><span class="line">    s = clock();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; PCD;i++) <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; PCD;j++) x1 = y % N;</span><br><span class="line">    e = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lf sec\n&quot;</span>,(e-s)/CLOCKS_PER_SEC);</span><br><span class="line"></span><br><span class="line">    s = clock();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; PCD;i++) <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; PCD;j++) x2 = QUICK_MODE(y, N);</span><br><span class="line">    e = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lf sec\n&quot;</span>,(e-s)/CLOCKS_PER_SEC);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,x1 == x2 ? <span class="string">&quot;PASSED&quot;</span>:<span class="string">&quot;FAILED&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">5.105534 sec</span><br><span class="line">4.125605 sec</span><br><span class="line">PASSED</span><br></pre></td></tr></table></figure>
+<h2 id="更慢但无中间值的交换"><a href="#更慢但无中间值的交换" class="headerlink" title="更慢但无中间值的交换"></a>更慢但无中间值的交换</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">noval_swap</span><span class="params">(<span class="type">int</span>* m,<span class="type">int</span>* n)</span></span><br><span class="line">&#123;</span><br><span class="line">    *m = *m ^ *n;</span><br><span class="line">    *n = *m ^ *n;</span><br><span class="line">    *m = *m ^ *n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PCD 100000</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">traditional_swap</span><span class="params">(<span class="type">int</span>* m,<span class="type">int</span>* n)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> buffer = *m;</span><br><span class="line">    *m = *n;</span><br><span class="line">    *n = buffer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">noval_swap</span><span class="params">(<span class="type">int</span>* m,<span class="type">int</span>* n)</span></span><br><span class="line">&#123;</span><br><span class="line">    *m = *m ^ *n;</span><br><span class="line">    *n = *m ^ *n;</span><br><span class="line">    *m = *m ^ *n;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">check</span><span class="params">(<span class="type">int</span>* m,<span class="type">int</span>* n)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> _m = *m, _n = *n;</span><br><span class="line">    traditional_swap(m, m);</span><br><span class="line">    noval_swap(&amp;_m,&amp;_n);</span><br><span class="line">    <span class="keyword">return</span> (_m == *n &amp;&amp; _n == *m);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">float</span> s,e;</span><br><span class="line">    <span class="type">int</span> m = <span class="number">3</span>,n = <span class="number">2</span>,i,j;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,check(&amp;m,&amp;n)?<span class="string">&quot;PASSED&quot;</span>:<span class="string">&quot;FAILED&quot;</span>);</span><br><span class="line"></span><br><span class="line">    s = clock();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; PCD;i++) <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; PCD;j++) traditional_swap(&amp;m, &amp;n);</span><br><span class="line">    e = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lf sec\n&quot;</span>,(e-s)/CLOCKS_PER_SEC);</span><br><span class="line"></span><br><span class="line">    s = clock();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; PCD;i++) <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; PCD;j++) noval_swap(&amp;m, &amp;n);</span><br><span class="line">    e = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lf sec\n&quot;</span>,(e-s)/CLOCKS_PER_SEC);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="炫酷但更慢的求绝对值"><a href="#炫酷但更慢的求绝对值" class="headerlink" title="炫酷但更慢的求绝对值"></a>炫酷但更慢的求绝对值</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> ABS(N) ((((N) &gt;&gt; 31) ^ (N)) - ((N) &gt;&gt; 31))</span></span><br></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ABS(N) ((((N) &gt;&gt; 31) ^ (N)) - ((N) &gt;&gt; 31))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PCD 100000</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">abs</span><span class="params">(<span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> n &gt; <span class="number">0</span> ? n : -n;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i,j,m,n = <span class="number">-114</span>;</span><br><span class="line">    <span class="type">float</span> s,e;</span><br><span class="line"></span><br><span class="line">    s = clock();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; PCD;i++) <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; PCD;j++) m = <span class="built_in">abs</span>(n);</span><br><span class="line">    e = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lf sec.\n&quot;</span>,(e - s)/CLOCKS_PER_SEC);</span><br><span class="line"></span><br><span class="line">    s = clock();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; PCD;i++) <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; PCD;j++) m = <span class="built_in">abs</span>(n);</span><br><span class="line">    e = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lf sec.\n&quot;</span>,(e - s)/CLOCKS_PER_SEC);</span><br><span class="line"></span><br><span class="line">    s = clock();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; PCD;i++) <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; PCD;j++) m = ABS(n);</span><br><span class="line">    e = clock();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lf sec.\n&quot;</span>,(e - s)/CLOCKS_PER_SEC);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">4.285493 sec.</span><br><span class="line">4.521450 sec.</span><br><span class="line">5.298813 sec.</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/10/11/%E8%AE%A1%E6%95%B0%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="prev" title="计数排序算法">
+      <i class="fa fa-chevron-left"></i> 计数排序算法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/10/20/const-type-%E5%92%8C-const-type-const/" rel="next" title="const type 和 const type* const">
+      const type 和 const type* const <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%95%E5%8F%98%E9%87%8F%E8%A1%A8%E7%A4%BA%E5%A4%9A%E7%8A%B6%E6%80%81"><span class="nav-number">1.</span> <span class="nav-text">单变量表示多状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E5%BF%AB%E7%9A%84%E4%B9%982%E8%BF%90%E7%AE%97"><span class="nav-number">2.</span> <span class="nav-text">更快的乘2运算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E5%BF%AB%E7%9A%84%E9%99%A42%E8%BF%90%E7%AE%97"><span class="nav-number">3.</span> <span class="nav-text">更快的除2运算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">哈希函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%8D%E8%BF%90%E7%AE%97%E7%9A%84%E4%B8%80%E4%BA%9B%E5%A5%87%E6%80%AA%E7%94%A8%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">位运算的一些奇怪用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E5%BF%AB%E4%BD%86%E6%9C%89%E5%B1%80%E9%99%90%E7%9A%84%E6%A8%A1%E8%BF%90%E7%AE%97"><span class="nav-number">5.1.</span> <span class="nav-text">更快但有局限的模运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E6%85%A2%E4%BD%86%E6%97%A0%E4%B8%AD%E9%97%B4%E5%80%BC%E7%9A%84%E4%BA%A4%E6%8D%A2"><span class="nav-number">5.2.</span> <span class="nav-text">更慢但无中间值的交换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%AB%E9%85%B7%E4%BD%86%E6%9B%B4%E6%85%A2%E7%9A%84%E6%B1%82%E7%BB%9D%E5%AF%B9%E5%80%BC"><span class="nav-number">5.3.</span> <span class="nav-text">炫酷但更慢的求绝对值</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">IAKSH</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/IAKSH" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;IAKSH" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:askzrj21@163.com" title="E-Mail → mailto:askzrj21@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">IAKSH</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
